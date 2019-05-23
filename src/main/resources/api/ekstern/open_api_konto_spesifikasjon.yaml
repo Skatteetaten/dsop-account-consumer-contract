@@ -1,0 +1,1438 @@
+openapi: 3.0.0
+info:
+    description: >
+        Open API spesifikasjon av Konto APIene. (Under arbeid)
+
+        * 0.7.5: Flyttet kontonummer til header
+
+        * 0.7.6: Lagt til responsestatus for alle responser. Rettet på xml-navnene
+        for rotelementene (roles, cards etc). Rettet navngiving av roles
+        endepunktet.
+
+        * 0.7.7: Endret content-type fra application/jose+json til application/json
+        siden kryptert respons skal representeres iht JWE compact serialization.
+
+        * 0.7.8: Endret Case for AccountID som header verdi, og endret beskrivelsen
+        av denne parameteren for noen av endepunktene.
+
+        * 0.7.9: Endret servers.url så den validerer,
+        /accounts_med_accountid_i_header returnerer responseStatus og account,
+        Transactions.transaction renamet til transactions, Transaction.links flyttet
+        til Transactions.links
+
+        * 0.8.0: Byttet til "native" typer for string. Ordnet typer alfabetisk.
+        Fikset ISOdate slik at den bruker date og ikke date-time typen. La til noen
+        beskrivelser. Tok bort date som format for AccountID (copy paste feil).
+
+        * 0.8.1: Rettet følgende skrivefeil: streetname -> streetName,
+        reverselIndicator -> reversalIndicator, receviedDirectDebits ->
+        receivedDirectDebits, receivedCashConsentrationTransactions ->
+        receivedCashConcentrationTransactions, commisions -> commissions, ,
+        debitCardPayment -> debetCardPayment
+
+        * 0.9.0: "Revision 2" - Kontoreferanse som erstatning for kontonummer i
+        URL'ene
+
+        * 0.9.1: Endret fra Paymentcard til Paymentcards i kortresponsen.
+
+        * 0.9.1: Fikset type knyttet til Transaction.additionalInfo
+
+    version: 0.9.1
+    title: Accounts API
+servers:
+- url: 'https://hostname.no/v1'
+paths:
+    /accounts:
+        get:
+            summary: >-
+                Liste over konto for en angitt part og periode. Kontonummer kan oppgis i
+                stedet for partsidentifikator ved oppslag direkte på konto.
+            operationId: listAccounts
+            tags:
+            - accounts
+            parameters:
+            - name: fromDate
+              in: query
+              description: Fra dato
+              required: false
+              schema:
+                  type: string
+                  format: date
+            - name: toDate
+              in: query
+              description: Til dato
+              required: false
+              schema:
+                  type: string
+                  format: date
+            - in: header
+              name: CorrelationID
+              description: 'Korrelasjonsid, unik identifikator for den tekniske forespørselen'
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+            - name: Legal-Mandate
+              in: header
+              description: Lovhjemmel
+              required: true
+              schema:
+                  type: string
+            - name: PartyID
+              in: header
+              description: >-
+                  Partsidentifikator, fødselsnummer, d-nummer eller
+                  organisasjonsnummer.
+              required: false
+              schema:
+                  type: string
+            - name: AccountID
+              in: header
+              description: Kontonummeret
+              required: false
+              schema:
+                  type: string
+            responses:
+                '200':
+                    description: Gyldig respons
+                    content:
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/Accounts'
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Accounts'
+                        application/jose:
+                            schema:
+                                type: string
+                                format: byte
+                                description: Kryptert respons iht JWE compact serialization
+                                example: (JWE respons med innhold som definert ovenfor)
+                '401':
+                    description: >-
+                        ACC-010 Unauthorized. Forespørselen mangler
+                        autentiseringsinformasjon
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '403':
+                    description: >-
+                        ACC-011 Forbidden. Brukeren er ikke autorisert for forespurt
+                        tjeneste
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '405':
+                    description: 'ACC-012 Method not allowed. Ugyldig HTTP metode, kun GET er støttet'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '406':
+                    description: >-
+                        ACC-013 Unaccepted. Brukes dersom klienten har oppgitt et annet
+                        format en JWE, JSON eller XML i Accept-headeren
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '429':
+                    description: >-
+                        ACC-022 Too many requests. For mange forespørsler, kan gis dersom
+                        man velger å innføre rate-limiting på tjenestene for å begrense
+                        antall kall fra en klient.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '500':
+                    description: >-
+                        ACC-100 Internal server error. Ulike tekniske feil hos
+                        tjenestetilbyder.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                default:
+                    description: unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+    '/accounts/{accountReference}':
+        get:
+            summary: 'Kontodetaljer, inkludert saldi, for en konto'
+            operationId: showAccountById
+            tags:
+            - accounts
+            parameters:
+            - name: fromDate
+              in: query
+              description: Fra dato
+              required: false
+              schema:
+                  type: string
+                  format: date
+            - name: toDate
+              in: query
+              description: Til dato
+              required: false
+              schema:
+                  type: string
+                  format: date
+            - in: header
+              name: CorrelationID
+              description: 'Korrelasjonsid, unik identifikator for den tekniske forespørselen'
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+            - name: Legal-Mandate
+              in: header
+              description: Legal mandate
+              required: true
+              schema:
+                  type: string
+            - name: accountReference
+              in: path
+              description: Unik referanse til kontoen
+              required: true
+              schema:
+                  type: string
+            responses:
+                '200':
+                    description: Gyldig respons
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AccountDetails'
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/AccountDetails'
+                        application/jose:
+                            schema:
+                                type: string
+                                format: byte
+                                description: Kryptert respons iht JWE compact serialization
+                                example: (JWE respons med innhold som definert for AccountDetails)
+                '401':
+                    description: >-
+                        ACC-010 Unauthorized. Forespørselen mangler
+                        autentiseringsinformasjon
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '403':
+                    description: >-
+                        ACC-011 Forbidden. Brukeren er ikke autorisert for forespurt
+                        tjeneste
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '404':
+                    description: >-
+                        ACC-002 Resource not found. Det finnes ikke informasjon på forespurt
+                        kontoid.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '405':
+                    description: 'ACC-012 Method not allowed. Ugyldig HTTP metode, kun GET er støttet'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '406':
+                    description: >-
+                        ACC-013 Unaccepted. Brukes dersom klienten har oppgitt et annet
+                        format en JWE, JSON eller XML i Accept-headeren
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '429':
+                    description: >-
+                        ACC-022 Too many requests. For mange forespørsler, kan gis dersom
+                        man velger å innføre rate-limiting på tjenestene for å begrense
+                        antall kall fra en klient.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '500':
+                    description: >-
+                        ACC-100 Internal server error. Ulike tekniske feil hos
+                        tjenestetilbyder.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                default:
+                    description: unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+    '/accounts/{accountReference}/transactions':
+        get:
+            summary: Transaksjoner for angitt konto og periode
+            operationId: listAccounts
+            tags:
+            - transactions
+            parameters:
+            - name: accountReference
+              in: path
+              description: Unik referanse til kontoen
+              required: true
+              schema:
+                  type: string
+            - name: fromDate
+              in: query
+              description: Fra dato
+              required: false
+              schema:
+                  type: string
+                  format: date
+            - name: toDate
+              in: query
+              description: Til dato
+              required: false
+              schema:
+                  type: string
+                  format: date
+            - in: header
+              name: CorrelationID
+              description: 'Korrelasjonsid, unik identifikator for den tekniske forespørselen'
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+            - name: Legal-Mandate
+              in: header
+              description: Lovhjemmel
+              required: true
+              schema:
+                  type: string
+            responses:
+                '200':
+                    description: A list of transactions
+                    content:
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/Transactions'
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Transactions'
+                        application/jose:
+                            schema:
+                                type: string
+                                format: byte
+                                description: Kryptert respons iht JWE compact serialization
+                                example: (JWE respons med innhold som definert ovenfor)
+                '401':
+                    description: >-
+                        ACC-010 Unauthorized. Forespørselen mangler
+                        autentiseringsinformasjon
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '403':
+                    description: >-
+                        ACC-011 Forbidden. Brukeren er ikke autorisert for forespurt
+                        tjeneste
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '405':
+                    description: 'ACC-012 Method not allowed. Ugyldig HTTP metode, kun GET er støttet'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '406':
+                    description: >-
+                        ACC-013 Unaccepted. Brukes dersom klienten har oppgitt et annet
+                        format en JWE, JSON eller XML i Accept-headeren
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '429':
+                    description: >-
+                        ACC-022 Too many requests. For mange forespørsler, kan gis dersom
+                        man velger å innføre rate-limiting på tjenestene for å begrense
+                        antall kall fra en klient.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '500':
+                    description: >-
+                        ACC-100 Internal server error. Ulike tekniske feil hos
+                        tjenestetilbyder.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                default:
+                    description: unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+    '/accounts/{accountReference}/cards':
+        get:
+            summary: Liste over kort knyttet til angitt konto
+            operationId: listCards
+            tags:
+            - cards
+            parameters:
+            - name: accountReference
+              in: path
+              description: Unik referanse til kontoen
+              required: true
+              schema:
+                  type: string
+            - name: fromDate
+              in: query
+              description: Fra dato
+              required: false
+              schema:
+                  type: string
+                  format: date
+            - name: toDate
+              in: query
+              description: Til dato
+              required: false
+              schema:
+                  type: string
+                  format: date
+            - in: header
+              name: CorrelationID
+              description: 'Korrelasjonsid, unik identifikator for den tekniske forespørselen'
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+            - name: Legal-Mandate
+              in: header
+              description: Lovhjemmel
+              required: true
+              schema:
+                  type: string
+            responses:
+                '200':
+                    description: Gyldig respons
+                    content:
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/Cards'
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Cards'
+                        application/jose:
+                            schema:
+                                type: string
+                                format: byte
+                                description: Kryptert respons iht JWE compact serialization
+                                example: (JWE respons med innhold som definert ovenfor)
+                '401':
+                    description: >-
+                        ACC-010 Unauthorized. Forespørselen mangler
+                        autentiseringsinformasjon
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '403':
+                    description: >-
+                        ACC-011 Forbidden. Brukeren er ikke autorisert for forespurt
+                        tjeneste
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '404':
+                    description: >-
+                        ACC-002 Resource not found. Det finnes ikke informasjon på forespurt
+                        kontoid.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '405':
+                    description: 'ACC-012 Method not allowed. Ugyldig HTTP metode, kun GET er støttet'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '406':
+                    description: >-
+                        ACC-013 Unaccepted. Brukes dersom klienten har oppgitt et annet
+                        format en JWE, JSON eller XML i Accept-headeren
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '429':
+                    description: >-
+                        ACC-022 Too many requests. For mange forespørsler, kan gis dersom
+                        man velger å innføre rate-limiting på tjenestene for å begrense
+                        antall kall fra en klient.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '500':
+                    description: >-
+                        ACC-100 Internal server error. Ulike tekniske feil hos
+                        tjenestetilbyder.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                default:
+                    description: unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+    '/accounts/{accountReference}/roles':
+        get:
+            summary: Rolleinnehavere for angitt konto
+            operationId: listRoles
+            tags:
+            - roles
+            parameters:
+            - name: accountReference
+              in: path
+              description: Unik referanse til kontoen
+              required: true
+              schema:
+                  type: string
+            - name: fromDate
+              in: query
+              description: Fra dato
+              required: false
+              schema:
+                  type: string
+                  format: date
+            - name: toDate
+              in: query
+              description: Til dato
+              required: false
+              schema:
+                  type: string
+                  format: date
+            - in: header
+              name: CorrelationID
+              description: 'Korrelasjonsid, unik identifikator for den tekniske forespørselen'
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+            - name: Legal-Mandate
+              in: header
+              description: Lovhjemmelen
+              required: true
+              schema:
+                  type: string
+            responses:
+                '200':
+                    description: Gydlig respons
+                    content:
+                        application/xml:
+                            schema:
+                                $ref: '#/components/schemas/Roles'
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Roles'
+                        application/jose:
+                            schema:
+                                type: string
+                                format: byte
+                                description: Kryptert respons iht JWE compact serialization
+                                example: (JWE respons med innhold som definert ovenfor)
+                '401':
+                    description: >-
+                        ACC-010 Unauthorized. Forespørselen mangler
+                        autentiseringsinformasjon
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '403':
+                    description: >-
+                        ACC-011 Forbidden. Brukeren er ikke autorisert for forespurt
+                        tjeneste
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '404':
+                    description: >-
+                        ACC-002 Resource not found. Det finnes ikke informasjon på forespurt
+                        kontoid.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '405':
+                    description: 'ACC-012 Method not allowed. Ugyldig HTTP metode, kun GET er støttet'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '406':
+                    description: >-
+                        ACC-013 Unaccepted. Brukes dersom klienten har oppgitt et annet
+                        format en JWE, JSON eller XML i Accept-headeren
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '429':
+                    description: >-
+                        ACC-022 Too many requests. For mange forespørsler, kan gis dersom
+                        man velger å innføre rate-limiting på tjenestene for å begrense
+                        antall kall fra en klient.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                '500':
+                    description: >-
+                        ACC-100 Internal server error. Ulike tekniske feil hos
+                        tjenestetilbyder.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                default:
+                    description: unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+components:
+    securitySchemes:
+        accountsAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: Access token (JWT)
+    schemas:
+        Account:
+            description: 'Konto: en spesifikasjon av en klart avgrenset type økonomiske hendelser'
+            required:
+            - accountIdentifier
+            - type
+            - status
+            - currency
+            - servicer
+            - primaryOwner
+            type: object
+            properties:
+                status:
+                    description: 'Status: angir nåværende status for en konto'
+                    allOf:
+                    - $ref: '#/components/schemas/AccountStatus'
+                servicer:
+                    description: >-
+                        administrator av konto: finansinstitusjon som administrerer en konto
+                        på vegne av kontoeier, herunder håndtere registrering av
+                        transaksjoner på konto, beregne saldo på konto og gi informasjon om
+                        konto
+                    allOf:
+                    - $ref: '#/components/schemas/FinancialInstitution'
+                links:
+                    type: array
+                    items:
+                        description: 'Paginering: støtte oppdeling av respons for store resultatsett'
+                        allOf:
+                        - $ref: '#/components/schemas/Link'
+                    minItems: 0
+                accountIdentifier:
+                    $ref: '#/components/schemas/AccountNumber'
+                accountReference:
+                    $ref: '#/components/schemas/AccountReference'
+                type:
+                    $ref: '#/components/schemas/AccountType'
+                currency:
+                    $ref: '#/components/schemas/CurrencyCode'
+                primaryOwner:
+                    $ref: '#/components/schemas/AccountRole'
+                name:
+                    type: string
+                    minLength: 1
+                    maxLength: 70
+        AccountDetail:
+            description: 'Konto: en spesifikasjon av en klart avgrenset type økonomiske hendelser'
+            required:
+            - accountIdentifier
+            - type
+            - status
+            - currency
+            - servicer
+            - primaryOwner
+            type: object
+            properties:
+                status:
+                    description: 'Status: angir nåværende status for en konto'
+                    allOf:
+                    - $ref: '#/components/schemas/AccountStatus'
+                servicer:
+                    description: >-
+                        administrator av konto: finansinstitusjon som administrerer en konto
+                        på vegne av kontoeier, herunder håndtere registrering av
+                        transaksjoner på konto, beregne saldo på konto og gi informasjon om
+                        konto
+                    allOf:
+                    - $ref: '#/components/schemas/FinancialInstitution'
+                links:
+                    type: array
+                    items:
+                        description: 'Paginering: støtte oppdeling av respons for store resultatsett'
+                        allOf:
+                        - $ref: '#/components/schemas/Link'
+                    minItems: 0
+                accountIdentifier:
+                    $ref: '#/components/schemas/AccountNumber'
+                accountReference:
+                    $ref: '#/components/schemas/AccountReference'
+                type:
+                    $ref: '#/components/schemas/AccountType'
+                currency:
+                    $ref: '#/components/schemas/CurrencyCode'
+                name:
+                    type: string
+                    minLength: 1
+                    maxLength: 70
+                balance:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Balance'
+                    minItems: 0
+                primaryOwner:
+                    $ref: '#/components/schemas/AccountRole'
+        AccountDetails:
+            description: Rot-element for respons
+            type: object
+            properties:
+                responseStatus:
+                    description: >-
+                        Angir hvorvidt dette er en komplett respons, eller om det også kan
+                        finnes data offline som ikke kan hentes gjennom apiene.
+                    allOf:
+                    - $ref: '#/components/schemas/ResponseStatus'
+                account:
+                    allOf:
+                    - $ref: '#/components/schemas/AccountDetail'
+            xml:
+                name: accounts
+        AccountNumber:
+            description: Kontonummer
+            type: string
+        AccountPermissionType:
+            enum:
+            - noRight
+            - rightToUseAlone
+            - rightToUseWithOther
+            type: string
+        AccountRole:
+            description: 'Rolle på konto: angir eier av- eller disponent på konto'
+            type: object
+            properties:
+                permission:
+                    description: 'Disposisjonsrett: angir hvilken rettighet man har på en konto'
+                    allOf:
+                    - $ref: '#/components/schemas/AccountPermissionType'
+                identifier:
+                    $ref: '#/components/schemas/Identifier'
+                name:
+                    type: string
+                    minLength: 1
+                    maxLength: 140
+                startDate:
+                    $ref: '#/components/schemas/ISODate'
+                endDate:
+                    $ref: '#/components/schemas/ISODate'
+                postalAddress:
+                    $ref: '#/components/schemas/PostalAddress'
+                electronicAddress:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ElectronicAddress'
+                    minItems: 0
+            required:
+            - name
+        AccountReference:
+            description: Unik referanse til kontoen
+            type: string
+        Accounts:
+            description: Rot-element for respons
+            type: object
+            properties:
+                responseStatus:
+                    description: >-
+                        Angir hvorvidt dette er en komplett respons, eller om det også kan
+                        finnes data offline som ikke kan hentes gjennom apiene.
+                    allOf:
+                    - $ref: '#/components/schemas/ResponseStatus'
+                accounts:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Account'
+                    minItems: 0
+            xml:
+                name: accounts
+        AccountStatus:
+            enum:
+            - enabled
+            - disabled
+            - deleted
+            type: string
+        AccountType:
+            description: Kontotype
+            enum:
+            - loanAccount
+            - salaryAccount
+            - currencyAccount
+            - savingsAccount
+            - clientAccount
+            - taxDeductionAccount
+            - businessAccount
+            type: string
+        AddressType:
+            description: >-
+                Kategorisering av måter å bruke en adresse både mht. hva slags adresse
+                beskrevet adresse er og hva man ønsker å utføre ved bruk av adressen
+            enum:
+            - residential
+            - business
+            - mailTo
+            - deliveryTo
+            type: string
+        Amount:
+            description: Beløp
+            type: number
+            minimum: 0
+            exclusiveMinimum: false
+        Balance:
+            description: 'Saldo: beholdning av innskudd og utlån på finanskonto'
+            required:
+            - type
+            - creditLineIncluded
+            - amount
+            - currency
+            - creditDebitIndicator
+            - registered
+            type: object
+            properties:
+                creditLineIncluded:
+                    description: >-
+                        Saldo inkludert i kredittgrense: angir om kredittgrense er inkludert
+                        i saldo eller ikke
+                    allOf:
+                    - $ref: '#/components/schemas/TrueFalseIndicator'
+                amount:
+                    description: >-
+                        En sum av penger brukt i en kontekst. Dette kan være en transaksjon,
+                        saldo o.l.
+                    allOf:
+                    - $ref: '#/components/schemas/Amount'
+                creditDebitIndicator:
+                    description: >-
+                        Kreditt eller debet beløp: indikerer om et beløp er kreditt eller
+                        debet
+                    allOf:
+                    - $ref: '#/components/schemas/CreditOrDebit'
+                registered:
+                    description: 'registreringsdato: gjeldende dato og tid for saldoen'
+                    allOf:
+                    - $ref: '#/components/schemas/ISODateTime'
+                type:
+                    $ref: '#/components/schemas/BalanceType'
+                creditLineAmount:
+                    $ref: '#/components/schemas/Amount'
+                creditLineCurrency:
+                    $ref: '#/components/schemas/CurrencyCode'
+                currency:
+                    $ref: '#/components/schemas/CurrencyCode'
+        BalanceType:
+            description: Saldotype
+            enum:
+            - availableBalance
+            - bookedBalance
+            - closingBookedBalance
+            type: string
+        BankTransactionCode:
+            description: Transaksjonskode
+            type: object
+            properties:
+                domain:
+                    description: >-
+                        Forretningsområde: Høyeste nivå for klassifisering av aktivitet i en
+                        forretning
+                    allOf:
+                    - $ref: '#/components/schemas/DomainType'
+                family:
+                    description: 'Produkt: en spesifikasjon av et produk'
+                    allOf:
+                    - $ref: '#/components/schemas/FamilyType'
+                subFamily:
+                    description: 'Underprodukt: en detaljering av produkt'
+                    allOf:
+                    - $ref: '#/components/schemas/SubFamilyType'
+                freeText:
+                    type: string
+                    minLength: 1
+                    maxLength: 500
+        CardNumber:
+            description: Kortnummer
+            type: string
+        Cards:
+            description: Rot-element for respons
+            type: object
+            xml:
+                name: cards
+            properties:
+                responseStatus:
+                    description: >-
+                        Angir hvorvidt dette er en komplett respons, eller om det også kan
+                        finnes data offline som ikke kan hentes gjennom apiene.
+                    allOf:
+                    - $ref: '#/components/schemas/ResponseStatus'
+                paymentCards:
+                    type: array
+                    items:
+                        description: >-
+                            Betalingskort: er fellesbetegnelse for ulike typer plastkort som
+                            brukes til kontantuttak og til betaling for varer og tjenester på
+                            ulike brukersteder
+                        allOf:
+                        - $ref: '#/components/schemas/PaymentCard'
+                    minItems: 0
+        CardType:
+            description: Korttype
+            enum:
+            - creditCard
+            - debitCard
+            type: string
+        CounterParty:
+            description: 'Motpart: den part som en transaksjon går til eller kommer fra'
+            type: object
+            properties:
+                accountIdentifier:
+                    $ref: '#/components/schemas/AccountNumber'
+                identifier:
+                    $ref: '#/components/schemas/Identifier'
+                name:
+                    type: string
+                    minLength: 1
+                    maxLength: 140
+                type:
+                    $ref: '#/components/schemas/CounterPartyType'
+                postalAddress:
+                    $ref: '#/components/schemas/PostalAddress'
+            required:
+            - type
+        CounterPartyType:
+            enum:
+            - debtor
+            - creditor
+            - ultimateDebtor
+            - ultimateCreditor
+            type: string
+        CountryCode:
+            type: string
+            pattern: '[A-Z]{2,2}'
+        CreditOrDebit:
+            enum:
+            - credit
+            - debit
+            type: string
+        CurrencyCode:
+            type: string
+            pattern: '[A-Z]{3,3}'
+        CurrencyExchange:
+            description: 'Valutaomregning: omregne et beløp fra en valuta til en annen valuta'
+            type: object
+            properties:
+                originalAmount:
+                    description: >-
+                        Beløp i sin opprinnelige valuta når konvertering fra / til en annen
+                        valuta har skjedd
+                    allOf:
+                    - $ref: '#/components/schemas/Amount'
+                sourceCurrency:
+                    description: >-
+                        kildevaluta: Valuta som et beløp skal konverteres fra i en
+                        valutaomregning
+                    allOf:
+                    - $ref: '#/components/schemas/CurrencyCode'
+                targetCurrency:
+                    description: >-
+                        målvaluta: Valuta som et beløp skal konverteres til i en
+                        valutaomregning
+                    allOf:
+                    - $ref: '#/components/schemas/CurrencyCode'
+                unitCurrency:
+                    description: >-
+                        enhetsvaluta: Valuta som uttrykkes i resultatet av en
+                        valutaomregning
+                    allOf:
+                    - $ref: '#/components/schemas/CurrencyCode'
+                exchangeRate:
+                    $ref: '#/components/schemas/Amount'
+            required:
+            - sourceCurrency
+            - targetCurrency
+            - exchangeRate
+        DomainType:
+            enum:
+            - accountManagement
+            - cashManagement
+            - foreignExchange
+            - payments
+            - securities
+            - tradeServices
+            - extended
+            type: string
+        ElectronicAddress:
+            required:
+            - type
+            - value
+            type: object
+            properties:
+                type:
+                    $ref: '#/components/schemas/ElectronicAddressType'
+                value:
+                    type: string
+                    minLength: 1
+                    maxLength: 2048
+        ElectronicAddressType:
+            enum:
+            - phoneNumber
+            - emailAddress
+            type: string
+        FamilyType:
+            enum:
+            - additionalMiscellaneousCreditOperations
+            - additionalMiscellaneousDebitOperations
+            - miscellaneousCreditOperations
+            - miscellaneousDebitOperations
+            - openingAndClosing
+            - accountBalancing
+            - cashPooling
+            - notAvailable
+            - customerCardTransactions
+            - counterTransactions
+            - drafts
+            - issuedCashConcentrationTransactions
+            - issuedCreditTransfers
+            - issuedCheques
+            - issuedDirectDebits
+            - lockboxTransactions
+            - merchantCardTransactions
+            - other
+            - receivedCashConcentrationTransactions
+            - receivedCreditTransfers
+            - receivedCheques
+            - receivedDirectDebits
+            - corporateAction
+            - documentaryCollection
+            - standByLetterOfCredit
+            type: string
+        FinancialInstitution:
+            description: >-
+                finansinstitusjon: Foretak eller annen institusjon som driver
+                finansieringsvirksomhet
+            required:
+            - identifier
+            - name
+            type: object
+            properties:
+                identifier:
+                    $ref: '#/components/schemas/Identifier'
+                name:
+                    type: string
+                    minLength: 1
+                    maxLength: 140
+        Identifier:
+            description: 'Identifikator: det som representerer identiteten'
+            type: object
+            properties:
+                countryOfResidence:
+                    description: 'Hjemland: landet hvor part er hjemmehørende'
+                    allOf:
+                    - $ref: '#/components/schemas/CountryCode'
+                value:
+                    type: string
+                type:
+                    $ref: '#/components/schemas/IdentifierType'
+            required:
+            - value
+            - type
+        IdentifierType:
+            enum:
+            - countryIdentificationCode
+            - nationalIdentityNumber
+            type: string
+        ISODate:
+            type: string
+            format: date
+        ISODateTime:
+            type: string
+            format: date-time
+        ISOYearMonth:
+            type: string
+            pattern: '^[0-9]+-([0][1-9]|1[0-2])$'
+        Link:
+            required:
+            - rel
+            - href
+            type: object
+            properties:
+                rel:
+                    type: string
+                    minLength: 1
+                    maxLength: 16
+                href:
+                    type: string
+                    minLength: 1
+                    maxLength: 500
+        PaymentCard:
+            description: >-
+                betalingskort: Fellesbetegnelse for ulike typer "plastkort" som brukes
+                til kontantuttak og til betaling for varer og tjenester på ulike
+                brukersteder
+            required:
+            - cardIdentifier
+            - type
+            - holderName
+            - startDate
+            - expiryDate
+            - cardIssuerName
+            type: object
+            properties:
+                cardIdentifier:
+                    description: 'Kontonummer: nummer som brukes til å identifisere betalingskort'
+                    allOf:
+                    - $ref: '#/components/schemas/CardNumber'
+                holderName:
+                    description: 'Kortholders navn: part som betalingskort er utstedt til'
+                    type: string
+                    minLength: 1
+                    maxLength: 140
+                startDate:
+                    description: >-
+                        oppstartsdato: Angir at betalingskort er gyldig fra og med måned og
+                        år
+                    allOf:
+                    - $ref: '#/components/schemas/ISOYearMonth'
+                expiryDate:
+                    description: 'Utløpsdato: angir at betalingskort er gyldig til og med måned og år'
+                    allOf:
+                    - $ref: '#/components/schemas/ISOYearMonth'
+                cardIssuerName:
+                    description: 'Kortutsteders navn: finansinstitusjon som har utstedt betalingskort'
+                    type: string
+                    minLength: 1
+                    maxLength: 140
+                type:
+                    $ref: '#/components/schemas/CardType'
+                cardIssuerIdentifier:
+                    $ref: '#/components/schemas/Identifier'
+        PostalAddress:
+            description: 'Geografisk adresse: navngitt geografisk sted'
+            type: object
+            properties:
+                postCode:
+                    description: nummer på et poststed
+                    type: string
+                    minLength: 1
+                    maxLength: 16
+                type:
+                    $ref: '#/components/schemas/AddressType'
+                streetName:
+                    type: string
+                    minLength: 1
+                    maxLength: 70
+                buildingNumber:
+                    type: string
+                    minLength: 1
+                    maxLength: 16
+                townName:
+                    type: string
+                    minLength: 1
+                    maxLength: 35
+                country:
+                    $ref: '#/components/schemas/CountryCode'
+                addressLine:
+                    type: array
+                    items:
+                        type: string
+                        minLength: 1
+                        maxLength: 70
+                    minItems: 0
+            required:
+            - type
+        ResponseStatus:
+            type: string
+            enum:
+            - partial
+            - complete
+        Roles:
+            description: Rot-element for respons
+            type: object
+            xml:
+                name: roles
+            properties:
+                responseStatus:
+                    description: >-
+                        Angir hvorvidt dette er en komplett respons, eller om det også kan
+                        finnes data offline som ikke kan hentes gjennom apiene.
+                    allOf:
+                    - $ref: '#/components/schemas/ResponseStatus'
+                roles:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/AccountRole'
+                    minItems: 0
+        SubFamilyType:
+            enum:
+            - valueDate
+            - chargesGeneric
+            - commissions
+            - interestsGeneric
+            - other
+            - accountClosing
+            - notAvailable
+            - sweeping
+            - topping
+            - zeroBalancing
+            - cashWithdrawal
+            - debitCardPayment
+            - crossBorderCashWithdrawal
+            - cashDeposit
+            - debitAdjustmentGeneric
+            - travellersChequesDeposit
+            - settlementAtMaturity
+            - intraCompanyTransfer
+            - corporateOwnAccountTransfer
+            - crossBorderIntraCompanyTransfer
+            - achDebit
+            - achReturn
+            - achTransactionAtxn
+            - automaticTransfer
+            - bankCheque
+            - booked
+            - domesticCreditTransfer
+            - dividend
+            - sepaCreditTransfer
+            - financialInstitutionCreditTransfer
+            - principalPayment
+            - priorityCreditTransfer
+            - reversalDueToPaymentReturn
+            - achTransactionSala
+            - sameDayValueCreditTransfer
+            - standingOrder
+            - taxes
+            - creditTransferWithAgreedCommercialInformation
+            - crossBorderCreditTransfer
+            - cashLetter
+            - cheques
+            - chequesReversal
+            - openCheque
+            - unpaidCheque
+            - crossBorderCheque
+            - sepaCoreDirectDebit
+            - directDebitPayment
+            - reversalDueToPayment
+            - reversalDueToPaymentCancellationRequest
+            - reversalDueToReturnUnpaidDirectDebit
+            - debit
+            - deposit
+            - adjustments
+            - fees
+            - creditCardPayment
+            - pointOfSalePosPayment
+            - creditAdjustment
+            - settlementAfterCollection
+            type: string
+        Transaction:
+            description: 'Transaksjon: enhver postering på konto'
+            required:
+            - transactionIdentifier
+            - amount
+            - currency
+            - creditDebitIndicator
+            - status
+            - transactionCode
+            - bookingDate
+            - valueDate
+            type: object
+            properties:
+                transactionIdentifier:
+                    description: 'Transaksjonens identifikasjon: identifikator for transaksjonen'
+                    type: string
+                    minLength: 0
+                    maxLength: 35
+                reference:
+                    type: array
+                    items:
+                        description: 'Referanse til transaksjonen: nøkler tilknyttet en transaksjon'
+                        allOf:
+                        - $ref: '#/components/schemas/TransactionReference'
+                    minItems: 0
+                creditDebitIndicator:
+                    description: >-
+                        Kreditt eller debit beløp: indikerer om et beløp er kreditt eller
+                        debet
+                    allOf:
+                    - $ref: '#/components/schemas/CreditOrDebit'
+                reversalIndicator:
+                    description: >-
+                        Indikator på korrigert transaksjon: angir om transaksjonen er en
+                        korreksjon av en tidligere transaksjon
+                    allOf:
+                    - $ref: '#/components/schemas/TrueFalseIndicator'
+                status:
+                    description: 'transaksjonens status: angir status på transaksjonen'
+                    allOf:
+                    - $ref: '#/components/schemas/TransactionStatus'
+                transactionCode:
+                    description: >-
+                        Transaksjonskode: inneholder et sett av elementer for å kunne
+                        identifisere type transaksjon
+                    allOf:
+                    - $ref: '#/components/schemas/BankTransactionCode'
+                bookingDate:
+                    description: >-
+                        Bokføringsdato: dato for når posteringen av transaksjonen er
+                        gjennomført av finansinstitusjonen
+                    allOf:
+                    - $ref: '#/components/schemas/ISODateTime'
+                valueDate:
+                    description: 'Rentedato: dato for når posteringen av transaksjonen er rentebærende'
+                    allOf:
+                    - $ref: '#/components/schemas/ISODateTime'
+                counterParty:
+                    type: array
+                    items:
+                        description: >-
+                            Motpart: annen part, den som en transaksjon går til eller kommer
+                            fra
+                        allOf:
+                        - $ref: '#/components/schemas/CounterParty'
+                    minItems: 0
+                additionalInfo:
+                    description: >-
+                        Tilleggsinformasjon på transaksjon: tekstlig beskrivelse av
+                        innholdet på en transkasjon
+                    type: string
+                    minLength: 1
+                    maxLength: 500
+                currencyExchange:
+                    description: 'Valutaomregning: omregne et beløp fra en valuta til en annen valuta'
+                    allOf:
+                    - $ref: '#/components/schemas/CurrencyExchange'
+                merchant:
+                    description: 'Brukersted: det fysiske stedet transaksjonen ble utført'
+                    type: string
+                    minLength: 1
+                    maxLength: 140
+                paymentCard:
+                    description: >-
+                        Betalingskort: er fellesbetegnelse for ulike typer plastkort som
+                        brukes til kontantuttak og til betaling for varer og tjenester på
+                        ulike brukersteder
+                    allOf:
+                    - $ref: '#/components/schemas/PaymentCard'
+                registered:
+                    description: 'registreringsdato: dato og tid for når transaksjonen ble utført'
+                    allOf:
+                    - $ref: '#/components/schemas/ISODateTime'
+                amount:
+                    $ref: '#/components/schemas/Amount'
+                currency:
+                    $ref: '#/components/schemas/CurrencyCode'
+        TransactionReference:
+            required:
+            - value
+            - type
+            type: object
+            properties:
+                value:
+                    type: string
+                type:
+                    $ref: '#/components/schemas/TransactionReferenceType'
+        TransactionReferenceType:
+            enum:
+            - accountServicerReference
+            - archiveReference
+            - chequeNumber
+            - endToEndIdentification
+            - instructionIdentification
+            - invoiceNumber
+            - mandateIdentification
+            - messageIdentification
+            - otherReference
+            - paymentInformationIdentification
+            - remittanceReference
+            type: string
+        TransactionStatus:
+            enum:
+            - booked
+            - pending
+            - info
+            type: string
+        Transactions:
+            description: Rot-element for respons
+            type: object
+            properties:
+                responseStatus:
+                    description: >-
+                        Angir hvorvidt dette er en komplett respons, eller om det også kan
+                        finnes data offline som ikke kan hentes gjennom apiene.
+                    allOf:
+                    - $ref: '#/components/schemas/ResponseStatus'
+                transactions:
+                    type: array
+                    items:
+                        description: 'transaksjon: enhver postering på konto'
+                        allOf:
+                        - $ref: '#/components/schemas/Transaction'
+                    minItems: 0
+                links:
+                    type: array
+                    items:
+                        description: 'paginering: støtte oppdeling av respons for store resultatsett'
+                        allOf:
+                        - $ref: '#/components/schemas/Link'
+                    minItems: 0
+            xml:
+                name: transactions
+        TrueFalseIndicator:
+            type: boolean
+        Error:
+            description: Feilstruktur for alle feilmeldinger
+            type: object
+            properties:
+                code:
+                    type: string
+                    description: 'feilkode, for maskinell håndtering'
+                    example: ACC-0xx
+                message:
+                    type: string
+                    description: beskrivelse av feilen som har oppstått
+                    example: Informative error message
+security:
+- accountsAuth: []
