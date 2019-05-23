@@ -1,4 +1,4 @@
-package ske.ekstkom.utsending.kontoopplysninger.kontoopplysningsforespoersel.pact;
+package dsop.konsument.kontrakt;
 
 import static io.pactfoundation.consumer.dsl.LambdaDsl.newJsonBody;
 

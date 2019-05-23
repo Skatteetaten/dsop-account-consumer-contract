@@ -20,231 +20,68 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.scm.plugin.version>1.9.5</maven.scm.plugin.version>
-    <junit.version>4.12</junit.version>
-    <camel.version>2.22.0</camel.version>
-    <awaitility.version>3.0.0</awaitility.version>
     <json-unit.version>1.25.0</json-unit.version>
-    <rest-assured.version>3.0.3</rest-assured.version>
     <springframework-boot.version>2.0.3.RELEASE</springframework-boot.version>
-    <system-rules.version>1.18.0</system-rules.version>
-    <wiremock.version>2.5.1</wiremock.version>
-    <junit.version>4.12</junit.version>
-    <cxf.version>3.1.5</cxf.version>
+    <junit-jupiter-engine.version>5.4.2</junit-jupiter-engine.version>
+    <commons-io.version>2.6</commons-io.version>
+    <jackson-databind.version>2.9.4</jackson-databind.version>
+    <pact-jvm-consumer-java8_2.12.version>3.5.9</pact-jvm-consumer-java8_2.12.version>
+    <springfox-swagger2.version>2.6.0</springfox-swagger2.version>
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>javax.inject</groupId>
-      <artifactId>javax.inject</artifactId>
-      <version>1</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-core</artifactId>
-      <version>${camel.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-http</artifactId>
-      <version>${camel.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>commons-logging</artifactId>
-          <groupId>commons-logging</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.activemq</groupId>
-      <artifactId>activemq-camel</artifactId>
-      <version>5.15.8</version>
-    </dependency>
-
-
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-metrics</artifactId>
-      <version>${camel.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-spring-boot</artifactId>
-      <version>${camel.version}</version>
-    </dependency>
-
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
       <version>${springframework-boot.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <version>${springframework-boot.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
       <version>${springframework-boot.version}</version>
     </dependency>
-
-
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-servlet</artifactId>
-      <version>${camel.version}</version>
-    </dependency>
-
-    <!-- camel jackson -->
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-jackson</artifactId>
-      <version>${camel.version}</version>
-    </dependency>
-    <!-- camel XMLJackson -->
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-jacksonxml</artifactId>
-      <version>${camel.version}</version>
-    </dependency>
-    <!-- camel cxf -->
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-cxf</artifactId>
-      <version>${camel.version}</version>
-    </dependency>
-    <!--camel xtream -->
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-xstream</artifactId>
-      <version>${camel.version}</version>
-    </dependency>
-
-    <!--Test dependencies -->
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-test</artifactId>
-      <version>${camel.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- json unit -->
     <dependency>
       <groupId>net.javacrumbs.json-unit</groupId>
       <artifactId>json-unit</artifactId>
       <version>${json-unit.version}</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junit-jupiter-engine.version}</version>
       <scope>test</scope>
     </dependency>
-
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-test-spring</artifactId>
-      <version>${camel.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-contract-wiremock</artifactId>
-      <version>2.0.0.RELEASE</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.github.stefanbirkner</groupId>
-      <artifactId>system-rules</artifactId>
-      <version>${system-rules.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.github.tomakehurst</groupId>
-      <artifactId>wiremock-standalone</artifactId>
-      <version>2.18.0</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.awaitility</groupId>
-      <artifactId>awaitility</artifactId>
-      <version>${awaitility.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <!--<dependency>-->
-    <!--<groupId>org.apache.camel</groupId>-->
-    <!--<artifactId>camel-velocity</artifactId>-->
-    <!--<version>${camel.version}</version>-->
-    <!--</dependency>-->
-
-    <dependency>
-      <groupId>com.github.tomakehurst</groupId>
-      <artifactId>wiremock</artifactId>
-      <version>${wiremock.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- REST assured -->
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>rest-assured</artifactId>
-      <version>${rest-assured.version}</version>
-      <scope>test</scope>
-    </dependency>
-
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.6</version>
+      <version>${commons-io.version}</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.9.4</version>
+      <version>${jackson-databind.version}</version>
     </dependency>
-
     <dependency>
       <groupId>au.com.dius</groupId>
       <artifactId>pact-jvm-consumer-java8_2.12</artifactId>
-      <version>3.5.9</version>
+      <version>${pact-jvm-consumer-java8_2.12.version}</version>
     </dependency>
     <dependency>
       <groupId>io.springfox</groupId>
       <artifactId>springfox-swagger2</artifactId>
-      <version>2.6.0</version>
+      <version>${springfox-swagger2.version}</version>
     </dependency>
-
   </dependencies>
 
   <build>
-    <!--<plugins>-->
-      <!--<plugin>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
-      <!--</plugin>-->
-    <!--</plugins>-->
     <plugins>
-
       <plugin>
         <groupId>org.openapitools</groupId>
         <artifactId>openapi-generator-maven-plugin</artifactId>
@@ -256,7 +93,7 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <inputSpec>${project.basedir}/src/main/resources/api/ekstern/open_api_konto_spesifikasjon.yaml</inputSpec>
+              <inputSpec>${project.basedir}/src/test/resources/api/ekstern/open_api_konto_spesifikasjon.yaml</inputSpec>
               <language>spring</language>
               <modelPackage>ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern</modelPackage>
               <apiPackage>ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern</apiPackage>
@@ -280,6 +117,5 @@
         </executions>
       </plugin>
     </plugins>
-
   </build>
 </project>
