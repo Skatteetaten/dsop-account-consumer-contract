@@ -1,0 +1,617 @@
+{
+  "provider": {
+    "name": "bank_provider"
+  },
+  "consumer": {
+    "name": "etat_consumer"
+  },
+  "interactions": [
+    {
+      "description": "GET AccountList REQUEST",
+      "request": {
+        "method": "GET",
+        "path": "/accounts",
+        "headers": {
+          "Authorization": "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ, CorrelationID=bbce7f02-ae53-c44f-5c5b-aa04da2fbcdb",
+          "CorrelationID": "77dcfc8c-5f6d-4095-bb7c-cdb54b5067a5",
+          "PartyID": "909716212",
+          "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
+        },
+        "query": {
+          "fromDate": [
+            "2016-12-09"
+          ],
+          "toDate": [
+            "2016-12-09"
+          ]
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
+        "body": {
+          "accounts": [
+            {
+              "accountReference": "string",
+              "electronicAddress": [
+                {
+                  "type": "phoneNumber",
+                  "value": "string"
+                }
+              ],
+              "primaryOwner": {
+                "expiryDate": "2010-05-20",
+                "identifier": {
+                  "countryOfResidence": "string",
+                  "type": "countryIdentificationCode",
+                  "value": "string"
+                },
+                "postalAddress": {
+                  "country": "string",
+                  "streetName": "string",
+                  "townName": "string",
+                  "buildingNumber": "string",
+                  "postCode": "string",
+                  "type": "residential",
+                  "addressLine": [
+                    "string"
+                  ]
+                },
+                "name": "string",
+                "permission": "noRight",
+                "startDate": "2010-05-20"
+              },
+              "servicer": {
+                "identifier": {
+                  "countryOfResidence": "string",
+                  "type": "countryIdentificationCode",
+                  "value": "string"
+                },
+                "name": "string",
+                "type": "countryIdentificationCode"
+              },
+              "name": "string",
+              "links": [
+                {
+                  "rel": "string",
+                  "href": "string"
+                }
+              ],
+              "accountIdentifier": "string",
+              "currency": "string",
+              "type": "loanAccount",
+              "status": "enabled"
+            }
+          ],
+          "responseStatus": "complete"
+        },
+        "matchingRules": {
+          "body": {
+            "$.accounts[0].primaryOwner.startDate": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-mm-dd"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.accounts[0].primaryOwner.expiryDate": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-mm-dd"
+                }
+              ],
+              "combine": "AND"
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json;\\s?charset=(utf|UTF)-8"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      },
+      "providerStates": [
+        {
+          "name": "test GET AccountList"
+        }
+      ]
+    },
+    {
+      "description": "GET AccountDetails REQUEST",
+      "request": {
+        "method": "GET",
+        "path": "/accounts/5687123451",
+        "headers": {
+          "Authorization": "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ, CorrelationID=bbce7f02-ae53-c44f-5c5b-aa04da2fbcdb",
+          "CorrelationID": "77dcfc8c-5f6d-4095-bb7c-cdb54b5067a5",
+          "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
+        },
+        "query": {
+          "fromDate": [
+            "2016-12-09"
+          ],
+          "toDate": [
+            "2016-12-09"
+          ]
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
+        "body": {
+          "responseStatus": "complete",
+          "account": {
+            "accountReference": "string",
+            "balance": [
+              {
+                "amount": 0.2,
+                "creditLineIncluded": true,
+                "creditLineAmount": 10.9,
+                "registered": "2019-05-20T10:23:38",
+                "creditLineCurrency": "NOK",
+                "type": "availableBalance",
+                "creditDebitIndicator": "credit"
+              }
+            ],
+            "electronicAddress": [
+              {
+                "type": "phoneNumber",
+                "value": "string"
+              }
+            ],
+            "primaryOwner": {
+              "expiryDate": "2010-05-20",
+              "postalAddress": {
+                "country": "string",
+                "streetName": "string",
+                "townName": "string",
+                "buildingNumber": "string",
+                "postCode": "string",
+                "type": "residential",
+                "addressLine": [
+                  "string"
+                ]
+              },
+              "name": "string",
+              "startDate": "2010-05-20"
+            },
+            "servicer": {
+              "identifier": {
+                "countryOfResidence": "string",
+                "type": "countryIdentificationCode",
+                "value": "string"
+              },
+              "name": "string",
+              "type": "countryIdentificationCode"
+            },
+            "links": [
+              {
+                "rel": "string",
+                "href": "string"
+              }
+            ],
+            "accountIdentifier": "string",
+            "currency": "string",
+            "type": "loanAccount",
+            "status": "enabled"
+          }
+        },
+        "matchingRules": {
+          "body": {
+            "$.account.balance[0].creditLineIncluded": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.account.balance[0].registered": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-MM-dd'T'HH:mm:ss"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.account.primaryOwner.startDate": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-mm-dd"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.account.primaryOwner.expiryDate": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-mm-dd"
+                }
+              ],
+              "combine": "AND"
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json;\\s?charset=(utf|UTF)-8"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      },
+      "providerStates": [
+        {
+          "name": "test GET AccountDetails"
+        }
+      ]
+    },
+    {
+      "description": "GET Cards  REQUEST",
+      "request": {
+        "method": "GET",
+        "path": "/accounts/5687123451/cards",
+        "headers": {
+          "Authorization": "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ, CorrelationID=bbce7f02-ae53-c44f-5c5b-aa04da2fbcdb",
+          "CorrelationID": "77dcfc8c-5f6d-4095-bb7c-cdb54b5067a5",
+          "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
+        },
+        "query": {
+          "fromDate": [
+            "2016-12-09"
+          ],
+          "toDate": [
+            "2016-12-09"
+          ]
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
+        "body": {
+          "paymentCards": [
+            {
+              "expiryDate": "2010-05-20",
+              "holderName": "string",
+              "cardIssuerName": "string",
+              "cardIssuerIdentifier": {
+                "countryOfResidence": "string",
+                "type": "countryIdentificationCode",
+                "value": "string"
+              },
+              "type": "creditCard",
+              "startDate": "2010-05-20",
+              "cardIdentifier": "string"
+            }
+          ],
+          "responseStatus": "complete"
+        },
+        "matchingRules": {
+          "body": {
+            "$.paymentCards[0].startDate": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-mm-dd"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.paymentCards[0].expiryDate": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-mm-dd"
+                }
+              ],
+              "combine": "AND"
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json;\\s?charset=(utf|UTF)-8"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      },
+      "providerStates": [
+        {
+          "name": "test GET Cards"
+        }
+      ]
+    },
+    {
+      "description": "GET Roles REQUEST",
+      "request": {
+        "method": "GET",
+        "path": "/accounts/5687123451/roles",
+        "headers": {
+          "Authorization": "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ, CorrelationID=bbce7f02-ae53-c44f-5c5b-aa04da2fbcdb",
+          "CorrelationID": "77dcfc8c-5f6d-4095-bb7c-cdb54b5067a5",
+          "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
+        },
+        "query": {
+          "fromDate": [
+            "2016-12-09"
+          ],
+          "toDate": [
+            "2016-12-09"
+          ]
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
+        "body": {
+          "roles": [
+            {
+              "identifier": {
+                "countryOfResidence": "Norway",
+                "type": "countryIdentificationCode",
+                "value": "countryIdentificationCode"
+              },
+              "electronicAddress": [
+                {
+                  "type": "emailAddress",
+                  "value": ""
+                }
+              ],
+              "endDate": "2010-05-20",
+              "postalAdress": {
+                "country": "",
+                "streetName": "",
+                "townName": "",
+                "buildingNumber": "",
+                "postCode": "",
+                "type": "residential"
+              },
+              "name": "string",
+              "permission": "noRight",
+              "startDate": "2010-05-20"
+            }
+          ],
+          "responseStatus": "complete"
+        },
+        "matchingRules": {
+          "body": {
+            "$.roles[0].startDate": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-mm-dd"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.roles[0].endDate": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-mm-dd"
+                }
+              ],
+              "combine": "AND"
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json;\\s?charset=(utf|UTF)-8"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      },
+      "providerStates": [
+        {
+          "name": "test GET Roles"
+        }
+      ]
+    },
+    {
+      "description": "GET Transactions REQUEST",
+      "request": {
+        "method": "GET",
+        "path": "/accounts/5687123451/transactions",
+        "headers": {
+          "Authorization": "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ, CorrelationID=bbce7f02-ae53-c44f-5c5b-aa04da2fbcdb",
+          "CorrelationID": "77dcfc8c-5f6d-4095-bb7c-cdb54b5067a5",
+          "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
+        },
+        "query": {
+          "fromDate": [
+            "2016-12-09"
+          ],
+          "toDate": [
+            "2016-12-09"
+          ]
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
+        "body": {
+          "transactions": [
+            {
+              "reversalIndicator": true,
+              "identifier": {
+                "countryOfResidence": "Norway",
+                "type": "countryIdentificationCode",
+                "value": "countryIdentificationCode"
+              },
+              "amount": 100.34,
+              "transactionIdentifier": "string",
+              "registered": "2019-04-20T10:23:38",
+              "merchant": "string",
+              "valueDate": "2019-04-20T10:23:38",
+              "transactionCode": {
+                "subFamily": "valueDate",
+                "domain": "accountManagement",
+                "freeText": "string",
+                "family": "additionalMiscellaneousCreditOperations"
+              },
+              "paymentCard": {
+                "expiryDate": "2010-05-20",
+                "holderName": "string",
+                "cardIssuerName": "string",
+                "cardIssuerIdentifier": {
+                  "countryOfResidence": "string",
+                  "type": "countryIdentificationCode",
+                  "value": "string"
+                },
+                "type": "creditCard",
+                "startDate": "2010-05-20",
+                "cardIdentifier": "string"
+              },
+              "additionalInfo": "string",
+              "bookingDate": "2019-05-20T10:23:38",
+              "currency": "NOK",
+              "counterParty": [
+                {
+                  "identifier": {
+                    "countryOfResidence": "Norway",
+                    "type": "countryIdentificationCode",
+                    "value": "countryIdentificationCode"
+                  },
+                  "postalAddress": {
+                    "country": "string",
+                    "streetName": "string",
+                    "townName": "string",
+                    "buildingNumber": "string",
+                    "postCode": "string",
+                    "type": "residential",
+                    "addressLine": [
+                      "string"
+                    ]
+                  },
+                  "name": "string",
+                  "accountIdentifier": "string",
+                  "type": "creditor"
+                }
+              ],
+              "family": "additionalMiscellaneousCreditOperations",
+              "status": "booked"
+            }
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.transactions[0].bookingDate": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-MM-dd'T'HH:mm:ss"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.transactions[0].valueDate": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-MM-dd'T'HH:mm:ss"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.transactions[0].reversalIndicator": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.transactions[0].registered": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-MM-dd'T'HH:mm:ss"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.transactions[0].paymentCard.startDate": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-mm-dd"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.transactions[0].paymentCard.expiryDate": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-mm-dd"
+                }
+              ],
+              "combine": "AND"
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json;\\s?charset=(utf|UTF)-8"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      },
+      "providerStates": [
+        {
+          "name": "test GET Transactions"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "3.0.0"
+    },
+    "pact-jvm": {
+      "version": "3.5.23"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "paymentCards": [
+    {
+      "expiryDate": "2010-05-20",
+      "holderName": "string",
+      "cardIssuerName": "string",
+      "cardIssuerIdentifier": {
+        "countryOfResidence": "string",
+        "type": "countryIdentificationCode",
+        "value": "string"
+      },
+      "type": "creditCard",
+      "startDate": "2010-05-20",
+      "cardIdentifier": "string"
+    }
+  ],
+  "responseStatus": "complete"
+}

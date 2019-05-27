@@ -81,7 +81,7 @@ public class ContractDefinition {
 
         return builder
         .given("test GET AccountList")
-            .uponReceiving("GET REQUEST") // lag beskrivelse av testen
+            .uponReceiving("GET AccountList REQUEST") // lag beskrivelse av testen
             .path("/accounts")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .headers(Listheaders)
@@ -91,7 +91,7 @@ public class ContractDefinition {
             .body(pactAccountsBody)
 
             .given("test GET AccountDetails")
-            .uponReceiving("GET REQUEST")
+            .uponReceiving("GET AccountDetails REQUEST")
             .path("/accounts/5687123451")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .method("GET")
@@ -101,7 +101,7 @@ public class ContractDefinition {
             .body(pactAccountDetailsBody)
 
         .given("test GET Cards")
-            .uponReceiving("GET REQUEST")
+            .uponReceiving("GET Cards  REQUEST")
             .path("/accounts/5687123451/cards")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .method("GET")
@@ -110,8 +110,8 @@ public class ContractDefinition {
             .status(200)
             .body(pactCardsBody)
 
-        .given("test GET Rolles")
-            .uponReceiving("GET REQUEST")
+        .given("test GET Roles")
+            .uponReceiving("GET Roles REQUEST")
             .headers(CommonHeaders)
             .path("/accounts/5687123451/roles")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
@@ -121,7 +121,7 @@ public class ContractDefinition {
             .body(pactRolesBody)
 
         .given("test GET Transactions")
-            .uponReceiving("GET REQUEST")
+            .uponReceiving("GET Transactions REQUEST")
             .path("/accounts/5687123451/transactions")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .method("GET")

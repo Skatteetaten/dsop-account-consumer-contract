@@ -25,8 +25,8 @@
     <junit-jupiter-engine.version>5.4.2</junit-jupiter-engine.version>
     <commons-io.version>2.6</commons-io.version>
     <jackson-databind.version>2.9.4</jackson-databind.version>
-    <pact-jvm-consumer-java8_2.12.version>3.5.9</pact-jvm-consumer-java8_2.12.version>
     <springfox-swagger2.version>2.6.0</springfox-swagger2.version>
+    <pact.version>3.5.23</pact.version>
   </properties>
 
   <dependencies>
@@ -61,7 +61,6 @@
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>${commons-io.version}</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -71,7 +70,17 @@
     <dependency>
       <groupId>au.com.dius</groupId>
       <artifactId>pact-jvm-consumer-java8_2.12</artifactId>
-      <version>${pact-jvm-consumer-java8_2.12.version}</version>
+      <version>${pact.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>au.com.dius</groupId>
+      <artifactId>pact-jvm-provider-spring_2.12</artifactId>
+      <version>${pact.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>au.com.dius</groupId>
+      <artifactId>pact-jvm-matchers_2.12</artifactId>
+      <version>${pact.version}</version>
     </dependency>
     <dependency>
       <groupId>io.springfox</groupId>

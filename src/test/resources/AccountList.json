@@ -1,0 +1,56 @@
+{
+  "accounts": [
+    {
+      "accountReference": "string",
+      "electronicAddress": [
+        {
+          "type": "phoneNumber",
+          "value": "string"
+        }
+      ],
+      "primaryOwner": {
+        "expiryDate": "2010-05-20",
+        "identifier": {
+          "countryOfResidence": "string",
+          "type": "countryIdentificationCode",
+          "value": "string"
+        },
+        "postalAddress": {
+          "country": "string",
+          "streetName": "string",
+          "townName": "string",
+          "buildingNumber": "string",
+          "postCode": "string",
+          "type": "residential",
+          "addressLine": [
+            "string"
+          ]
+        },
+        "name": "string",
+        "permission": "noRight",
+        "startDate": "2010-05-20"
+      },
+      "servicer": {
+        "identifier": {
+          "countryOfResidence": "string",
+          "type": "countryIdentificationCode",
+          "value": "string"
+        },
+        "name": "string",
+        "type": "countryIdentificationCode"
+      },
+      "name": "string",
+      "links": [
+        {
+          "rel": "string",
+          "href": "string"
+        }
+      ],
+      "accountIdentifier": "string",
+      "currency": "string",
+      "type": "loanAccount",
+      "status": "enabled"
+    }
+  ],
+  "responseStatus": "complete"
+}

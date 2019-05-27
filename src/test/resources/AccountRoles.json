@@ -1,0 +1,30 @@
+{
+  "roles": [
+    {
+      "identifier": {
+        "countryOfResidence": "Norway",
+        "type": "countryIdentificationCode",
+        "value": "countryIdentificationCode"
+      },
+      "electronicAddress": [
+        {
+          "type": "emailAddress",
+          "value": ""
+        }
+      ],
+      "endDate": "2010-05-20",
+      "postalAdress": {
+        "country": "",
+        "streetName": "",
+        "townName": "",
+        "buildingNumber": "",
+        "postCode": "",
+        "type": "residential"
+      },
+      "name": "string",
+      "permission": "noRight",
+      "startDate": "2010-05-20"
+    }
+  ],
+  "responseStatus": "complete"
+}

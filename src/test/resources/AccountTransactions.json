@@ -1,0 +1,64 @@
+{
+  "transactions": [
+    {
+      "reversalIndicator": true,
+      "identifier": {
+        "countryOfResidence": "Norway",
+        "type": "countryIdentificationCode",
+        "value": "countryIdentificationCode"
+      },
+      "amount": 100.34,
+      "transactionIdentifier": "string",
+      "registered": "2019-04-20T10:23:38",
+      "merchant": "string",
+      "valueDate": "2019-04-20T10:23:38",
+      "transactionCode": {
+        "subFamily": "valueDate",
+        "domain": "accountManagement",
+        "freeText": "string",
+        "family": "additionalMiscellaneousCreditOperations"
+      },
+      "paymentCard": {
+        "expiryDate": "2010-05-20",
+        "holderName": "string",
+        "cardIssuerName": "string",
+        "cardIssuerIdentifier": {
+          "countryOfResidence": "string",
+          "type": "countryIdentificationCode",
+          "value": "string"
+        },
+        "type": "creditCard",
+        "startDate": "2010-05-20",
+        "cardIdentifier": "string"
+      },
+      "additionalInfo": "string",
+      "bookingDate": "2019-05-20T10:23:38",
+      "currency": "NOK",
+      "counterParty": [
+        {
+          "identifier": {
+            "countryOfResidence": "Norway",
+            "type": "countryIdentificationCode",
+            "value": "countryIdentificationCode"
+          },
+          "postalAddress": {
+            "country": "string",
+            "streetName": "string",
+            "townName": "string",
+            "buildingNumber": "string",
+            "postCode": "string",
+            "type": "residential",
+            "addressLine": [
+              "string"
+            ]
+          },
+          "name": "string",
+          "accountIdentifier": "string",
+          "type": "creditor"
+        }
+      ],
+      "family": "additionalMiscellaneousCreditOperations",
+      "status": "booked"
+    }
+  ]
+}
