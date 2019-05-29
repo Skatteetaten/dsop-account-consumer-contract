@@ -41,4 +41,8 @@ public class ProviderIntegrationTest {
     public void getTransactions() {
     }
 
+    @State("test GET AccountList empty")
+    public void getEmptyAccountList() {
+    }
+
 }

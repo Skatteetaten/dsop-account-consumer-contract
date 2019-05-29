@@ -39,6 +39,7 @@ import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Transactions;
 public class ContractDefinition {
 
     private static final String PARTY_ID = "909716212";
+    private static final String PARTY_ID_NO_ACCOUNTS = "123456789";
     private static final String LEGAL_MANDATE = "Skatteforvaltningsloven%20%C2%A7%2010-2%201";
     private static final String CORRELATION_ID = "77dcfc8c-5f6d-4095-bb7c-cdb54b5067a5";
     private static final String AUTHORIZATION = "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0"
@@ -67,12 +68,19 @@ public class ContractDefinition {
         DslPart pactCardsBody = getCardsDslPart();
         DslPart pactRolesBody = getRolesDslPart();
         DslPart pactTransactionsBody = getTransactionsDslPart();
+        DslPart pactEmptyAccountsBody = getEmptyAccountsDslPart();
 
         Map<String, String> Listheaders = new HashMap<>();
         Listheaders.put("PartyID", PARTY_ID);
         Listheaders.put("Legal-Mandate", LEGAL_MANDATE);
         Listheaders.put("CorrelationID", CORRELATION_ID);
         Listheaders.put("Authorization", AUTHORIZATION);
+
+        Map<String, String> EmptyListHeaders = new HashMap<>();
+        EmptyListHeaders.put("PartyID", PARTY_ID_NO_ACCOUNTS);
+        EmptyListHeaders.put("Legal-Mandate", LEGAL_MANDATE);
+        EmptyListHeaders.put("CorrelationID", CORRELATION_ID);
+        EmptyListHeaders.put("Authorization", AUTHORIZATION);
 
         Map<String, String> CommonHeaders = new HashMap<>();
         CommonHeaders.put("Legal-Mandate", LEGAL_MANDATE);
@@ -90,7 +98,7 @@ public class ContractDefinition {
             .status(200)
             .body(pactAccountsBody)
 
-            .given("test GET AccountDetails")
+        .given("test GET AccountDetails")
             .uponReceiving("GET AccountDetails REQUEST")
             .path("/accounts/5687123451")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
@@ -101,7 +109,7 @@ public class ContractDefinition {
             .body(pactAccountDetailsBody)
 
         .given("test GET Cards")
-            .uponReceiving("GET Cards  REQUEST")
+            .uponReceiving("GET Cards REQUEST")
             .path("/accounts/5687123451/cards")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .method("GET")
@@ -130,7 +138,16 @@ public class ContractDefinition {
             .status(200)
             .body(pactTransactionsBody)
 
-            // legg på negative tester
+        // legg på negative tester
+        .given("test GET AccountList empty")
+            .uponReceiving("GET AccountList empty REQUEST")
+            .path("/accounts")
+            .query("fromDate=2016-12-09&toDate=2016-12-09")
+            .method("GET")
+            .headers(EmptyListHeaders)
+        .willRespondWith()
+            .status(200)
+            .body(pactEmptyAccountsBody)
         .toPact();
     }
 
@@ -141,10 +158,12 @@ public class ContractDefinition {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders accountListHeaders = new HttpHeaders();
         HttpHeaders accountCommonHeaders = new HttpHeaders();
+        HttpHeaders emptyAccountListHeaders = new HttpHeaders();
 
-        createRequestHeaders(accountListHeaders, accountCommonHeaders);
+        createRequestHeaders(accountListHeaders, accountCommonHeaders, emptyAccountListHeaders);
 
         verifyAccountList(restTemplate, accountListHeaders);
+        verifyEmptyAccountList(restTemplate, emptyAccountListHeaders);
         verifyAccountDetails(restTemplate, accountListHeaders);
         verifyTransactions(restTemplate, accountCommonHeaders);
         verifyCards(restTemplate, accountCommonHeaders);
@@ -152,12 +171,18 @@ public class ContractDefinition {
 
     }
 
-    private void createRequestHeaders(HttpHeaders accountListHeaders, HttpHeaders accountCommonHeaders) {
+    private void createRequestHeaders(HttpHeaders accountListHeaders, HttpHeaders accountCommonHeaders, HttpHeaders emptyAccountListHeaders) {
         accountListHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         accountListHeaders.set("PartyID", PARTY_ID);
         accountListHeaders.set("Legal-Mandate", LEGAL_MANDATE);
         accountListHeaders.set("CorrelationID", CORRELATION_ID);
         accountListHeaders.set("Authorization", AUTHORIZATION);
+
+        emptyAccountListHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        emptyAccountListHeaders.set("PartyID", PARTY_ID_NO_ACCOUNTS);
+        emptyAccountListHeaders.set("Legal-Mandate", LEGAL_MANDATE);
+        emptyAccountListHeaders.set("CorrelationID", CORRELATION_ID);
+        emptyAccountListHeaders.set("Authorization", AUTHORIZATION);
 
         accountCommonHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         accountCommonHeaders.set("Legal-Mandate", LEGAL_MANDATE);
@@ -210,6 +235,17 @@ public class ContractDefinition {
         String accountList = mockProvider.getUrl() + "/accounts?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> accountsResponse =
             sendRequest(restTemplate, accountListHeaders, accountList);
+
+        String jsonAccounts = accountsResponse.getBody();
+        System.out.println(jsonAccounts);
+        Accounts accounts = unmarhalAccount(jsonAccounts);
+        System.out.println(accounts.getAccounts());
+    }
+
+    private void verifyEmptyAccountList(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
+        String accountList = mockProvider.getUrl() + "/accounts?fromDate=2016-12-09&toDate=2016-12-09";
+        ResponseEntity<String> accountsResponse =
+                sendRequest(restTemplate, accountListHeaders, accountList);
 
         String jsonAccounts = accountsResponse.getBody();
         System.out.println(jsonAccounts);
@@ -298,6 +334,12 @@ public class ContractDefinition {
         }).build();
     }
 
+    private DslPart getEmptyAccountsDslPart() throws ParseException {
+        return newJsonBody((accountsList) -> {
+            accountsList.stringValue("responseStatus", "complete");
+            accountsList.array("accounts", account -> {});
+        }).build();
+    }
 
     private DslPart getCardsDslPart() throws ParseException {
 
