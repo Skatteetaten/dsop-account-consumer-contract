@@ -139,8 +139,8 @@ public class ContractDefinition {
             .body(pactTransactionsBody)
 
         // legg på negative tester
-        .given("test GET AccountList empty")
-            .uponReceiving("GET AccountList empty REQUEST")
+        .given("test GET empty AccountList")
+            .uponReceiving("GET empty AccountList REQUEST")
             .path("/accounts")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .method("GET")

@@ -606,7 +606,7 @@
       ]
     },
     {
-      "description": "GET AccountList empty REQUEST",
+      "description": "GET empty AccountList REQUEST",
       "request": {
         "method": "GET",
         "path": "/accounts",
@@ -652,7 +652,7 @@
       },
       "providerStates": [
         {
-          "name": "test GET AccountList empty"
+          "name": "test GET empty AccountList"
         }
       ]
     }
