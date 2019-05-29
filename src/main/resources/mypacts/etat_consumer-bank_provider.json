@@ -267,7 +267,7 @@
       ]
     },
     {
-      "description": "GET Cards  REQUEST",
+      "description": "GET Cards REQUEST",
       "request": {
         "method": "GET",
         "path": "/accounts/5687123451/cards",
@@ -602,6 +602,57 @@
       "providerStates": [
         {
           "name": "test GET Transactions"
+        }
+      ]
+    },
+    {
+      "description": "GET empty AccountList REQUEST",
+      "request": {
+        "method": "GET",
+        "path": "/accounts",
+        "headers": {
+          "Authorization": "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ, CorrelationID=bbce7f02-ae53-c44f-5c5b-aa04da2fbcdb",
+          "CorrelationID": "77dcfc8c-5f6d-4095-bb7c-cdb54b5067a5",
+          "PartyID": "123456789",
+          "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
+        },
+        "query": {
+          "fromDate": [
+            "2016-12-09"
+          ],
+          "toDate": [
+            "2016-12-09"
+          ]
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
+        "body": {
+          "accounts": [
+
+          ],
+          "responseStatus": "complete"
+        },
+        "matchingRules": {
+          "header": {
+            "Content-Type": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json;\\s?charset=(utf|UTF)-8"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      },
+      "providerStates": [
+        {
+          "name": "test GET empty AccountList"
         }
       ]
     }

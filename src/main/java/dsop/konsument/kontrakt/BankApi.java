@@ -17,6 +17,9 @@ public class BankApi {
         @RequestHeader("CorrelationID") String CorrelationID,
         @RequestHeader("PartyID") String PartyID,
         @RequestHeader("Legal-Mandate") String Mandate) throws IOException {
+        if ("123456789".equals(PartyID)) {
+            return getResposeFromFile("AccountListEmpty.json");
+        }
         return getResposeFromFile("AccountList.json");
     }
 
