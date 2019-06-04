@@ -276,7 +276,7 @@ public class ContractDefinition {
                 account.stringValue("type", "loanAccount"); //enum
                 account.stringValue("currency", "string");  //se over
 
-                account.array("balance", balance ->
+                account.array("balances", balance ->
                     balance.object(balanceObject -> {
                         balanceObject.booleanType("creditLineIncluded", true);
                         balanceObject.numberValue("amount", 0.2); // type så lenge det er med 2 desimaler
@@ -292,7 +292,7 @@ public class ContractDefinition {
                     primaryOwner.date("startDate", "yyyy-mm-dd", startDate);
                     primaryOwner.date("expiryDate", "yyyy-mm-dd", expiryDate);
                     createPostalAdress(primaryOwner);
-                    createElectronicAdress(account, "electronicAddress", "type", "phoneNumber", "value");
+                    createElectronicAdress(account, "electronicAddresses", "type", "phoneNumber", "value");
                 });
             });
         }).build();
@@ -328,7 +328,7 @@ public class ContractDefinition {
                     createPostalAdress(primaryOwner);
                 });
 
-                createElectronicAdress(accountObject, "electronicAddress", "type", "phoneNumber", "value"); // reformat
+                createElectronicAdress(accountObject, "electronicAddresses", "type", "phoneNumber", "value"); // reformat
                 accountObject.stringValue("name", "string");
             }));
         }).build();
@@ -378,7 +378,7 @@ public class ContractDefinition {
                     identifier.stringValue("value", "countryIdentificationCode");
                     identifier.stringValue("type", "countryIdentificationCode");
                 });
-                roleObject.array("electronicAddress", electronicAddress ->
+                roleObject.array("electronicAddresses", electronicAddress ->
                     electronicAddress.object(electronicAddressObject -> {
                         electronicAddressObject.stringValue("type", "emailAddress");
                         electronicAddressObject.stringValue("value", "");
@@ -420,7 +420,7 @@ public class ContractDefinition {
                     transactionCode.stringValue("subFamily", "valueDate");
                     transactionCode.stringValue("freeText", "string");
                 });
-                transactionsObject.array("counterParty", counterParty ->
+                transactionsObject.array("counterParties", counterParty ->
                     counterParty.object(counterPartyObject -> {
                         counterPartyObject.object("identifier", identifier -> {
                             identifier.stringValue("countryOfResidence", "Norway");
@@ -457,7 +457,7 @@ public class ContractDefinition {
             postalAddress.stringValue("buildingNumber", "string");
             postalAddress.stringValue("townName", "string");
             postalAddress.stringValue("country", "string");
-            postalAddress.array("addressLine", addressLine -> addressLine.stringValue("string"));
+            postalAddress.array("addressLines", addressLine -> addressLine.stringValue("string"));
         });
     }
 

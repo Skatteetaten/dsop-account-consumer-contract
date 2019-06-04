@@ -1,1 +1,58 @@
-{"responseStatus":"complete","account":{"accountReference":"string","balance":[{"amount":0.2,"creditLineIncluded":true,"creditLineAmount":10.9,"registered":"2019-05-20T10:23:38","creditLineCurrency":"NOK","type":"availableBalance","creditDebitIndicator":"credit"}],"electronicAddress":[{"type":"phoneNumber","value":"string"}],"primaryOwner":{"expiryDate":"2010-05-20","postalAddress":{"country":"string","streetName":"string","townName":"string","buildingNumber":"string","postCode":"string","type":"residential","addressLine":["string"]},"name":"string","startDate":"2010-05-20"},"servicer":{"identifier":{"countryOfResidence":"string","type":"countryIdentificationCode","value":"string"},"name":"string","type":"countryIdentificationCode"},"links":[{"rel":"string","href":"string"}],"accountIdentifier":"string","currency":"string","type":"loanAccount","status":"enabled"}}
+{
+  "responseStatus": "complete",
+  "account": {
+    "accountReference": "string",
+    "balances": [
+      {
+        "amount": 0.2,
+        "creditLineIncluded": true,
+        "creditLineAmount": 10.9,
+        "registered": "2019-05-20T10:23:38",
+        "creditLineCurrency": "NOK",
+        "type": "availableBalance",
+        "creditDebitIndicator": "credit"
+      }
+    ],
+    "electronicAddresses": [
+      {
+        "type": "phoneNumber",
+        "value": "string"
+      }
+    ],
+    "primaryOwner": {
+      "expiryDate": "2010-05-20",
+      "postalAddress": {
+        "country": "string",
+        "streetName": "string",
+        "townName": "string",
+        "buildingNumber": "string",
+        "postCode": "string",
+        "type": "residential",
+        "addressLines": [
+          "string"
+        ]
+      },
+      "name": "string",
+      "startDate": "2010-05-20"
+    },
+    "servicer": {
+      "identifier": {
+        "countryOfResidence": "string",
+        "type": "countryIdentificationCode",
+        "value": "string"
+      },
+      "name": "string",
+      "type": "countryIdentificationCode"
+    },
+    "links": [
+      {
+        "rel": "string",
+        "href": "string"
+      }
+    ],
+    "accountIdentifier": "string",
+    "currency": "string",
+    "type": "loanAccount",
+    "status": "enabled"
+  }
+}

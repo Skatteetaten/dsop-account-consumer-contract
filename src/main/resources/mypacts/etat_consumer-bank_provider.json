@@ -35,12 +35,6 @@
           "accounts": [
             {
               "accountReference": "string",
-              "electronicAddress": [
-                {
-                  "type": "phoneNumber",
-                  "value": "string"
-                }
-              ],
               "primaryOwner": {
                 "expiryDate": "2010-05-20",
                 "identifier": {
@@ -54,10 +48,10 @@
                   "townName": "string",
                   "buildingNumber": "string",
                   "postCode": "string",
-                  "type": "residential",
-                  "addressLine": [
+                  "addressLines": [
                     "string"
-                  ]
+                  ],
+                  "type": "residential"
                 },
                 "name": "string",
                 "permission": "noRight",
@@ -81,6 +75,12 @@
               ],
               "accountIdentifier": "string",
               "currency": "string",
+              "electronicAddresses": [
+                {
+                  "type": "phoneNumber",
+                  "value": "string"
+                }
+              ],
               "type": "loanAccount",
               "status": "enabled"
             }
@@ -154,8 +154,7 @@
         "body": {
           "responseStatus": "complete",
           "account": {
-            "accountReference": "string",
-            "balance": [
+            "balances": [
               {
                 "amount": 0.2,
                 "creditLineIncluded": true,
@@ -166,12 +165,7 @@
                 "creditDebitIndicator": "credit"
               }
             ],
-            "electronicAddress": [
-              {
-                "type": "phoneNumber",
-                "value": "string"
-              }
-            ],
+            "accountReference": "string",
             "primaryOwner": {
               "expiryDate": "2010-05-20",
               "postalAddress": {
@@ -180,10 +174,10 @@
                 "townName": "string",
                 "buildingNumber": "string",
                 "postCode": "string",
-                "type": "residential",
-                "addressLine": [
+                "addressLines": [
                   "string"
-                ]
+                ],
+                "type": "residential"
               },
               "name": "string",
               "startDate": "2010-05-20"
@@ -205,13 +199,19 @@
             ],
             "accountIdentifier": "string",
             "currency": "string",
+            "electronicAddresses": [
+              {
+                "type": "phoneNumber",
+                "value": "string"
+              }
+            ],
             "type": "loanAccount",
             "status": "enabled"
           }
         },
         "matchingRules": {
           "body": {
-            "$.account.balance[0].creditLineIncluded": {
+            "$.account.balances[0].creditLineIncluded": {
               "matchers": [
                 {
                   "match": "type"
@@ -219,7 +219,7 @@
               ],
               "combine": "AND"
             },
-            "$.account.balance[0].registered": {
+            "$.account.balances[0].registered": {
               "matchers": [
                 {
                   "match": "date",
@@ -380,12 +380,6 @@
                 "type": "countryIdentificationCode",
                 "value": "countryIdentificationCode"
               },
-              "electronicAddress": [
-                {
-                  "type": "emailAddress",
-                  "value": ""
-                }
-              ],
               "endDate": "2010-05-20",
               "postalAdress": {
                 "country": "",
@@ -396,6 +390,12 @@
                 "type": "residential"
               },
               "name": "string",
+              "electronicAddresses": [
+                {
+                  "type": "emailAddress",
+                  "value": ""
+                }
+              ],
               "permission": "noRight",
               "startDate": "2010-05-20"
             }
@@ -476,6 +476,29 @@
                 "value": "countryIdentificationCode"
               },
               "amount": 100.34,
+              "counterParties": [
+                {
+                  "identifier": {
+                    "countryOfResidence": "Norway",
+                    "type": "countryIdentificationCode",
+                    "value": "countryIdentificationCode"
+                  },
+                  "postalAddress": {
+                    "country": "string",
+                    "streetName": "string",
+                    "townName": "string",
+                    "buildingNumber": "string",
+                    "postCode": "string",
+                    "addressLines": [
+                      "string"
+                    ],
+                    "type": "residential"
+                  },
+                  "name": "string",
+                  "accountIdentifier": "string",
+                  "type": "creditor"
+                }
+              ],
               "transactionIdentifier": "string",
               "registered": "2019-04-20T10:23:38",
               "merchant": "string",
@@ -502,29 +525,6 @@
               "additionalInfo": "string",
               "bookingDate": "2019-05-20T10:23:38",
               "currency": "NOK",
-              "counterParty": [
-                {
-                  "identifier": {
-                    "countryOfResidence": "Norway",
-                    "type": "countryIdentificationCode",
-                    "value": "countryIdentificationCode"
-                  },
-                  "postalAddress": {
-                    "country": "string",
-                    "streetName": "string",
-                    "townName": "string",
-                    "buildingNumber": "string",
-                    "postCode": "string",
-                    "type": "residential",
-                    "addressLine": [
-                      "string"
-                    ]
-                  },
-                  "name": "string",
-                  "accountIdentifier": "string",
-                  "type": "creditor"
-                }
-              ],
               "family": "additionalMiscellaneousCreditOperations",
               "status": "booked"
             }
