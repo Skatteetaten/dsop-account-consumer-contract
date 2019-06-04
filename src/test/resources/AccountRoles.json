@@ -6,7 +6,7 @@
         "type": "countryIdentificationCode",
         "value": "countryIdentificationCode"
       },
-      "electronicAddress": [
+      "electronicAddresses": [
         {
           "type": "emailAddress",
           "value": ""

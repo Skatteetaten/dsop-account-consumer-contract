@@ -2,7 +2,7 @@
   "accounts": [
     {
       "accountReference": "string",
-      "electronicAddress": [
+      "electronicAddresses": [
         {
           "type": "phoneNumber",
           "value": "string"
@@ -22,7 +22,7 @@
           "buildingNumber": "string",
           "postCode": "string",
           "type": "residential",
-          "addressLine": [
+          "addressLines": [
             "string"
           ]
         },

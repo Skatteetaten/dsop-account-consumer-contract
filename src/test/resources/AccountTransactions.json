@@ -34,7 +34,7 @@
       "additionalInfo": "string",
       "bookingDate": "2019-05-20T10:23:38",
       "currency": "NOK",
-      "counterParty": [
+      "counterParties": [
         {
           "identifier": {
             "countryOfResidence": "Norway",
@@ -48,7 +48,7 @@
             "buildingNumber": "string",
             "postCode": "string",
             "type": "residential",
-            "addressLine": [
+            "addressLines": [
               "string"
             ]
           },
