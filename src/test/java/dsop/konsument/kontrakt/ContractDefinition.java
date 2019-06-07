@@ -57,7 +57,6 @@ public class ContractDefinition {
         + "AoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ, CorrelationID=bbce7"
         + "f02-ae53-c44f-5c5b-aa04da2fbcdb";
 
-
     @Rule
     public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("bank_provider", "localhost", 8080, this);
 
@@ -171,7 +170,8 @@ public class ContractDefinition {
 
     }
 
-    private void createRequestHeaders(HttpHeaders accountListHeaders, HttpHeaders accountCommonHeaders, HttpHeaders emptyAccountListHeaders) {
+    private void createRequestHeaders(HttpHeaders accountListHeaders, HttpHeaders accountCommonHeaders,
+        HttpHeaders emptyAccountListHeaders) {
         accountListHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         accountListHeaders.set("PartyID", PARTY_ID);
         accountListHeaders.set("Legal-Mandate", LEGAL_MANDATE);
@@ -211,7 +211,8 @@ public class ContractDefinition {
     }
 
     private void verifyTransactions(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
-        String transactionsUrl = mockProvider.getUrl() + "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09";
+        String transactionsUrl =
+            mockProvider.getUrl() + "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> transactionsResponse = sendRequest(restTemplate, accountCommonHeaders, transactionsUrl);
 
         String jsonTransactions = transactionsResponse.getBody();
@@ -245,7 +246,7 @@ public class ContractDefinition {
     private void verifyEmptyAccountList(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
         String accountList = mockProvider.getUrl() + "/accounts?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> accountsResponse =
-                sendRequest(restTemplate, accountListHeaders, accountList);
+            sendRequest(restTemplate, accountListHeaders, accountList);
 
         String jsonAccounts = accountsResponse.getBody();
         System.out.println(jsonAccounts);
@@ -266,16 +267,15 @@ public class ContractDefinition {
         Date expiryDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
 
         return newJsonBody((accountDetails) -> {
-            accountDetails.stringValue("responseStatus", "complete"); //enum
+            accountDetails.stringValue("responseStatus", "partial"); //enum
             accountDetails.object("account", account -> {
                 account.stringValue("status", "enabled"); // enum
-                createServicer(account); // se over
-                createElectronicAdress(account, "links", "rel", "string", "href"); //se over
+                addServicer(account); // se over
+                addElectronicAdress(account, "links", "rel", "string", "href"); //se over
                 account.stringValue("accountIdentifier", "string"); // se over
                 account.stringValue("accountReference", "string"); // se over
                 account.stringValue("type", "loanAccount"); //enum
                 account.stringValue("currency", "string");  //se over
-
                 account.array("balances", balance ->
                     balance.object(balanceObject -> {
                         balanceObject.booleanType("creditLineIncluded", true);
@@ -286,14 +286,7 @@ public class ContractDefinition {
                         balanceObject.numberValue("creditLineAmount", 10.9); //se over
                         balanceObject.stringValue("creditLineCurrency", "NOK"); //se over
                     }));
-
-                account.object("primaryOwner", primaryOwner -> { // se over
-                    primaryOwner.stringValue("name", "string");
-                    primaryOwner.date("startDate", "yyyy-mm-dd", startDate);
-                    primaryOwner.date("expiryDate", "yyyy-mm-dd", expiryDate);
-                    createPostalAdress(primaryOwner);
-                    createElectronicAdress(account, "electronicAddresses", "type", "phoneNumber", "value");
-                });
+                addPrimaryOwner(startDate, expiryDate, account);
             });
         }).build();
     }
@@ -303,33 +296,21 @@ public class ContractDefinition {
         Date startDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
         Date expiryDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
 
-
         return newJsonBody((accountsList) -> {
             accountsList.stringValue("responseStatus", "complete");
             accountsList.array("accounts", accounts -> accounts.object(accountObject -> {
                 accountObject.stringValue("status", "enabled");
-                createServicer(accountObject);
-                createElectronicAdress(accountObject, "links", "rel", "string", "href");
+                addServicer(accountObject);
+                addElectronicAdress(accountObject, "links", "rel", "string", "href");
 
                 accountObject.stringValue("accountIdentifier", "string"); // 11 siffer regexp
                 accountObject.stringValue("accountReference", "string"); //.* string -> StringType
                 accountObject.stringValue("type", "loanAccount"); //stringMatcher test mot alle verdier
                 accountObject.stringValue("currency", "string"); // Stringmatcher Uppercase 3 letters A-Z
-                accountObject.object("primaryOwner", primaryOwner -> {
-                    primaryOwner.stringValue("permission", "noRight"); //StringMatch enums
-                    primaryOwner.object("identifier", identifier -> {
-                        identifier.stringValue("countryOfResidence", "string"); //ISO standard 2 bokstaver
-                        identifier.stringValue("value", "string");
-                        identifier.stringValue("type", "countryIdentificationCode"); // enum
-                    });
-                    primaryOwner.stringValue("name", "string"); // String
-                    primaryOwner.date("startDate", "yyyy-mm-dd", startDate);
-                    primaryOwner.date("expiryDate", "yyyy-mm-dd", expiryDate);
-                    createPostalAdress(primaryOwner);
-                });
-
-                createElectronicAdress(accountObject, "electronicAddresses", "type", "phoneNumber", "value"); // reformat
-                accountObject.stringValue("name", "string");
+                addPrimaryOwner(startDate, expiryDate, accountObject);
+                addElectronicAdress(accountObject, "electronicAddresses", "type", "phoneNumber",
+                    "96711125"); // reformat
+                accountObject.stringValue("name", "DNB");
             }));
         }).build();
     }
@@ -337,7 +318,8 @@ public class ContractDefinition {
     private DslPart getEmptyAccountsDslPart() throws ParseException {
         return newJsonBody((accountsList) -> {
             accountsList.stringValue("responseStatus", "complete");
-            accountsList.array("accounts", account -> {});
+            accountsList.array("accounts", account -> {
+            });
         }).build();
     }
 
@@ -349,7 +331,7 @@ public class ContractDefinition {
         return newJsonBody((cardsBody) -> {
             cardsBody.stringValue("responseStatus", "complete");
             cardsBody.array("paymentCards", paymentCards -> paymentCards.object(cardObject -> {
-                createCardIdentifier(startDate, expiryDate, cardObject);
+                addCardIdentifier(startDate, expiryDate, cardObject);
             }));
         }).build();
     }
@@ -362,28 +344,24 @@ public class ContractDefinition {
         return newJsonBody((rolesBody) -> {
             rolesBody.stringValue("responseStatus", "complete"); //enum
             rolesBody.array("roles", roles -> roles.object(roleObject -> {
-                roleObject.stringValue("name", "string"); //string
+                roleObject.stringValue("name", "Nicolai"); //string
                 roleObject.date("startDate", "yyyy-mm-dd", startDate); // sjekk oblig.
                 roleObject.date("endDate", "yyyy-mm-dd", endDate); // sjekk oblig.
                 roleObject.object("postalAdress", postalAdress -> {
-                    postalAdress.stringValue("postCode", "");
+                    postalAdress.stringValue("postCode", "1598");
                     postalAdress.stringValue("type", "residential");
-                    postalAdress.stringValue("streetName", "");
-                    postalAdress.stringValue("buildingNumber", "");
-                    postalAdress.stringValue("townName", "");
-                    postalAdress.stringValue("country", "");
+                    postalAdress.stringValue("streetName", "bøgata");
+                    postalAdress.stringValue("buildingNumber", "2");
+                    postalAdress.stringValue("townName", "Oslo");
+                    postalAdress.stringValue("country", "Norway");
                 });
-                roleObject.object("identifier", identifier -> {
-                    identifier.stringValue("countryOfResidence", "Norway");
-                    identifier.stringValue("value", "countryIdentificationCode");
-                    identifier.stringValue("type", "countryIdentificationCode");
-                });
+                addIdentifier(roleObject);
                 roleObject.array("electronicAddresses", electronicAddress ->
                     electronicAddress.object(electronicAddressObject -> {
                         electronicAddressObject.stringValue("type", "emailAddress");
-                        electronicAddressObject.stringValue("value", "");
+                        electronicAddressObject.stringValue("value", "test@test.no");
                     }));
-                roleObject.stringValue("permission", "noRight");
+                roleObject.stringValue("permission", "rightToUseAlone");
             }));
         }).build();
     }
@@ -400,80 +378,93 @@ public class ContractDefinition {
                 transactionsObject.date("bookingDate", "yyyy-MM-dd'T'HH:mm:ss", bookingDate);
                 transactionsObject.date("valueDate", "yyyy-MM-dd'T'HH:mm:ss", valueDate);
                 transactionsObject.stringValue("family", "additionalMiscellaneousCreditOperations");
-                transactionsObject.stringValue("transactionIdentifier", "string");
+                transactionsObject.stringValue("transactionIdentifier", "DSOP10000000318308");
                 transactionsObject.booleanType("reversalIndicator", true);
                 transactionsObject.stringValue("status", "booked");
                 transactionsObject.date("registered", "yyyy-MM-dd'T'HH:mm:ss", registredDate);
                 transactionsObject.numberValue("amount", 100.34);
                 transactionsObject.stringValue("currency", "NOK");
-                transactionsObject.stringValue("additionalInfo", "string");
+                transactionsObject.stringValue("additionalInfo", "Anonymisert transaksjonstekst DSOP");
                 transactionsObject.stringValue("merchant", "string");
-                transactionsObject.object("paymentCard", paymentCard -> createCardIdentifier(startDate, expiryDate, paymentCard));
-                transactionsObject.object("identifier", identifier -> {
-                    identifier.stringValue("countryOfResidence", "Norway");
-                    identifier.stringValue("value", "countryIdentificationCode");
-                    identifier.stringValue("type", "countryIdentificationCode");
-                });
+                transactionsObject
+                    .object("paymentCard", paymentCard -> addCardIdentifier(startDate, expiryDate, paymentCard));
+                addIdentifier(transactionsObject);
                 transactionsObject.object("transactionCode", transactionCode -> {
                     transactionCode.stringValue("domain", "accountManagement");
                     transactionCode.stringValue("family", "additionalMiscellaneousCreditOperations");
-                    transactionCode.stringValue("subFamily", "valueDate");
-                    transactionCode.stringValue("freeText", "string");
+                    transactionCode.stringValue("subFamily", "valueDate"); // sjekke
+                    transactionCode.stringValue("freeText", "VISA Varekjøp");
                 });
                 transactionsObject.array("counterParties", counterParty ->
                     counterParty.object(counterPartyObject -> {
-                        counterPartyObject.object("identifier", identifier -> {
-                            identifier.stringValue("countryOfResidence", "Norway");
-                            identifier.stringValue("value", "countryIdentificationCode");
-                            identifier.stringValue("type", "countryIdentificationCode");
-                        });
-                        counterPartyObject.stringValue("accountIdentifier", "string");
-                        counterPartyObject.stringValue("name", "string");
+                        addIdentifier(counterPartyObject);
+                        counterPartyObject.stringValue("accountIdentifier", "9867123111");
+                        counterPartyObject.stringValue("name", "Selskapet AS");
                         counterPartyObject.stringValue("type", "creditor");
-                        createPostalAdress(counterPartyObject);
+                        addPostalAdress(counterPartyObject);
                     }));
             }))).build();
     }
 
-    private void createCardIdentifier(Date startDate, Date expiryDate, LambdaDslObject paymentCard) {
-        paymentCard.stringValue("holderName", "string"); // String
-        paymentCard.stringValue("cardIssuerName", "string"); //String
-        paymentCard.stringValue("type", "creditCard"); //Enum
-        paymentCard.date("startDate", "yyyy-mm-dd", startDate); // må være med
-        paymentCard.date("expiryDate", "yyyy-mm-dd", expiryDate); // må være med
-        paymentCard.stringValue("cardIdentifier", "string"); // maskert regmatcher X eller *
-        paymentCard.object("cardIssuerIdentifier", cardIssuerIdentifier -> {
-            cardIssuerIdentifier.stringValue("countryOfResidence", "string"); // se over
-            cardIssuerIdentifier.stringValue("value", "string"); // se over
-            cardIssuerIdentifier.stringValue("type", "countryIdentificationCode"); // se over
+    private void addCardIdentifier(Date startDate, Date expiryDate, LambdaDslObject parentDslObject) {
+        parentDslObject.stringValue("holderName", "Alma"); // String
+        parentDslObject.stringValue("cardIssuerName", "Mastercard AS"); //String
+        parentDslObject.stringValue("type", "creditCard"); //Enum
+        parentDslObject.date("startDate", "yyyy-mm-dd", startDate); // må være med
+        parentDslObject.date("expiryDate", "yyyy-mm-dd", expiryDate); // må være med
+        parentDslObject.stringValue("cardIdentifier", "4567xxxxxxxx9809"); // maskert regmatcher X eller *
+        parentDslObject.object("cardIssuerIdentifier", cardIssuerIdentifier -> {
+            cardIssuerIdentifier.stringValue("countryOfResidence", "NO"); // se over
+            cardIssuerIdentifier.stringValue("value", "123456879"); // se over
+            cardIssuerIdentifier.stringValue("type", "nationalIdentityNumber"); // se over
         });
     }
 
-    private void createPostalAdress(LambdaDslObject primaryOwner) {
-        primaryOwner.object("postalAddress", postalAddress -> {
-            postalAddress.stringValue("postCode", "string");
+    private void addPostalAdress(LambdaDslObject parentDslObject) {
+        parentDslObject.object("postalAddress", postalAddress -> {
+            postalAddress.stringValue("postCode", "1598");
             postalAddress.stringValue("type", "residential");
-            postalAddress.stringValue("streetName", "string");
-            postalAddress.stringValue("buildingNumber", "string");
-            postalAddress.stringValue("townName", "string");
-            postalAddress.stringValue("country", "string");
-            postalAddress.array("addressLines", addressLine -> addressLine.stringValue("string"));
+            postalAddress.stringValue("streetName", "bøgata");
+            postalAddress.stringValue("buildingNumber", "2");
+            postalAddress.stringValue("townName", "Oslo");
+            postalAddress.stringValue("country", "Norway");
+            postalAddress.array("addressLines", addressLine -> addressLine.stringValue("test@test.no"));
         });
     }
 
-    private void createServicer(LambdaDslObject account) {
+    private void addPrimaryOwner(Date startDate, Date expiryDate, LambdaDslObject parentDslObject) {
+        parentDslObject.object("primaryOwner", primaryOwner -> {
+            primaryOwner.stringValue("permission", "noRight"); //StringMatch enums
+            addIdentifier(primaryOwner);
+            primaryOwner.stringValue("name", "Boomsma Erika"); // String
+            primaryOwner.date("startDate", "yyyy-mm-dd", startDate);
+            primaryOwner.date("expiryDate", "yyyy-mm-dd", expiryDate);
+            addPostalAdress(primaryOwner);
+        });
+    }
+
+    private void addServicer(LambdaDslObject account) {
         account.object("servicer", servicer -> {
-            servicer.stringValue("name", "string"); //string
+            servicer.stringValue("name", "808987654"); //string
             servicer.object("identifier", identifier -> {
-                identifier.stringValue("countryOfResidence", "string"); // se over
-                identifier.stringValue("value", "string");
+                identifier.stringValue("countryOfResidence", "NO"); // se over
+                identifier.stringValue("value", "123456879");
                 identifier.stringValue("type", "countryIdentificationCode");
             });
             servicer.stringValue("type", "countryIdentificationCode");
         });
     }
 
-    private void createElectronicAdress(LambdaDslObject accountObject, String links2, String rel,
+    private void addIdentifier(LambdaDslObject parentDslObject) {
+        parentDslObject.object("identifier", identifier -> {
+            identifier.stringValue("countryOfResidence", "NO"); //ISO standard 2 bokstaver
+            identifier.stringValue("value", "10108054242");
+            identifier.stringValue("type", "nationalIdentityNumber"); // en
+        });
+
+    }
+
+    private void addElectronicAdress(LambdaDslObject accountObject, String links2, String rel,
         String string, String href) {
         accountObject.array(links2, links ->
             links.object(electronicAddressObject -> {
@@ -527,7 +518,6 @@ public class ContractDefinition {
         }
     }
 
-
     private Roles unmarhalRoles(String rolesJson) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -542,7 +532,6 @@ public class ContractDefinition {
             throw new IllegalArgumentException("Cards kan ikke unmarshalles", e);
         }
     }
-
 
     private Transactions unmarhalTransactions(String transactionsJson) {
         ObjectMapper objectMapper = new ObjectMapper();
