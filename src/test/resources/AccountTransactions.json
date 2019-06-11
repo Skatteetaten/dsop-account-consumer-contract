@@ -3,60 +3,60 @@
     {
       "reversalIndicator": true,
       "identifier": {
-        "countryOfResidence": "Norway",
-        "type": "countryIdentificationCode",
-        "value": "countryIdentificationCode"
+        "countryOfResidence": "NO",
+        "type": "nationalIdentityNumber",
+        "value": "10108054242"
       },
       "amount": 100.34,
-      "transactionIdentifier": "string",
+      "counterParties": [
+        {
+          "identifier": {
+            "countryOfResidence": "NO",
+            "type": "nationalIdentityNumber",
+            "value": "10108054242"
+          },
+          "postalAddress": {
+            "country": "Norway",
+            "streetName": "trysilgata",
+            "townName": "Oslo",
+            "buildingNumber": "2",
+            "postCode": "1598",
+            "addressLines": [
+              "test@test.no"
+            ],
+            "type": "residential"
+          },
+          "name": "Selskapet AS",
+          "accountIdentifier": "9867123111",
+          "type": "creditor"
+        }
+      ],
+      "transactionIdentifier": "DSOP10000000318308",
       "registered": "2019-04-20T10:23:38",
       "merchant": "string",
       "valueDate": "2019-04-20T10:23:38",
       "transactionCode": {
         "subFamily": "valueDate",
         "domain": "accountManagement",
-        "freeText": "string",
+        "freeText": "VISA Varekj\u00f8p",
         "family": "additionalMiscellaneousCreditOperations"
       },
       "paymentCard": {
         "expiryDate": "2010-05-20",
-        "holderName": "string",
-        "cardIssuerName": "string",
+        "holderName": "Alma",
+        "cardIssuerName": "Mastercard AS",
         "cardIssuerIdentifier": {
-          "countryOfResidence": "string",
-          "type": "countryIdentificationCode",
-          "value": "string"
+          "countryOfResidence": "NO",
+          "type": "nationalIdentityNumber",
+          "value": "123456879"
         },
         "type": "creditCard",
         "startDate": "2010-05-20",
-        "cardIdentifier": "string"
+        "cardIdentifier": "4567xxxxxxxx9809"
       },
-      "additionalInfo": "string",
+      "additionalInfo": "Anonymisert transaksjonstekst DSOP",
       "bookingDate": "2019-05-20T10:23:38",
       "currency": "NOK",
-      "counterParties": [
-        {
-          "identifier": {
-            "countryOfResidence": "Norway",
-            "type": "countryIdentificationCode",
-            "value": "countryIdentificationCode"
-          },
-          "postalAddress": {
-            "country": "string",
-            "streetName": "string",
-            "townName": "string",
-            "buildingNumber": "string",
-            "postCode": "string",
-            "type": "residential",
-            "addressLines": [
-              "string"
-            ]
-          },
-          "name": "string",
-          "accountIdentifier": "string",
-          "type": "creditor"
-        }
-      ],
       "family": "additionalMiscellaneousCreditOperations",
       "status": "booked"
     }

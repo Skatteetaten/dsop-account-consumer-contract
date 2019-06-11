@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -195,7 +196,7 @@ public class ContractDefinition {
         ResponseEntity<String> rolesResponse = sendRequest(restTemplate, accountCommonHeaders, RolesUrl);
         String jsonRoles = rolesResponse.getBody();
 
-        System.out.println(jsonRoles);
+        System.out.println("Roles : " + jsonRoles);
         Roles roles = unmarhalRoles(jsonRoles);
         System.out.println(roles.getRoles());
     }
@@ -205,7 +206,7 @@ public class ContractDefinition {
         ResponseEntity<String> cardsResponse = sendRequest(restTemplate, accountCommonHeaders, cardsUrl);
 
         String jsonCards = cardsResponse.getBody();
-        System.out.println(jsonCards);
+        System.out.println("Cards : " + jsonCards);
         Cards cards = unmarhalCards(jsonCards);
         System.out.println(cards.getPaymentCards());
     }
@@ -216,7 +217,7 @@ public class ContractDefinition {
         ResponseEntity<String> transactionsResponse = sendRequest(restTemplate, accountCommonHeaders, transactionsUrl);
 
         String jsonTransactions = transactionsResponse.getBody();
-        System.out.println(jsonTransactions);
+        System.out.println("Transactions : " + jsonTransactions);
         Transactions transactions = unmarhalTransactions(jsonTransactions);
         System.out.println(transactions.getTransactions());
     }
@@ -227,7 +228,7 @@ public class ContractDefinition {
             sendRequest(restTemplate, accountListHeaders, accountDetailsUrl);
 
         String jsonAccountDetails = accountDetailsResponse.getBody();
-        System.out.println(jsonAccountDetails);
+        System.out.println("AccountDetails : " + jsonAccountDetails);
         AccountDetails accountDetails = unmarhalAccountDetails(jsonAccountDetails);
         System.out.println(accountDetails.getAccount());
     }
@@ -238,7 +239,7 @@ public class ContractDefinition {
             sendRequest(restTemplate, accountListHeaders, accountList);
 
         String jsonAccounts = accountsResponse.getBody();
-        System.out.println(jsonAccounts);
+        System.out.println("AccountList : " + jsonAccounts);
         Accounts accounts = unmarhalAccount(jsonAccounts);
         System.out.println(accounts.getAccounts());
     }
@@ -350,7 +351,7 @@ public class ContractDefinition {
                 roleObject.object("postalAdress", postalAdress -> {
                     postalAdress.stringValue("postCode", "1598");
                     postalAdress.stringValue("type", "residential");
-                    postalAdress.stringValue("streetName", "bøgata");
+                    postalAdress.stringValue("streetName", "trysilgata");
                     postalAdress.stringValue("buildingNumber", "2");
                     postalAdress.stringValue("townName", "Oslo");
                     postalAdress.stringValue("country", "Norway");
@@ -424,7 +425,7 @@ public class ContractDefinition {
         parentDslObject.object("postalAddress", postalAddress -> {
             postalAddress.stringValue("postCode", "1598");
             postalAddress.stringValue("type", "residential");
-            postalAddress.stringValue("streetName", "bøgata");
+            postalAddress.stringValue("streetName", "trysilgata");
             postalAddress.stringValue("buildingNumber", "2");
             postalAddress.stringValue("townName", "Oslo");
             postalAddress.stringValue("country", "Norway");

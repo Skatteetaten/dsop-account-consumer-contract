@@ -38,35 +38,35 @@
               "primaryOwner": {
                 "expiryDate": "2010-05-20",
                 "identifier": {
-                  "countryOfResidence": "string",
-                  "type": "countryIdentificationCode",
-                  "value": "string"
+                  "countryOfResidence": "NO",
+                  "type": "nationalIdentityNumber",
+                  "value": "10108054242"
                 },
                 "postalAddress": {
-                  "country": "string",
-                  "streetName": "string",
-                  "townName": "string",
-                  "buildingNumber": "string",
-                  "postCode": "string",
+                  "country": "Norway",
+                  "streetName": "trysilgata",
+                  "townName": "Oslo",
+                  "buildingNumber": "2",
+                  "postCode": "1598",
                   "addressLines": [
-                    "string"
+                    "test@test.no"
                   ],
                   "type": "residential"
                 },
-                "name": "string",
+                "name": "Boomsma Erika",
                 "permission": "noRight",
                 "startDate": "2010-05-20"
               },
               "servicer": {
                 "identifier": {
-                  "countryOfResidence": "string",
+                  "countryOfResidence": "NO",
                   "type": "countryIdentificationCode",
-                  "value": "string"
+                  "value": "123456879"
                 },
-                "name": "string",
+                "name": "808987654",
                 "type": "countryIdentificationCode"
               },
-              "name": "string",
+              "name": "DNB",
               "links": [
                 {
                   "rel": "string",
@@ -78,7 +78,7 @@
               "electronicAddresses": [
                 {
                   "type": "phoneNumber",
-                  "value": "string"
+                  "96711125": "string"
                 }
               ],
               "type": "loanAccount",
@@ -152,7 +152,7 @@
           "Content-Type": "application/json; charset=UTF-8"
         },
         "body": {
-          "responseStatus": "complete",
+          "responseStatus": "partial",
           "account": {
             "balances": [
               {
@@ -168,27 +168,33 @@
             "accountReference": "string",
             "primaryOwner": {
               "expiryDate": "2010-05-20",
+              "identifier": {
+                "countryOfResidence": "NO",
+                "type": "nationalIdentityNumber",
+                "value": "10108054242"
+              },
               "postalAddress": {
-                "country": "string",
-                "streetName": "string",
-                "townName": "string",
-                "buildingNumber": "string",
-                "postCode": "string",
+                "country": "Norway",
+                "streetName": "trysilgata",
+                "townName": "Oslo",
+                "buildingNumber": "2",
+                "postCode": "1598",
                 "addressLines": [
-                  "string"
+                  "test@test.no"
                 ],
                 "type": "residential"
               },
-              "name": "string",
+              "name": "Boomsma Erika",
+              "permission": "noRight",
               "startDate": "2010-05-20"
             },
             "servicer": {
               "identifier": {
-                "countryOfResidence": "string",
+                "countryOfResidence": "NO",
                 "type": "countryIdentificationCode",
-                "value": "string"
+                "value": "123456879"
               },
-              "name": "string",
+              "name": "808987654",
               "type": "countryIdentificationCode"
             },
             "links": [
@@ -199,12 +205,6 @@
             ],
             "accountIdentifier": "string",
             "currency": "string",
-            "electronicAddresses": [
-              {
-                "type": "phoneNumber",
-                "value": "string"
-              }
-            ],
             "type": "loanAccount",
             "status": "enabled"
           }
@@ -294,16 +294,16 @@
           "paymentCards": [
             {
               "expiryDate": "2010-05-20",
-              "holderName": "string",
-              "cardIssuerName": "string",
+              "holderName": "Alma",
+              "cardIssuerName": "Mastercard AS",
               "cardIssuerIdentifier": {
-                "countryOfResidence": "string",
-                "type": "countryIdentificationCode",
-                "value": "string"
+                "countryOfResidence": "NO",
+                "type": "nationalIdentityNumber",
+                "value": "123456879"
               },
               "type": "creditCard",
               "startDate": "2010-05-20",
-              "cardIdentifier": "string"
+              "cardIdentifier": "4567xxxxxxxx9809"
             }
           ],
           "responseStatus": "complete"
@@ -376,27 +376,27 @@
           "roles": [
             {
               "identifier": {
-                "countryOfResidence": "Norway",
-                "type": "countryIdentificationCode",
-                "value": "countryIdentificationCode"
+                "countryOfResidence": "NO",
+                "type": "nationalIdentityNumber",
+                "value": "10108054242"
               },
               "endDate": "2010-05-20",
               "postalAdress": {
-                "country": "",
-                "streetName": "",
-                "townName": "",
-                "buildingNumber": "",
-                "postCode": "",
+                "country": "Norway",
+                "streetName": "trysilgata",
+                "townName": "Oslo",
+                "buildingNumber": "2",
+                "postCode": "1598",
                 "type": "residential"
               },
-              "name": "string",
+              "name": "Nicolai",
               "electronicAddresses": [
                 {
                   "type": "emailAddress",
-                  "value": ""
+                  "value": "test@test.no"
                 }
               ],
-              "permission": "noRight",
+              "permission": "rightToUseAlone",
               "startDate": "2010-05-20"
             }
           ],
@@ -471,58 +471,58 @@
             {
               "reversalIndicator": true,
               "identifier": {
-                "countryOfResidence": "Norway",
-                "type": "countryIdentificationCode",
-                "value": "countryIdentificationCode"
+                "countryOfResidence": "NO",
+                "type": "nationalIdentityNumber",
+                "value": "10108054242"
               },
               "amount": 100.34,
               "counterParties": [
                 {
                   "identifier": {
-                    "countryOfResidence": "Norway",
-                    "type": "countryIdentificationCode",
-                    "value": "countryIdentificationCode"
+                    "countryOfResidence": "NO",
+                    "type": "nationalIdentityNumber",
+                    "value": "10108054242"
                   },
                   "postalAddress": {
-                    "country": "string",
-                    "streetName": "string",
-                    "townName": "string",
-                    "buildingNumber": "string",
-                    "postCode": "string",
+                    "country": "Norway",
+                    "streetName": "trysilgata",
+                    "townName": "Oslo",
+                    "buildingNumber": "2",
+                    "postCode": "1598",
                     "addressLines": [
-                      "string"
+                      "test@test.no"
                     ],
                     "type": "residential"
                   },
-                  "name": "string",
-                  "accountIdentifier": "string",
+                  "name": "Selskapet AS",
+                  "accountIdentifier": "9867123111",
                   "type": "creditor"
                 }
               ],
-              "transactionIdentifier": "string",
+              "transactionIdentifier": "DSOP10000000318308",
               "registered": "2019-04-20T10:23:38",
               "merchant": "string",
               "valueDate": "2019-04-20T10:23:38",
               "transactionCode": {
                 "subFamily": "valueDate",
                 "domain": "accountManagement",
-                "freeText": "string",
+                "freeText": "VISA Varekj\u00f8p",
                 "family": "additionalMiscellaneousCreditOperations"
               },
               "paymentCard": {
                 "expiryDate": "2010-05-20",
-                "holderName": "string",
-                "cardIssuerName": "string",
+                "holderName": "Alma",
+                "cardIssuerName": "Mastercard AS",
                 "cardIssuerIdentifier": {
-                  "countryOfResidence": "string",
-                  "type": "countryIdentificationCode",
-                  "value": "string"
+                  "countryOfResidence": "NO",
+                  "type": "nationalIdentityNumber",
+                  "value": "123456879"
                 },
                 "type": "creditCard",
                 "startDate": "2010-05-20",
-                "cardIdentifier": "string"
+                "cardIdentifier": "4567xxxxxxxx9809"
               },
-              "additionalInfo": "string",
+              "additionalInfo": "Anonymisert transaksjonstekst DSOP",
               "bookingDate": "2019-05-20T10:23:38",
               "currency": "NOK",
               "family": "additionalMiscellaneousCreditOperations",
@@ -632,7 +632,6 @@
         },
         "body": {
           "accounts": [
-
           ],
           "responseStatus": "complete"
         },

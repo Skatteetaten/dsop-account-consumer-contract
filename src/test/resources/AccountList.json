@@ -2,44 +2,38 @@
   "accounts": [
     {
       "accountReference": "string",
-      "electronicAddresses": [
-        {
-          "type": "phoneNumber",
-          "value": "string"
-        }
-      ],
       "primaryOwner": {
         "expiryDate": "2010-05-20",
         "identifier": {
-          "countryOfResidence": "string",
-          "type": "countryIdentificationCode",
-          "value": "string"
+          "countryOfResidence": "NO",
+          "type": "nationalIdentityNumber",
+          "value": "10108054242"
         },
         "postalAddress": {
-          "country": "string",
-          "streetName": "string",
-          "townName": "string",
-          "buildingNumber": "string",
-          "postCode": "string",
-          "type": "residential",
+          "country": "Norway",
+          "streetName": "trysilgata",
+          "townName": "Oslo",
+          "buildingNumber": "2",
+          "postCode": "1598",
           "addressLines": [
-            "string"
-          ]
+            "test@test.no"
+          ],
+          "type": "residential"
         },
-        "name": "string",
+        "name": "Boomsma Erika",
         "permission": "noRight",
         "startDate": "2010-05-20"
       },
       "servicer": {
         "identifier": {
-          "countryOfResidence": "string",
+          "countryOfResidence": "NO",
           "type": "countryIdentificationCode",
-          "value": "string"
+          "value": "123456879"
         },
-        "name": "string",
+        "name": "808987654",
         "type": "countryIdentificationCode"
       },
-      "name": "string",
+      "name": "DNB",
       "links": [
         {
           "rel": "string",
@@ -48,6 +42,12 @@
       ],
       "accountIdentifier": "string",
       "currency": "string",
+      "electronicAddresses": [
+        {
+          "type": "phoneNumber",
+          "96711125": "string"
+        }
+      ],
       "type": "loanAccount",
       "status": "enabled"
     }

@@ -1,7 +1,6 @@
 {
-  "responseStatus": "complete",
+  "responseStatus": "partial",
   "account": {
-    "accountReference": "string",
     "balances": [
       {
         "amount": 0.2,
@@ -13,35 +12,36 @@
         "creditDebitIndicator": "credit"
       }
     ],
-    "electronicAddresses": [
-      {
-        "type": "phoneNumber",
-        "value": "string"
-      }
-    ],
+    "accountReference": "string",
     "primaryOwner": {
       "expiryDate": "2010-05-20",
-      "postalAddress": {
-        "country": "string",
-        "streetName": "string",
-        "townName": "string",
-        "buildingNumber": "string",
-        "postCode": "string",
-        "type": "residential",
-        "addressLines": [
-          "string"
-        ]
+      "identifier": {
+        "countryOfResidence": "NO",
+        "type": "nationalIdentityNumber",
+        "value": "10108054242"
       },
-      "name": "string",
+      "postalAddress": {
+        "country": "Norway",
+        "streetName": "trysilgata",
+        "townName": "Oslo",
+        "buildingNumber": "2",
+        "postCode": "1598",
+        "addressLines": [
+          "test@test.no"
+        ],
+        "type": "residential"
+      },
+      "name": "Boomsma Erika",
+      "permission": "noRight",
       "startDate": "2010-05-20"
     },
     "servicer": {
       "identifier": {
-        "countryOfResidence": "string",
+        "countryOfResidence": "NO",
         "type": "countryIdentificationCode",
-        "value": "string"
+        "value": "123456879"
       },
-      "name": "string",
+      "name": "808987654",
       "type": "countryIdentificationCode"
     },
     "links": [

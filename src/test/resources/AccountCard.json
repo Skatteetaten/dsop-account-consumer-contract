@@ -2,16 +2,16 @@
   "paymentCards": [
     {
       "expiryDate": "2010-05-20",
-      "holderName": "string",
-      "cardIssuerName": "string",
+      "holderName": "Alma",
+      "cardIssuerName": "Mastercard AS",
       "cardIssuerIdentifier": {
-        "countryOfResidence": "string",
-        "type": "countryIdentificationCode",
-        "value": "string"
+        "countryOfResidence": "NO",
+        "type": "nationalIdentityNumber",
+        "value": "123456879"
       },
       "type": "creditCard",
       "startDate": "2010-05-20",
-      "cardIdentifier": "string"
+      "cardIdentifier": "4567xxxxxxxx9809"
     }
   ],
   "responseStatus": "complete"
