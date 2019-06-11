@@ -1,0 +1,378 @@
+\documentclass[12pt]{report}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[latin1]{inputenc}
+
+\title{Consumer Driven Contracts}
+\date{11/06/19}
+
+\begin{document}
+
+\author{Version 1.0.0}
+\maketitle
+
+Consumer Driven Contracts is a pattern that solves the challange of having many consumers and providers.
+Pact is used as a framework for the implementation of Consumer Driven Contracts.
+The providers(financial institutions) implement a pact-file and configure tests. Below is a description of the REST requests
+that will be made by pact.
+
+The tests assumes a JSON response. In production the response must be encrypted.
+The figure belows describes the proccess for the provider.
+
+\includegraphics{}
+
+
+\begin{itemize}
+  \item Account list
+  \begin{itemize}
+    \item path : /accounts?fromDate=2016-12-09&toDate=2016-12-09
+    \item method : GET
+    \item headers :
+    \begin{itemize}
+      \item CorrelationID : bbce7f02-ae53-c44f-5c5b-aa04da2fbcdb
+      \item PartyID : 909716212
+      \item Legal-Mandate : Skatteforvaltningsloven\%20\%C2\%A7\%2010-2\%201
+      \item Authorization : Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-\_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT\_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm\_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9\_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y\_DJ03NvtZN1ZYbsjBB-3\_\_kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY\_83a-2fkFa6RPdZX\_2OlXmQ
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+  \item Account details
+  \begin{itemize}
+    \item path : /accounts/5687123451?fromDate=2016-12-09&toDate=2016-12-09
+    \item method : GET
+    \item headers :
+    \begin{itemize}
+      \item CorrelationID : bbce7f02-ae53-c44f-5c5b-aa04da2fbcdb
+      \item Legal-Mandate : Skatteforvaltningsloven\%20\%C2\%A7\%2010-2\%201
+      \item Authorization : Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-\_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT\_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm\_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9\_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y\_DJ03NvtZN1ZYbsjBB-3\_\_kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY\_83a-2fkFa6RPdZX\_2OlXmQ
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+  \item Account Roles
+  \begin{itemize}
+    \item path : /accounts/5687123451/roles?fromDate=2016-12-09&toDate=2016-12-09
+    \item method : GET
+    \item headers :
+    \begin{itemize}
+      \item CorrelationID : bbce7f02-ae53-c44f-5c5b-aa04da2fbcdb
+      \item Legal-Mandate : Skatteforvaltningsloven\%20\%C2\%A7\%2010-2\%201
+      \item Authorization : Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-\_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT\_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm\_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9\_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y\_DJ03NvtZN1ZYbsjBB-3\_\_kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY\_83a-2fkFa6RPdZX\_2OlXmQ
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+  \item Account Cards
+  \begin{itemize}
+    \item path : /accounts/5687123451/cards?fromDate=2016-12-09&toDate=2016-12-09
+    \item method : GET
+    \item headers :
+    \begin{itemize}
+      \item CorrelationID : bbce7f02-ae53-c44f-5c5b-aa04da2fbcdb
+      \item Legal-Mandate : Skatteforvaltningsloven\%20\%C2\%A7\%2010-2\%201
+      \item Authorization : Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-\_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT\_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm\_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9\_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y\_DJ03NvtZN1ZYbsjBB-3\_\_kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY\_83a-2fkFa6RPdZX\_2OlXmQ
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+  \item Account Transactions
+  \begin{itemize}
+    \item path : /accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09
+    \item method : GET
+    \item headers :
+    \begin{itemize}
+      \item CorrelationID : bbce7f02-ae53-c44f-5c5b-aa04da2fbcdb
+      \item Legal-Mandate : Skatteforvaltningsloven\%20\%C2\%A7\%2010-2\%201
+      \item Authorization : Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-\_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT\_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm\_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9\_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y\_DJ03NvtZN1ZYbsjBB-3\_\_kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY\_83a-2fkFa6RPdZX\_2OlXmQ
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+In addition to the tests above there is an empty account list request that will be tested:
+
+\begin{itemize}
+  \item Account list with empty response
+  \begin{itemize}
+    \item path : /accounts?fromDate=2016-12-09&toDate=2016-12-09
+    \item method : GET
+    \item headers :
+    \begin{itemize}
+      \item CorrelationID : bbce7f02-ae53-c44f-5c5b-aa04da2fbcdb
+      \item PartyID : 123456789
+      \item Legal-Mandate : Skatteforvaltningsloven\%20\%C2\%A7\%2010-2\%201
+      \item Authorization : Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-\_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT\_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm\_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9\_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y\_DJ03NvtZN1ZYbsjBB-3\_\_kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY\_83a-2fkFa6RPdZX\_2OlXmQ
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\appendix
+\chapter*{Addendum: Responses}
+\addcontentsline{toc}{chapter}{Addendum \thechapter: random facts}
+\renewcommand{\thesection}{A\arabic{section}}
+
+
+\section{Account List Reponse}
+\begin{verbatim}
+
+{
+  "accounts": [
+    {
+      "accountReference": "string",
+      "primaryOwner": {
+        "expiryDate": "2010-05-20",
+        "identifier": {
+          "countryOfResidence": "NO",
+          "type": "nationalIdentityNumber",
+          "value": "10108054242"
+        },
+        "postalAddress": {
+          "country": "Norway",
+          "streetName": "trysilgata",
+          "townName": "Oslo",
+          "buildingNumber": "2",
+          "postCode": "1598",
+          "addressLines": [
+            "test@test.no"
+          ],
+          "type": "residential"
+        },
+        "name": "Boomsma Erika",
+        "permission": "noRight",
+        "startDate": "2010-05-20"
+      },
+      "servicer": {
+        "identifier": {
+          "countryOfResidence": "NO",
+          "type": "countryIdentificationCode",
+          "value": "123456879"
+        },
+        "name": "808987654",
+        "type": "countryIdentificationCode"
+      },
+      "name": "DNB",
+      "links": [
+        {
+          "rel": "string",
+          "href": "string"
+        }
+      ],
+      "accountIdentifier": "string",
+      "currency": "string",
+      "electronicAddresses": [
+        {
+          "type": "phoneNumber",
+          "96711125": "string"
+        }
+      ],
+      "type": "loanAccount",
+      "status": "enabled"
+    }
+  ],
+  "responseStatus": "complete"
+}
+\end{verbatim}
+
+\section{Account Details Reponse}
+\begin{verbatim}
+{
+  "responseStatus": "partial",
+  "account": {
+    "balances": [
+      {
+        "amount": 0.2,
+        "creditLineIncluded": true,
+        "creditLineAmount": 10.9,
+        "registered": "2019-05-20T10:23:38",
+        "creditLineCurrency": "NOK",
+        "type": "availableBalance",
+        "creditDebitIndicator": "credit"
+      }
+    ],
+    "accountReference": "string",
+    "primaryOwner": {
+      "expiryDate": "2010-05-20",
+      "identifier": {
+        "countryOfResidence": "NO",
+        "type": "nationalIdentityNumber",
+        "value": "10108054242"
+      },
+      "postalAddress": {
+        "country": "Norway",
+        "streetName": "trysilgata",
+        "townName": "Oslo",
+        "buildingNumber": "2",
+        "postCode": "1598",
+        "addressLines": [
+          "test@test.no"
+        ],
+        "type": "residential"
+      },
+      "name": "Boomsma Erika",
+      "permission": "noRight",
+      "startDate": "2010-05-20"
+    },
+    "servicer": {
+      "identifier": {
+        "countryOfResidence": "NO",
+        "type": "countryIdentificationCode",
+        "value": "123456879"
+      },
+      "name": "808987654",
+      "type": "countryIdentificationCode"
+    },
+    "links": [
+      {
+        "rel": "string",
+        "href": "string"
+      }
+    ],
+    "accountIdentifier": "string",
+    "currency": "string",
+    "type": "loanAccount",
+    "status": "enabled"
+  }
+}
+\end{verbatim}
+
+\section{Account Roles Reponse}
+\begin{verbatim}
+{
+  "roles": [
+    {
+      "identifier": {
+        "countryOfResidence": "NO",
+        "type": "nationalIdentityNumber",
+        "value": "10108054242"
+      },
+      "endDate": "2010-05-20",
+      "postalAdress": {
+        "country": "Norway",
+        "streetName": "trysilgata",
+        "townName": "Oslo",
+        "buildingNumber": "2",
+        "postCode": "1598",
+        "type": "residential"
+      },
+      "name": "Nicolai",
+      "electronicAddresses": [
+        {
+          "type": "emailAddress",
+          "value": "test@test.no"
+        }
+      ],
+      "permission": "rightToUseAlone",
+      "startDate": "2010-05-20"
+    }
+  ],
+  "responseStatus": "complete"
+}
+\end{verbatim}
+
+\section{Account Cards Reponse}
+\begin{verbatim}
+{
+  "paymentCards": [
+    {
+      "expiryDate": "2010-05-20",
+      "holderName": "Alma",
+      "cardIssuerName": "Mastercard AS",
+      "cardIssuerIdentifier": {
+        "countryOfResidence": "NO",
+        "type": "nationalIdentityNumber",
+        "value": "123456879"
+      },
+      "type": "creditCard",
+      "startDate": "2010-05-20",
+      "cardIdentifier": "4567xxxxxxxx9809"
+    }
+  ],
+  "responseStatus": "complete"
+}
+\end{verbatim}
+
+\section{Account Transactions Reponse}
+\begin{verbatim}
+{
+  "transactions": [
+    {
+      "reversalIndicator": true,
+      "identifier": {
+        "countryOfResidence": "NO",
+        "type": "nationalIdentityNumber",
+        "value": "10108054242"
+      },
+      "amount": 100.34,
+      "counterParties": [
+        {
+          "identifier": {
+            "countryOfResidence": "NO",
+            "type": "nationalIdentityNumber",
+            "value": "10108054242"
+          },
+          "postalAddress": {
+            "country": "Norway",
+            "streetName": "trysilgata",
+            "townName": "Oslo",
+            "buildingNumber": "2",
+            "postCode": "1598",
+            "addressLines": [
+              "test@test.no"
+            ],
+            "type": "residential"
+          },
+          "name": "Selskapet AS",
+          "accountIdentifier": "9867123111",
+          "type": "creditor"
+        }
+      ],
+      "transactionIdentifier": "DSOP10000000318308",
+      "registered": "2019-04-20T10:23:38",
+      "merchant": "string",
+      "valueDate": "2019-04-20T10:23:38",
+      "transactionCode": {
+        "subFamily": "valueDate",
+        "domain": "accountManagement",
+        "freeText": "VISA Varekj\u00f8p",
+        "family": "additionalMiscellaneousCreditOperations"
+      },
+      "paymentCard": {
+        "expiryDate": "2010-05-20",
+        "holderName": "Alma",
+        "cardIssuerName": "Mastercard AS",
+        "cardIssuerIdentifier": {
+          "countryOfResidence": "NO",
+          "type": "nationalIdentityNumber",
+          "value": "123456879"
+        },
+        "type": "creditCard",
+        "startDate": "2010-05-20",
+        "cardIdentifier": "4567xxxxxxxx9809"
+      },
+      "additionalInfo": "Anonymisert transaksjonstekst DSOP",
+      "bookingDate": "2019-05-20T10:23:38",
+      "currency": "NOK",
+      "family": "additionalMiscellaneousCreditOperations",
+      "status": "booked"
+    }
+  ]
+}
+\end{verbatim}
+
+\section{Account List Empty Reponse}
+\begin{verbatim}
+{
+  "accounts": [],
+  "responseStatus": "complete"
+}
+
+\end{verbatim}
+
+\end{document}
+
+
+\end{document}
