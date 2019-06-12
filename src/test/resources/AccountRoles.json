@@ -2,27 +2,27 @@
   "roles": [
     {
       "identifier": {
-        "countryOfResidence": "Norway",
-        "type": "countryIdentificationCode",
-        "value": "countryIdentificationCode"
+        "countryOfResidence": "NO",
+        "type": "nationalIdentityNumber",
+        "value": "10108054242"
       },
+      "endDate": "2010-05-20",
+      "postalAdress": {
+        "country": "Norway",
+        "streetName": "b\u00f8gata",
+        "townName": "Oslo",
+        "buildingNumber": "2",
+        "postCode": "1598",
+        "type": "residential"
+      },
+      "name": "Nicolai",
       "electronicAddresses": [
         {
           "type": "emailAddress",
-          "value": ""
+          "value": "test@test.no"
         }
       ],
-      "endDate": "2010-05-20",
-      "postalAdress": {
-        "country": "",
-        "streetName": "",
-        "townName": "",
-        "buildingNumber": "",
-        "postCode": "",
-        "type": "residential"
-      },
-      "name": "string",
-      "permission": "noRight",
+      "permission": "rightToUseAlone",
       "startDate": "2010-05-20"
     }
   ],

@@ -1,53 +1,53 @@
 {
   "accounts": [
     {
-      "accountReference": "string",
-      "electronicAddresses": [
-        {
-          "type": "phoneNumber",
-          "value": "string"
-        }
-      ],
+      "accountReference": "MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr",
       "primaryOwner": {
         "expiryDate": "2010-05-20",
         "identifier": {
-          "countryOfResidence": "string",
-          "type": "countryIdentificationCode",
-          "value": "string"
+          "countryOfResidence": "NO",
+          "type": "nationalIdentityNumber",
+          "value": "10108054242"
         },
         "postalAddress": {
-          "country": "string",
-          "streetName": "string",
-          "townName": "string",
-          "buildingNumber": "string",
-          "postCode": "string",
-          "type": "residential",
+          "country": "Norway",
+          "streetName": "b\u00f8gata",
+          "townName": "Oslo",
+          "buildingNumber": "2",
+          "postCode": "1598",
           "addressLines": [
-            "string"
-          ]
+            "test@test.no"
+          ],
+          "type": "residential"
         },
-        "name": "string",
+        "name": "Boomsma Erika",
         "permission": "noRight",
         "startDate": "2010-05-20"
       },
       "servicer": {
         "identifier": {
-          "countryOfResidence": "string",
+          "countryOfResidence": "NO",
           "type": "countryIdentificationCode",
-          "value": "string"
+          "value": "123456879"
         },
-        "name": "string",
+        "name": "808987654",
         "type": "countryIdentificationCode"
       },
-      "name": "string",
+      "name": "DNB",
       "links": [
         {
-          "rel": "string",
-          "href": "string"
+          "rel": "transactions",
+          "href": "/accounts/3IS31JKFhiasfPxLicnPwg/transactions"
         }
       ],
-      "accountIdentifier": "string",
-      "currency": "string",
+      "accountIdentifier": "78770517388",
+      "currency": "NOK",
+      "electronicAddresses": [
+        {
+          "type": "phoneNumber",
+          "96711125": "/accounts/3IS31JKFhiasfPxLicnPwg/phoneNumber"
+        }
+      ],
       "type": "loanAccount",
       "status": "enabled"
     }
