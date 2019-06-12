@@ -1,7 +1,7 @@
 {
   "accounts": [
     {
-      "accountReference": "string",
+      "accountReference": "MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr",
       "primaryOwner": {
         "expiryDate": "2010-05-20",
         "identifier": {
@@ -11,7 +11,7 @@
         },
         "postalAddress": {
           "country": "Norway",
-          "streetName": "trysilgata",
+          "streetName": "b\u00f8gata",
           "townName": "Oslo",
           "buildingNumber": "2",
           "postCode": "1598",
@@ -36,16 +36,16 @@
       "name": "DNB",
       "links": [
         {
-          "rel": "string",
-          "href": "string"
+          "rel": "transactions",
+          "href": "/accounts/3IS31JKFhiasfPxLicnPwg/transactions"
         }
       ],
-      "accountIdentifier": "string",
-      "currency": "string",
+      "accountIdentifier": "78770517388",
+      "currency": "NOK",
       "electronicAddresses": [
         {
           "type": "phoneNumber",
-          "96711125": "string"
+          "96711125": "/accounts/3IS31JKFhiasfPxLicnPwg/phoneNumber"
         }
       ],
       "type": "loanAccount",

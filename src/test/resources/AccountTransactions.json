@@ -17,7 +17,7 @@
           },
           "postalAddress": {
             "country": "Norway",
-            "streetName": "trysilgata",
+            "streetName": "b\u00f8gata",
             "townName": "Oslo",
             "buildingNumber": "2",
             "postCode": "1598",
@@ -33,7 +33,7 @@
       ],
       "transactionIdentifier": "DSOP10000000318308",
       "registered": "2019-04-20T10:23:38",
-      "merchant": "string",
+      "merchant": "Anonymisert transaksjonstekst DSOP",
       "valueDate": "2019-04-20T10:23:38",
       "transactionCode": {
         "subFamily": "valueDate",

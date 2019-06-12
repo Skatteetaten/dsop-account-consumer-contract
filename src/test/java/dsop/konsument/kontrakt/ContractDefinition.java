@@ -93,7 +93,7 @@ public class ContractDefinition {
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .headers(Listheaders)
             .method("GET")
-        .willRespondWith()
+            .willRespondWith()
             .status(200)
             .body(pactAccountsBody)
 
@@ -103,7 +103,7 @@ public class ContractDefinition {
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .method("GET")
             .headers(CommonHeaders)
-        .willRespondWith()
+            .willRespondWith()
             .status(200)
             .body(pactAccountDetailsBody)
 
@@ -113,7 +113,7 @@ public class ContractDefinition {
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .method("GET")
             .headers(CommonHeaders)
-        .willRespondWith()
+            .willRespondWith()
             .status(200)
             .body(pactCardsBody)
 
@@ -123,7 +123,7 @@ public class ContractDefinition {
             .path("/accounts/5687123451/roles")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .method("GET")
-        .willRespondWith()
+            .willRespondWith()
             .status(200)
             .body(pactRolesBody)
 
@@ -133,21 +133,21 @@ public class ContractDefinition {
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .method("GET")
             .headers(CommonHeaders)
-        .willRespondWith()
+            .willRespondWith()
             .status(200)
             .body(pactTransactionsBody)
 
-        // legg på negative tester
+            // legg på negative tester
         .given("test GET empty AccountList")
             .uponReceiving("GET empty AccountList REQUEST")
             .path("/accounts")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .method("GET")
             .headers(EmptyListHeaders)
-        .willRespondWith()
+            .willRespondWith()
             .status(200)
             .body(pactEmptyAccountsBody)
-        .toPact();
+            .toPact();
     }
 
     @Test
@@ -171,7 +171,7 @@ public class ContractDefinition {
     }
 
     private void createRequestHeaders(HttpHeaders accountListHeaders, HttpHeaders accountCommonHeaders,
-        HttpHeaders emptyAccountListHeaders) {
+                                      HttpHeaders emptyAccountListHeaders) {
         accountListHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         accountListHeaders.set("PartyID", PARTY_ID);
         accountListHeaders.set("Legal-Mandate", LEGAL_MANDATE);
@@ -255,7 +255,7 @@ public class ContractDefinition {
     }
 
     private ResponseEntity<String> sendRequest(RestTemplate restTemplate, HttpHeaders accountListHeaders,
-        String transactionsUrl) {
+                                               String transactionsUrl) {
         HttpEntity<String> entityTransactions = new HttpEntity<>(accountListHeaders);
         return restTemplate.exchange(transactionsUrl, HttpMethod.GET, entityTransactions, String.class);
     }
@@ -271,11 +271,10 @@ public class ContractDefinition {
             accountDetails.object("account", account -> {
                 account.stringValue("status", "enabled"); // enum
                 addServicer(account); // se over
-                addElectronicAdress(account, "links", "rel", "string", "href"); //se over
-                account.stringValue("accountIdentifier", "string"); // se over
-                account.stringValue("accountReference", "string"); // se over
+                account.stringValue("accountIdentifier", "78770517388"); // se over
+                account.stringValue("accountReference", "MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr"); // se over
                 account.stringValue("type", "loanAccount"); //enum
-                account.stringValue("currency", "string");  //se over
+                account.stringValue("currency", "NOK");  //se over
                 account.array("balances", balance ->
                     balance.object(balanceObject -> {
                         balanceObject.booleanType("creditLineIncluded", true);
@@ -301,12 +300,14 @@ public class ContractDefinition {
             accountsList.array("accounts", accounts -> accounts.object(accountObject -> {
                 accountObject.stringValue("status", "enabled");
                 addServicer(accountObject);
-                addElectronicAdress(accountObject, "links", "rel", "string", "href");
+                addElectronicAdress(accountObject, "links", "rel", "cards", "href"); //se over
+                addElectronicAdress(accountObject, "links", "rel", "roles", "href"); //se over
+                addElectronicAdress(accountObject, "links", "rel", "transactions", "href"); //se over
 
-                accountObject.stringValue("accountIdentifier", "string"); // 11 siffer regexp
-                accountObject.stringValue("accountReference", "string"); //.* string -> StringType
+                accountObject.stringValue("accountIdentifier", "78770517388"); // 11 siffer regexp
+                accountObject.stringValue("accountReference", "MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr"); //.* string -> StringType
                 accountObject.stringValue("type", "loanAccount"); //stringMatcher test mot alle verdier
-                accountObject.stringValue("currency", "string"); // Stringmatcher Uppercase 3 letters A-Z
+                accountObject.stringValue("currency", "NOK"); // Stringmatcher Uppercase 3 letters A-Z
                 addPrimaryOwner(startDate, expiryDate, accountObject);
                 addElectronicAdress(accountObject, "electronicAddresses", "type", "phoneNumber",
                     "96711125"); // reformat
@@ -385,7 +386,7 @@ public class ContractDefinition {
                 transactionsObject.numberValue("amount", 100.34);
                 transactionsObject.stringValue("currency", "NOK");
                 transactionsObject.stringValue("additionalInfo", "Anonymisert transaksjonstekst DSOP");
-                transactionsObject.stringValue("merchant", "string");
+                transactionsObject.stringValue("merchant", "Anonymisert transaksjonstekst DSOP");
                 transactionsObject
                     .object("paymentCard", paymentCard -> addCardIdentifier(startDate, expiryDate, paymentCard));
                 addIdentifier(transactionsObject);
@@ -465,11 +466,11 @@ public class ContractDefinition {
     }
 
     private void addElectronicAdress(LambdaDslObject accountObject, String links2, String rel,
-        String string, String href) {
+                                     String type, String href) {
         accountObject.array(links2, links ->
             links.object(electronicAddressObject -> {
-                electronicAddressObject.stringValue(rel, string);
-                electronicAddressObject.stringValue(href, "string");
+                electronicAddressObject.stringType(rel, type);
+                electronicAddressObject.stringType(href, "/accounts/3IS31JKFhiasfPxLicnPwg/" + type);
             }));
     }
 
