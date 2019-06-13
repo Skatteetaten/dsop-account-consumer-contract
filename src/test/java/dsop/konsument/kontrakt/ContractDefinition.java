@@ -54,15 +54,14 @@ public class ContractDefinition {
         + "MLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkC"
         + "DLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJ"
         + "v-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxT"
-        + "AoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ, CorrelationID=bbce7"
-        + "f02-ae53-c44f-5c5b-aa04da2fbcdb";
+        + "AoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ";
 
     @Rule
     public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("bank_provider", "localhost", 8080, this);
 
     @Pact(consumer = "etat_consumer")
     public RequestResponsePact createPact(PactDslWithProvider builder) throws ParseException {
-        DslPart pactAccountsBody = getAccountsDslPart();
+        DslPart pactAccountsBody = getAccountListDslPart();
         DslPart pactAccountDetailsBody = getAccountDetailsDslPart();
         DslPart pactCardsBody = getCardsDslPart();
         DslPart pactRolesBody = getRolesDslPart();
@@ -195,7 +194,7 @@ public class ContractDefinition {
         ResponseEntity<String> rolesResponse = sendRequest(restTemplate, accountCommonHeaders, RolesUrl);
         String jsonRoles = rolesResponse.getBody();
 
-        System.out.println(jsonRoles);
+        System.out.println("Roles : " + jsonRoles);
         Roles roles = unmarhalRoles(jsonRoles);
         System.out.println(roles.getRoles());
     }
@@ -205,7 +204,7 @@ public class ContractDefinition {
         ResponseEntity<String> cardsResponse = sendRequest(restTemplate, accountCommonHeaders, cardsUrl);
 
         String jsonCards = cardsResponse.getBody();
-        System.out.println(jsonCards);
+        System.out.println("Cards : " + jsonCards);
         Cards cards = unmarhalCards(jsonCards);
         System.out.println(cards.getPaymentCards());
     }
@@ -216,7 +215,7 @@ public class ContractDefinition {
         ResponseEntity<String> transactionsResponse = sendRequest(restTemplate, accountCommonHeaders, transactionsUrl);
 
         String jsonTransactions = transactionsResponse.getBody();
-        System.out.println(jsonTransactions);
+        System.out.println("Transactions : " + jsonTransactions);
         Transactions transactions = unmarhalTransactions(jsonTransactions);
         System.out.println(transactions.getTransactions());
     }
@@ -227,7 +226,7 @@ public class ContractDefinition {
             sendRequest(restTemplate, accountListHeaders, accountDetailsUrl);
 
         String jsonAccountDetails = accountDetailsResponse.getBody();
-        System.out.println(jsonAccountDetails);
+        System.out.println("AccountDetails : " + jsonAccountDetails);
         AccountDetails accountDetails = unmarhalAccountDetails(jsonAccountDetails);
         System.out.println(accountDetails.getAccount());
     }
@@ -238,7 +237,7 @@ public class ContractDefinition {
             sendRequest(restTemplate, accountListHeaders, accountList);
 
         String jsonAccounts = accountsResponse.getBody();
-        System.out.println(jsonAccounts);
+        System.out.println("AccountList : " + jsonAccounts);
         Accounts accounts = unmarhalAccount(jsonAccounts);
         System.out.println(accounts.getAccounts());
     }
@@ -264,10 +263,10 @@ public class ContractDefinition {
 
         Date registered = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2019-05-20T10:23:38");
         Date startDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
-        Date expiryDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
+        Date endDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
 
         return newJsonBody((accountDetails) -> {
-            accountDetails.stringValue("responseStatus", "partial"); //enum
+            accountDetails.stringValue("responseStatus", "complete");
             accountDetails.object("account", account -> {
                 account.stringValue("status", "enabled"); // enum
                 addServicer(account); // se over
@@ -278,19 +277,19 @@ public class ContractDefinition {
                 account.array("balances", balance ->
                     balance.object(balanceObject -> {
                         balanceObject.booleanType("creditLineIncluded", true);
-                        balanceObject.numberValue("amount", 0.2); // type så lenge det er med 2 desimaler
+                        balanceObject.numberValue("amount", 20.2); // type så lenge det er med 2 desimaler
                         balanceObject.stringValue("creditDebitIndicator", "credit"); // enum
                         balanceObject.date("registered", "yyyy-MM-dd'T'HH:mm:ss", registered);
                         balanceObject.stringValue("type", "availableBalance"); //enum
                         balanceObject.numberValue("creditLineAmount", 10.9); //se over
                         balanceObject.stringValue("creditLineCurrency", "NOK"); //se over
                     }));
-                addPrimaryOwner(startDate, expiryDate, account);
+                addPrimaryOwner(startDate, endDate, account);
             });
         }).build();
     }
 
-    private DslPart getAccountsDslPart() throws ParseException {
+    private DslPart getAccountListDslPart() throws ParseException {
 
         Date startDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
         Date expiryDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
@@ -300,18 +299,32 @@ public class ContractDefinition {
             accountsList.array("accounts", accounts -> accounts.object(accountObject -> {
                 accountObject.stringValue("status", "enabled");
                 addServicer(accountObject);
-                addElectronicAdress(accountObject, "links", "rel", "cards", "href"); //se over
-                addElectronicAdress(accountObject, "links", "rel", "roles", "href"); //se over
-                addElectronicAdress(accountObject, "links", "rel", "transactions", "href"); //se over
 
+                accountObject.array("links", links ->
+                    links
+                        .object(link -> {
+                            link.stringType("rel", "cards");
+                            link.stringType("href",
+                                "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/" + "cards");
+                        })
+                        .object(link -> {
+                            link.stringType("rel", "roles");
+                            link.stringType("href",
+                                "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/" + "roles");
+                        })
+                        .object(link -> {
+                            link.stringType("rel", "transactions");
+                            link.stringType("href",
+                                "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/" + "transactions");
+                        })
+                );
                 accountObject.stringValue("accountIdentifier", "78770517388"); // 11 siffer regexp
                 accountObject.stringValue("accountReference", "MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr"); //.* string -> StringType
                 accountObject.stringValue("type", "loanAccount"); //stringMatcher test mot alle verdier
                 accountObject.stringValue("currency", "NOK"); // Stringmatcher Uppercase 3 letters A-Z
                 addPrimaryOwner(startDate, expiryDate, accountObject);
-                addElectronicAdress(accountObject, "electronicAddresses", "type", "phoneNumber",
-                    "96711125"); // reformat
-                accountObject.stringValue("name", "DNB");
+                addElectronicAdress(accountObject, "electronicAddresses", "type", "96711125");
+                accountObject.stringValue("name", "Boomsma Erika");
             }));
         }).build();
     }
@@ -351,7 +364,7 @@ public class ContractDefinition {
                 roleObject.object("postalAdress", postalAdress -> {
                     postalAdress.stringValue("postCode", "1598");
                     postalAdress.stringValue("type", "residential");
-                    postalAdress.stringValue("streetName", "bøgata");
+                    postalAdress.stringValue("streetName", "trysilgata");
                     postalAdress.stringValue("buildingNumber", "2");
                     postalAdress.stringValue("townName", "Oslo");
                     postalAdress.stringValue("country", "Norway");
@@ -385,8 +398,8 @@ public class ContractDefinition {
                 transactionsObject.date("registered", "yyyy-MM-dd'T'HH:mm:ss", registredDate);
                 transactionsObject.numberValue("amount", 100.34);
                 transactionsObject.stringValue("currency", "NOK");
-                transactionsObject.stringValue("additionalInfo", "Anonymisert transaksjonstekst DSOP");
-                transactionsObject.stringValue("merchant", "Anonymisert transaksjonstekst DSOP");
+                transactionsObject.stringValue("additionalInfo", "info");
+                transactionsObject.stringValue("merchant", "Power");
                 transactionsObject
                     .object("paymentCard", paymentCard -> addCardIdentifier(startDate, expiryDate, paymentCard));
                 addIdentifier(transactionsObject);
@@ -425,7 +438,7 @@ public class ContractDefinition {
         parentDslObject.object("postalAddress", postalAddress -> {
             postalAddress.stringValue("postCode", "1598");
             postalAddress.stringValue("type", "residential");
-            postalAddress.stringValue("streetName", "bøgata");
+            postalAddress.stringValue("streetName", "trysilgata");
             postalAddress.stringValue("buildingNumber", "2");
             postalAddress.stringValue("townName", "Oslo");
             postalAddress.stringValue("country", "Norway");
@@ -439,20 +452,19 @@ public class ContractDefinition {
             addIdentifier(primaryOwner);
             primaryOwner.stringValue("name", "Boomsma Erika"); // String
             primaryOwner.date("startDate", "yyyy-mm-dd", startDate);
-            primaryOwner.date("expiryDate", "yyyy-mm-dd", expiryDate);
+            primaryOwner.date("endDate", "yyyy-mm-dd", expiryDate);
             addPostalAdress(primaryOwner);
         });
     }
 
     private void addServicer(LambdaDslObject account) {
         account.object("servicer", servicer -> {
-            servicer.stringValue("name", "808987654"); //string
+            servicer.stringValue("name", "DNB");
             servicer.object("identifier", identifier -> {
-                identifier.stringValue("countryOfResidence", "NO"); // se over
+                identifier.stringValue("countryOfResidence", "NO");
                 identifier.stringValue("value", "123456879");
                 identifier.stringValue("type", "countryIdentificationCode");
             });
-            servicer.stringValue("type", "countryIdentificationCode");
         });
     }
 
@@ -465,14 +477,23 @@ public class ContractDefinition {
 
     }
 
-    private void addElectronicAdress(LambdaDslObject accountObject, String links2, String rel,
+    private void addLinks(LambdaDslObject accountObject, String links2, String rel,
                                      String type, String href) {
         accountObject.array(links2, links ->
-            links.object(electronicAddressObject -> {
-                electronicAddressObject.stringType(rel, type);
-                electronicAddressObject.stringType(href, "/accounts/3IS31JKFhiasfPxLicnPwg/" + type);
+            links.object(link -> {
+                link.stringType(rel, type);
+                link.stringType(href, "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/" + type);
             }));
     }
+
+    private void addElectronicAdress(LambdaDslObject accountObject, String arrayName, String type, String value) {
+        accountObject.array(arrayName, links ->
+            links.object(electronicAddressObject -> {
+                electronicAddressObject.stringType("type", type);
+                electronicAddressObject.stringType("value", value);
+            }));
+    }
+
 
     private Accounts unmarhalAccount(String kontolisteJson) {
         ObjectMapper objectMapper = new ObjectMapper();

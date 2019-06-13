@@ -3,7 +3,6 @@
     {
       "accountReference": "MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr",
       "primaryOwner": {
-        "expiryDate": "2010-05-20",
         "identifier": {
           "countryOfResidence": "NO",
           "type": "nationalIdentityNumber",
@@ -11,7 +10,7 @@
         },
         "postalAddress": {
           "country": "Norway",
-          "streetName": "b\u00f8gata",
+          "streetName": "trysilgata",
           "townName": "Oslo",
           "buildingNumber": "2",
           "postCode": "1598",
@@ -20,6 +19,7 @@
           ],
           "type": "residential"
         },
+        "endDate": "2010-05-20",
         "name": "Boomsma Erika",
         "permission": "noRight",
         "startDate": "2010-05-20"
@@ -30,22 +30,29 @@
           "type": "countryIdentificationCode",
           "value": "123456879"
         },
-        "name": "808987654",
-        "type": "countryIdentificationCode"
+        "name": "DNB"
       },
-      "name": "DNB",
+      "name": "Boomsma Erika",
       "links": [
         {
+          "rel": "cards",
+          "href": "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/cards"
+        },
+        {
+          "rel": "roles",
+          "href": "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/roles"
+        },
+        {
           "rel": "transactions",
-          "href": "/accounts/3IS31JKFhiasfPxLicnPwg/transactions"
+          "href": "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/transactions"
         }
       ],
       "accountIdentifier": "78770517388",
       "currency": "NOK",
       "electronicAddresses": [
         {
-          "type": "phoneNumber",
-          "96711125": "/accounts/3IS31JKFhiasfPxLicnPwg/phoneNumber"
+          "type": "type",
+          "value": "96711125"
         }
       ],
       "type": "loanAccount",
