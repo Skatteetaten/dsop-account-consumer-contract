@@ -38,7 +38,7 @@ The **response.body** field contains the response that is excpected from the fin
 The **request** field contains the information about the request that will be sent by PACT
 
 ### Implemenation
-The Requests will be sent when PACTs TestTarget is and a test class is implemented.
+The Requests will be sent when PACT's TestTarget and a test class is implemented.
 The financial institutions will have to mock or create test data. The test data will 
 create a response that matches the PACT response for a given state. 
 

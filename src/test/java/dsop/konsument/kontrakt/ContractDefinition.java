@@ -299,10 +299,25 @@ public class ContractDefinition {
             accountsList.array("accounts", accounts -> accounts.object(accountObject -> {
                 accountObject.stringValue("status", "enabled");
                 addServicer(accountObject);
-                addLinks(accountObject, "links", "rel", "cards", "href"); //se over
-                addLinks(accountObject, "links", "rel", "roles", "href"); //se over
-                addLinks(accountObject, "links", "rel", "transactions", "href"); //se over
 
+                accountObject.array("links", links ->
+                    links
+                        .object(link -> {
+                            link.stringType("rel", "cards");
+                            link.stringType("href",
+                                "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/" + "cards");
+                        })
+                        .object(link -> {
+                            link.stringType("rel", "roles");
+                            link.stringType("href",
+                                "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/" + "roles");
+                        })
+                        .object(link -> {
+                            link.stringType("rel", "transactions");
+                            link.stringType("href",
+                                "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/" + "transactions");
+                        })
+                );
                 accountObject.stringValue("accountIdentifier", "78770517388"); // 11 siffer regexp
                 accountObject.stringValue("accountReference", "MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr"); //.* string -> StringType
                 accountObject.stringValue("type", "loanAccount"); //stringMatcher test mot alle verdier
@@ -465,9 +480,9 @@ public class ContractDefinition {
     private void addLinks(LambdaDslObject accountObject, String links2, String rel,
                                      String type, String href) {
         accountObject.array(links2, links ->
-            links.object(electronicAddressObject -> {
-                electronicAddressObject.stringType(rel, type);
-                electronicAddressObject.stringType(href, "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/" + type);
+            links.object(link -> {
+                link.stringType(rel, type);
+                link.stringType(href, "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/" + type);
             }));
     }
 

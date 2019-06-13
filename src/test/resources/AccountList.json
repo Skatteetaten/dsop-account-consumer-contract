@@ -35,6 +35,14 @@
       "name": "Boomsma Erika",
       "links": [
         {
+          "rel": "cards",
+          "href": "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/cards"
+        },
+        {
+          "rel": "roles",
+          "href": "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/roles"
+        },
+        {
           "rel": "transactions",
           "href": "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/transactions"
         }

@@ -7,158 +7,6 @@
   },
   "interactions": [
     {
-      "description": "GET AccountList REQUEST",
-      "request": {
-        "method": "GET",
-        "path": "/accounts",
-        "headers": {
-          "Authorization": "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ",
-          "CorrelationID": "77dcfc8c-5f6d-4095-bb7c-cdb54b5067a5",
-          "PartyID": "909716212",
-          "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
-        },
-        "query": {
-          "fromDate": [
-            "2016-12-09"
-          ],
-          "toDate": [
-            "2016-12-09"
-          ]
-        }
-      },
-      "response": {
-        "status": 200,
-        "headers": {
-          "Content-Type": "application/json; charset=UTF-8"
-        },
-        "body": {
-          "accounts": [
-            {
-              "accountReference": "MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr",
-              "primaryOwner": {
-                "identifier": {
-                  "countryOfResidence": "NO",
-                  "type": "nationalIdentityNumber",
-                  "value": "10108054242"
-                },
-                "postalAddress": {
-                  "country": "Norway",
-                  "streetName": "trysilgata",
-                  "townName": "Oslo",
-                  "buildingNumber": "2",
-                  "postCode": "1598",
-                  "addressLines": [
-                    "test@test.no"
-                  ],
-                  "type": "residential"
-                },
-                "endDate": "2010-05-20",
-                "name": "Boomsma Erika",
-                "permission": "noRight",
-                "startDate": "2010-05-20"
-              },
-              "servicer": {
-                "identifier": {
-                  "countryOfResidence": "NO",
-                  "type": "countryIdentificationCode",
-                  "value": "123456879"
-                },
-                "name": "DNB"
-              },
-              "name": "Boomsma Erika",
-              "links": [
-                {
-                  "rel": "transactions",
-                  "href": "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/transactions"
-                }
-              ],
-              "accountIdentifier": "78770517388",
-              "currency": "NOK",
-              "electronicAddresses": [
-                {
-                  "type": "type",
-                  "value": "96711125"
-                }
-              ],
-              "type": "loanAccount",
-              "status": "enabled"
-            }
-          ],
-          "responseStatus": "complete"
-        },
-        "matchingRules": {
-          "body": {
-            "$.accounts[0].links[0].rel": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.accounts[0].links[0].href": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.accounts[0].primaryOwner.startDate": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-mm-dd"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.accounts[0].primaryOwner.endDate": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-mm-dd"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.accounts[0].electronicAddresses[0].type": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.accounts[0].electronicAddresses[0].value": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            }
-          },
-          "header": {
-            "Content-Type": {
-              "matchers": [
-                {
-                  "match": "regex",
-                  "regex": "application/json;\\s?charset=(utf|UTF)-8"
-                }
-              ],
-              "combine": "AND"
-            }
-          }
-        }
-      },
-      "providerStates": [
-        {
-          "name": "test GET AccountList"
-        }
-      ]
-    },
-    {
       "description": "GET AccountDetails REQUEST",
       "request": {
         "method": "GET",
@@ -287,6 +135,198 @@
       "providerStates": [
         {
           "name": "test GET AccountDetails"
+        }
+      ]
+    },
+    {
+      "description": "GET AccountList REQUEST",
+      "request": {
+        "method": "GET",
+        "path": "/accounts",
+        "headers": {
+          "Authorization": "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ",
+          "CorrelationID": "77dcfc8c-5f6d-4095-bb7c-cdb54b5067a5",
+          "PartyID": "909716212",
+          "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
+        },
+        "query": {
+          "fromDate": [
+            "2016-12-09"
+          ],
+          "toDate": [
+            "2016-12-09"
+          ]
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=UTF-8"
+        },
+        "body": {
+          "accounts": [
+            {
+              "accountReference": "MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr",
+              "primaryOwner": {
+                "identifier": {
+                  "countryOfResidence": "NO",
+                  "type": "nationalIdentityNumber",
+                  "value": "10108054242"
+                },
+                "postalAddress": {
+                  "country": "Norway",
+                  "streetName": "trysilgata",
+                  "townName": "Oslo",
+                  "buildingNumber": "2",
+                  "postCode": "1598",
+                  "addressLines": [
+                    "test@test.no"
+                  ],
+                  "type": "residential"
+                },
+                "endDate": "2010-05-20",
+                "name": "Boomsma Erika",
+                "permission": "noRight",
+                "startDate": "2010-05-20"
+              },
+              "servicer": {
+                "identifier": {
+                  "countryOfResidence": "NO",
+                  "type": "countryIdentificationCode",
+                  "value": "123456879"
+                },
+                "name": "DNB"
+              },
+              "name": "Boomsma Erika",
+              "links": [
+                {
+                  "rel": "cards",
+                  "href": "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/cards"
+                },
+                {
+                  "rel": "roles",
+                  "href": "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/roles"
+                },
+                {
+                  "rel": "transactions",
+                  "href": "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/transactions"
+                }
+              ],
+              "accountIdentifier": "78770517388",
+              "currency": "NOK",
+              "electronicAddresses": [
+                {
+                  "type": "type",
+                  "value": "96711125"
+                }
+              ],
+              "type": "loanAccount",
+              "status": "enabled"
+            }
+          ],
+          "responseStatus": "complete"
+        },
+        "matchingRules": {
+          "body": {
+            "$.accounts[0].links[0].rel": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.accounts[0].links[0].href": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.accounts[0].links[1].rel": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.accounts[0].links[1].href": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.accounts[0].links[2].rel": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.accounts[0].links[2].href": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.accounts[0].primaryOwner.startDate": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-mm-dd"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.accounts[0].primaryOwner.endDate": {
+              "matchers": [
+                {
+                  "match": "date",
+                  "date": "yyyy-mm-dd"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.accounts[0].electronicAddresses[0].type": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.accounts[0].electronicAddresses[0].value": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json;\\s?charset=(utf|UTF)-8"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      },
+      "providerStates": [
+        {
+          "name": "test GET AccountList"
         }
       ]
     },
@@ -656,6 +696,7 @@
         },
         "body": {
           "accounts": [
+
           ],
           "responseStatus": "complete"
         },
