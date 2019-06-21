@@ -1,7 +1,7 @@
 {
   "paymentCards": [
     {
-      "expiryDate": "2010-05-20",
+      "expiryDate": "2010-05",
       "holderName": "Alma",
       "cardIssuerName": "Mastercard AS",
       "cardIssuerIdentifier": {
@@ -10,7 +10,7 @@
         "value": "123456879"
       },
       "type": "creditCard",
-      "startDate": "2010-05-20",
+      "startDate": "2010-05",
       "cardIdentifier": "4567xxxxxxxx9809"
     }
   ],

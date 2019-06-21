@@ -339,8 +339,8 @@ public class ContractDefinition {
 
     private DslPart getCardsDslPart() throws ParseException {
 
-        Date startDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
-        Date expiryDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
+        Date startDate = new SimpleDateFormat("yyyy-mm").parse("2010-05");
+        Date expiryDate = new SimpleDateFormat("yyyy-mm").parse("2010-05");
 
         return newJsonBody((cardsBody) -> {
             cardsBody.stringValue("responseStatus", "complete");
@@ -384,8 +384,8 @@ public class ContractDefinition {
         Date bookingDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2019-05-20T10:23:38");
         Date valueDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2019-04-20T10:23:38");
         Date registredDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2019-04-20T10:23:38");
-        Date startDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
-        Date expiryDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
+        Date startDate = new SimpleDateFormat("yyyy-mm").parse("2010-05");
+        Date expiryDate = new SimpleDateFormat("yyyy-mm").parse("2010-05");
 
         return newJsonBody((transactionsBody) ->
             transactionsBody.array("transactions", transactions -> transactions.object(transactionsObject -> {
@@ -424,8 +424,8 @@ public class ContractDefinition {
         parentDslObject.stringValue("holderName", "Alma"); // String
         parentDslObject.stringValue("cardIssuerName", "Mastercard AS"); //String
         parentDslObject.stringValue("type", "creditCard"); //Enum
-        parentDslObject.date("startDate", "yyyy-mm-dd", startDate); // må være med
-        parentDslObject.date("expiryDate", "yyyy-mm-dd", expiryDate); // må være med
+        parentDslObject.date("startDate", "yyyy-mm", startDate); // må være med
+        parentDslObject.date("expiryDate", "yyyy-mm", expiryDate); // må være med
         parentDslObject.stringValue("cardIdentifier", "4567xxxxxxxx9809"); // maskert regmatcher X eller *
         parentDslObject.object("cardIssuerIdentifier", cardIssuerIdentifier -> {
             cardIssuerIdentifier.stringValue("countryOfResidence", "NO"); // se over
