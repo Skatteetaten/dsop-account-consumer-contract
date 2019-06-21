@@ -28,7 +28,7 @@
       "response": {
         "status": 200,
         "headers": {
-          "Content-Type": "application/json; charset=UTF-8"
+          "Content-Type": "application/json"
         },
         "body": {
           "responseStatus": "complete",
@@ -118,17 +118,6 @@
               ],
               "combine": "AND"
             }
-          },
-          "header": {
-            "Content-Type": {
-              "matchers": [
-                {
-                  "match": "regex",
-                  "regex": "application/json;\\s?charset=(utf|UTF)-8"
-                }
-              ],
-              "combine": "AND"
-            }
           }
         }
       },
@@ -161,7 +150,7 @@
       "response": {
         "status": 200,
         "headers": {
-          "Content-Type": "application/json; charset=UTF-8"
+          "Content-Type": "application/json"
         },
         "body": {
           "accounts": [
@@ -310,17 +299,6 @@
               ],
               "combine": "AND"
             }
-          },
-          "header": {
-            "Content-Type": {
-              "matchers": [
-                {
-                  "match": "regex",
-                  "regex": "application/json;\\s?charset=(utf|UTF)-8"
-                }
-              ],
-              "combine": "AND"
-            }
           }
         }
       },
@@ -352,7 +330,7 @@
       "response": {
         "status": 200,
         "headers": {
-          "Content-Type": "application/json; charset=UTF-8"
+          "Content-Type": "application/json"
         },
         "body": {
           "paymentCards": [
@@ -392,17 +370,6 @@
               ],
               "combine": "AND"
             }
-          },
-          "header": {
-            "Content-Type": {
-              "matchers": [
-                {
-                  "match": "regex",
-                  "regex": "application/json;\\s?charset=(utf|UTF)-8"
-                }
-              ],
-              "combine": "AND"
-            }
           }
         }
       },
@@ -434,7 +401,7 @@
       "response": {
         "status": 200,
         "headers": {
-          "Content-Type": "application/json; charset=UTF-8"
+          "Content-Type": "application/json"
         },
         "body": {
           "roles": [
@@ -486,17 +453,6 @@
               ],
               "combine": "AND"
             }
-          },
-          "header": {
-            "Content-Type": {
-              "matchers": [
-                {
-                  "match": "regex",
-                  "regex": "application/json;\\s?charset=(utf|UTF)-8"
-                }
-              ],
-              "combine": "AND"
-            }
           }
         }
       },
@@ -528,7 +484,7 @@
       "response": {
         "status": 200,
         "headers": {
-          "Content-Type": "application/json; charset=UTF-8"
+          "Content-Type": "application/json"
         },
         "body": {
           "transactions": [
@@ -649,17 +605,6 @@
               ],
               "combine": "AND"
             }
-          },
-          "header": {
-            "Content-Type": {
-              "matchers": [
-                {
-                  "match": "regex",
-                  "regex": "application/json;\\s?charset=(utf|UTF)-8"
-                }
-              ],
-              "combine": "AND"
-            }
           }
         }
       },
@@ -692,26 +637,13 @@
       "response": {
         "status": 200,
         "headers": {
-          "Content-Type": "application/json; charset=UTF-8"
+          "Content-Type": "application/json"
         },
         "body": {
           "accounts": [
 
           ],
           "responseStatus": "complete"
-        },
-        "matchingRules": {
-          "header": {
-            "Content-Type": {
-              "matchers": [
-                {
-                  "match": "regex",
-                  "regex": "application/json;\\s?charset=(utf|UTF)-8"
-                }
-              ],
-              "combine": "AND"
-            }
-          }
         }
       },
       "providerStates": [

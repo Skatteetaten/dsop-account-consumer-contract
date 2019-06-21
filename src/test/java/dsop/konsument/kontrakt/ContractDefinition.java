@@ -85,6 +85,9 @@ public class ContractDefinition {
         CommonHeaders.put("CorrelationID", CORRELATION_ID);
         CommonHeaders.put("Authorization", AUTHORIZATION);
 
+        Map<String, String> responseHeaders = new HashMap<>();
+        responseHeaders.put("Content-Type", "application/json");
+
         return builder
         .given("test GET AccountList")
             .uponReceiving("GET AccountList REQUEST") // lag beskrivelse av testen
@@ -93,6 +96,7 @@ public class ContractDefinition {
             .headers(Listheaders)
             .method("GET")
             .willRespondWith()
+            .headers(responseHeaders)
             .status(200)
             .body(pactAccountsBody)
 
@@ -103,6 +107,7 @@ public class ContractDefinition {
             .method("GET")
             .headers(CommonHeaders)
             .willRespondWith()
+            .headers(responseHeaders)
             .status(200)
             .body(pactAccountDetailsBody)
 
@@ -113,6 +118,7 @@ public class ContractDefinition {
             .method("GET")
             .headers(CommonHeaders)
             .willRespondWith()
+            .headers(responseHeaders)
             .status(200)
             .body(pactCardsBody)
 
@@ -123,6 +129,7 @@ public class ContractDefinition {
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .method("GET")
             .willRespondWith()
+            .headers(responseHeaders)
             .status(200)
             .body(pactRolesBody)
 
@@ -133,6 +140,7 @@ public class ContractDefinition {
             .method("GET")
             .headers(CommonHeaders)
             .willRespondWith()
+            .headers(responseHeaders)
             .status(200)
             .body(pactTransactionsBody)
 
@@ -144,6 +152,7 @@ public class ContractDefinition {
             .method("GET")
             .headers(EmptyListHeaders)
             .willRespondWith()
+            .headers(responseHeaders)
             .status(200)
             .body(pactEmptyAccountsBody)
             .toPact();
