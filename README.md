@@ -1,5 +1,9 @@
 # dsop-account-consumer-contract
 
+This project contains a REST contract first pattern and an Consumer Driven Contract pattern. 
+The former is implemented with OPEN API, the latter with PACT.
+They complement eachother and combined implement a Congruity API pattern across services.
+
 ## Scope
 Pact kontrakt/tester skal dekke følgende behov:
 1. Tester at alle felter har riktig navn
