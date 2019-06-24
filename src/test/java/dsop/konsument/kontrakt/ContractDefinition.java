@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,7 +42,13 @@ public class ContractDefinition {
     private static final String PARTY_ID = "909716212";
     private static final String PARTY_ID_NO_ACCOUNTS = "123456789";
     private static final String LEGAL_MANDATE = "Skatteforvaltningsloven%20%C2%A7%2010-2%201";
-    private static final String CORRELATION_ID = "77dcfc8c-5f6d-4095-bb7c-cdb54b5067a5";
+    private static final String CORRELATION_ID_ACCOUNT_LIST = "14aea0c2-0742-4b84-8ac9-0844d05d4673";
+    private static final String CORRELATION_ID_ACCOUNT_LIST_EMPTY = "fa9d1bcf-e6f5-47ec-95b8-37e47e2d0868";
+    private static final String CORRELATION_ID_ACCOUNT_DETAILS = "5cba4c0d-afc3-4e96-b6c8-e9de2e81a31d";
+    private static final String CORRELATION_ID_CARDS = "c049c99f-8a60-41ea-90c9-1889471394d0";
+    private static final String CORRELATION_ID_ROLES = "8981b032-bdc2-4a01-a9d4-f0e5d938cce9";
+    private static final String CORRELATION_ID_TRANSACTIONS = "b2e25cd6-8bb6-40c1-9aa8-29d7ca114cb3";
+
     private static final String AUTHORIZATION = "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0"
         + "NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJh"
         + "dWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRl"
@@ -71,19 +78,34 @@ public class ContractDefinition {
         Map<String, String> Listheaders = new HashMap<>();
         Listheaders.put("PartyID", PARTY_ID);
         Listheaders.put("Legal-Mandate", LEGAL_MANDATE);
-        Listheaders.put("CorrelationID", CORRELATION_ID);
+        Listheaders.put("CorrelationID", CORRELATION_ID_ACCOUNT_LIST);
         Listheaders.put("Authorization", AUTHORIZATION);
 
         Map<String, String> EmptyListHeaders = new HashMap<>();
         EmptyListHeaders.put("PartyID", PARTY_ID_NO_ACCOUNTS);
         EmptyListHeaders.put("Legal-Mandate", LEGAL_MANDATE);
-        EmptyListHeaders.put("CorrelationID", CORRELATION_ID);
+        EmptyListHeaders.put("CorrelationID", CORRELATION_ID_ACCOUNT_LIST_EMPTY);
         EmptyListHeaders.put("Authorization", AUTHORIZATION);
 
-        Map<String, String> CommonHeaders = new HashMap<>();
-        CommonHeaders.put("Legal-Mandate", LEGAL_MANDATE);
-        CommonHeaders.put("CorrelationID", CORRELATION_ID);
-        CommonHeaders.put("Authorization", AUTHORIZATION);
+        Map<String, String> accountDetailsHeaders = new HashMap<>();
+        accountDetailsHeaders.put("Legal-Mandate", LEGAL_MANDATE);
+        accountDetailsHeaders.put("CorrelationID", CORRELATION_ID_ACCOUNT_DETAILS);
+        accountDetailsHeaders.put("Authorization", AUTHORIZATION);
+
+        Map<String, String> cardsHeaders = new HashMap<>();
+        cardsHeaders.put("Legal-Mandate", LEGAL_MANDATE);
+        cardsHeaders.put("CorrelationID", CORRELATION_ID_CARDS);
+        cardsHeaders.put("Authorization", AUTHORIZATION);
+
+        Map<String, String> rolesHeaders = new HashMap<>();
+        rolesHeaders.put("Legal-Mandate", LEGAL_MANDATE);
+        rolesHeaders.put("CorrelationID", CORRELATION_ID_ROLES);
+        rolesHeaders.put("Authorization", AUTHORIZATION);
+
+        Map<String, String> transactionsHeaders = new HashMap<>();
+        transactionsHeaders.put("Legal-Mandate", LEGAL_MANDATE);
+        transactionsHeaders.put("CorrelationID", CORRELATION_ID_TRANSACTIONS);
+        transactionsHeaders.put("Authorization", AUTHORIZATION);
 
         Map<String, String> responseHeaders = new HashMap<>();
         responseHeaders.put("Content-Type", "application/json");
@@ -105,7 +127,7 @@ public class ContractDefinition {
             .path("/accounts/5687123451")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .method("GET")
-            .headers(CommonHeaders)
+            .headers(accountDetailsHeaders)
             .willRespondWith()
             .headers(responseHeaders)
             .status(200)
@@ -116,7 +138,7 @@ public class ContractDefinition {
             .path("/accounts/5687123451/cards")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .method("GET")
-            .headers(CommonHeaders)
+            .headers(cardsHeaders)
             .willRespondWith()
             .headers(responseHeaders)
             .status(200)
@@ -124,7 +146,7 @@ public class ContractDefinition {
 
         .given("test GET Roles")
             .uponReceiving("GET Roles REQUEST")
-            .headers(CommonHeaders)
+            .headers(rolesHeaders)
             .path("/accounts/5687123451/roles")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .method("GET")
@@ -138,7 +160,7 @@ public class ContractDefinition {
             .path("/accounts/5687123451/transactions")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
             .method("GET")
-            .headers(CommonHeaders)
+            .headers(transactionsHeaders)
             .willRespondWith()
             .headers(responseHeaders)
             .status(200)
@@ -164,38 +186,57 @@ public class ContractDefinition {
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders accountListHeaders = new HttpHeaders();
-        HttpHeaders accountCommonHeaders = new HttpHeaders();
         HttpHeaders emptyAccountListHeaders = new HttpHeaders();
+        HttpHeaders detailsHeaders = new HttpHeaders();
+        HttpHeaders cardsHeaders = new HttpHeaders();
+        HttpHeaders rolesHeaders = new HttpHeaders();
+        HttpHeaders transactionHeaders = new HttpHeaders();
 
-        createRequestHeaders(accountListHeaders, accountCommonHeaders, emptyAccountListHeaders);
+        createRequestHeaders(accountListHeaders, emptyAccountListHeaders, detailsHeaders, cardsHeaders, rolesHeaders, transactionHeaders);
 
         verifyAccountList(restTemplate, accountListHeaders);
         verifyEmptyAccountList(restTemplate, emptyAccountListHeaders);
-        verifyAccountDetails(restTemplate, accountListHeaders);
-        verifyTransactions(restTemplate, accountCommonHeaders);
-        verifyCards(restTemplate, accountCommonHeaders);
-        verifyRoles(restTemplate, accountCommonHeaders);
+        verifyAccountDetails(restTemplate, detailsHeaders);
+        verifyTransactions(restTemplate, transactionHeaders);
+        verifyCards(restTemplate, cardsHeaders);
+        verifyRoles(restTemplate, rolesHeaders);
 
     }
 
-    private void createRequestHeaders(HttpHeaders accountListHeaders, HttpHeaders accountCommonHeaders,
-                                      HttpHeaders emptyAccountListHeaders) {
+    private void createRequestHeaders(HttpHeaders accountListHeaders, HttpHeaders emptyAccountListHeaders,
+        HttpHeaders detailsHeaders, HttpHeaders cardsHeaders, HttpHeaders rolesHeaders, HttpHeaders transactionHeaders) {
+
         accountListHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         accountListHeaders.set("PartyID", PARTY_ID);
         accountListHeaders.set("Legal-Mandate", LEGAL_MANDATE);
-        accountListHeaders.set("CorrelationID", CORRELATION_ID);
+        accountListHeaders.set("CorrelationID", CORRELATION_ID_ACCOUNT_LIST);
         accountListHeaders.set("Authorization", AUTHORIZATION);
 
         emptyAccountListHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         emptyAccountListHeaders.set("PartyID", PARTY_ID_NO_ACCOUNTS);
         emptyAccountListHeaders.set("Legal-Mandate", LEGAL_MANDATE);
-        emptyAccountListHeaders.set("CorrelationID", CORRELATION_ID);
+        emptyAccountListHeaders.set("CorrelationID", CORRELATION_ID_ACCOUNT_LIST_EMPTY);
         emptyAccountListHeaders.set("Authorization", AUTHORIZATION);
 
-        accountCommonHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        accountCommonHeaders.set("Legal-Mandate", LEGAL_MANDATE);
-        accountCommonHeaders.set("CorrelationID", CORRELATION_ID);
-        accountCommonHeaders.set("Authorization", AUTHORIZATION);
+        detailsHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        detailsHeaders.set("Legal-Mandate", LEGAL_MANDATE);
+        detailsHeaders.set("CorrelationID", CORRELATION_ID_ACCOUNT_DETAILS);
+        detailsHeaders.set("Authorization", AUTHORIZATION);
+
+        cardsHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        cardsHeaders.set("Legal-Mandate", LEGAL_MANDATE);
+        cardsHeaders.set("CorrelationID", CORRELATION_ID_CARDS);
+        cardsHeaders.set("Authorization", AUTHORIZATION);
+
+        rolesHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        rolesHeaders.set("Legal-Mandate", LEGAL_MANDATE);
+        rolesHeaders.set("CorrelationID", CORRELATION_ID_ROLES);
+        rolesHeaders.set("Authorization", AUTHORIZATION);
+
+        transactionHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        transactionHeaders.set("Legal-Mandate", LEGAL_MANDATE);
+        transactionHeaders.set("CorrelationID", CORRELATION_ID_TRANSACTIONS);
+        transactionHeaders.set("Authorization", AUTHORIZATION);
     }
 
     private void verifyRoles(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
