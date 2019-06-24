@@ -492,7 +492,7 @@ public class ContractDefinition {
             postalAddress.stringValue("buildingNumber", "2");
             postalAddress.stringValue("townName", "Oslo");
             postalAddress.stringValue("country", "Norway");
-            postalAddress.array("addressLines", addressLine -> addressLine.stringValue("test@test.no"));
+            postalAddress.array("addressLines", addressLine -> addressLine.stringValue("bondes vei 4"));
         });
     }
 
