@@ -65,6 +65,12 @@
               "endDate": "2010-05-20",
               "name": "Boomsma Erika",
               "permission": "noRight",
+              "electronicAddresses": [
+                {
+                  "type": "phoneNumber",
+                  "value": "96711125"
+                }
+              ],
               "startDate": "2010-05-20"
             },
             "servicer": {
@@ -114,6 +120,22 @@
                 {
                   "match": "date",
                   "date": "yyyy-mm-dd"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.account.primaryOwner.electronicAddresses[0].type": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.account.primaryOwner.electronicAddresses[0].value": {
+              "matchers": [
+                {
+                  "match": "type"
                 }
               ],
               "combine": "AND"
@@ -176,6 +198,12 @@
                 "endDate": "2010-05-20",
                 "name": "Boomsma Erika",
                 "permission": "noRight",
+                "electronicAddresses": [
+                  {
+                    "type": "phoneNumber",
+                    "value": "96711125"
+                  }
+                ],
                 "startDate": "2010-05-20"
               },
               "servicer": {
@@ -203,12 +231,6 @@
               ],
               "accountIdentifier": "78770517388",
               "currency": "NOK",
-              "electronicAddresses": [
-                {
-                  "type": "type",
-                  "value": "96711125"
-                }
-              ],
               "type": "loanAccount",
               "status": "enabled"
             }
@@ -283,7 +305,7 @@
               ],
               "combine": "AND"
             },
-            "$.accounts[0].electronicAddresses[0].type": {
+            "$.accounts[0].primaryOwner.electronicAddresses[0].type": {
               "matchers": [
                 {
                   "match": "type"
@@ -291,7 +313,7 @@
               ],
               "combine": "AND"
             },
-            "$.accounts[0].electronicAddresses[0].value": {
+            "$.accounts[0].primaryOwner.electronicAddresses[0].value": {
               "matchers": [
                 {
                   "match": "type"
@@ -411,8 +433,7 @@
                 "type": "nationalIdentityNumber",
                 "value": "10108054242"
               },
-              "endDate": "2010-05-20",
-              "postalAdress": {
+              "postalAddress": {
                 "country": "Norway",
                 "streetName": "trysilgata",
                 "townName": "Oslo",
@@ -420,6 +441,7 @@
                 "postCode": "1598",
                 "type": "residential"
               },
+              "endDate": "2010-05-20",
               "name": "Nicolai",
               "electronicAddresses": [
                 {
@@ -490,11 +512,6 @@
           "transactions": [
             {
               "reversalIndicator": true,
-              "identifier": {
-                "countryOfResidence": "NO",
-                "type": "nationalIdentityNumber",
-                "value": "10108054242"
-              },
               "amount": 100.34,
               "counterParties": [
                 {
@@ -545,7 +562,6 @@
               "additionalInfo": "info",
               "bookingDate": "2019-05-20T10:23:38",
               "currency": "NOK",
-              "family": "additionalMiscellaneousCreditOperations",
               "status": "booked"
             }
           ]

@@ -1,6 +1,12 @@
 package dsop.konsument.kontrakt;
 
+import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalAccount;
+import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalAccountDetails;
+import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalCards;
+import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalRoles;
+import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalTransactions;
 import static io.pactfoundation.consumer.dsl.LambdaDsl.newJsonBody;
+import static ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.ElectronicAddressType.PHONENUMBER;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -373,7 +379,6 @@ public class ContractDefinition {
                 accountObject.stringValue("type", "loanAccount"); //stringMatcher test mot alle verdier
                 accountObject.stringValue("currency", "NOK"); // Stringmatcher Uppercase 3 letters A-Z
                 addPrimaryOwner(startDate, expiryDate, accountObject);
-                addElectronicAdress(accountObject, "electronicAddresses", "type", "96711125");
                 accountObject.stringValue("name", "Boomsma Erika");
             }));
         }).build();
@@ -411,13 +416,13 @@ public class ContractDefinition {
                 roleObject.stringValue("name", "Nicolai"); //string
                 roleObject.date("startDate", "yyyy-mm-dd", startDate); // sjekk oblig.
                 roleObject.date("endDate", "yyyy-mm-dd", endDate); // sjekk oblig.
-                roleObject.object("postalAdress", postalAdress -> {
-                    postalAdress.stringValue("postCode", "1598");
-                    postalAdress.stringValue("type", "residential");
-                    postalAdress.stringValue("streetName", "trysilgata");
-                    postalAdress.stringValue("buildingNumber", "2");
-                    postalAdress.stringValue("townName", "Oslo");
-                    postalAdress.stringValue("country", "Norway");
+                roleObject.object("postalAddress", postalAddress -> {
+                    postalAddress.stringValue("postCode", "1598");
+                    postalAddress.stringValue("type", "residential");
+                    postalAddress.stringValue("streetName", "trysilgata");
+                    postalAddress.stringValue("buildingNumber", "2");
+                    postalAddress.stringValue("townName", "Oslo");
+                    postalAddress.stringValue("country", "Norway");
                 });
                 addIdentifier(roleObject);
                 roleObject.array("electronicAddresses", electronicAddress ->
@@ -441,7 +446,6 @@ public class ContractDefinition {
             transactionsBody.array("transactions", transactions -> transactions.object(transactionsObject -> {
                 transactionsObject.date("bookingDate", "yyyy-MM-dd'T'HH:mm:ss", bookingDate);
                 transactionsObject.date("valueDate", "yyyy-MM-dd'T'HH:mm:ss", valueDate);
-                transactionsObject.stringValue("family", "additionalMiscellaneousCreditOperations");
                 transactionsObject.stringValue("transactionIdentifier", "DSOP10000000318308");
                 transactionsObject.booleanType("reversalIndicator", true);
                 transactionsObject.stringValue("status", "booked");
@@ -452,7 +456,6 @@ public class ContractDefinition {
                 transactionsObject.stringValue("merchant", "Power");
                 transactionsObject
                     .object("paymentCard", paymentCard -> addCardIdentifier(startDate, expiryDate, paymentCard));
-                addIdentifier(transactionsObject);
                 transactionsObject.object("transactionCode", transactionCode -> {
                     transactionCode.stringValue("domain", "accountManagement");
                     transactionCode.stringValue("family", "additionalMiscellaneousCreditOperations");
@@ -467,6 +470,7 @@ public class ContractDefinition {
                         counterPartyObject.stringValue("type", "creditor");
                         addPostalAdress(counterPartyObject);
                     }));
+
             }))).build();
     }
 
@@ -503,6 +507,7 @@ public class ContractDefinition {
             primaryOwner.stringValue("name", "Boomsma Erika"); // String
             primaryOwner.date("startDate", "yyyy-mm-dd", startDate);
             primaryOwner.date("endDate", "yyyy-mm-dd", expiryDate);
+            addElectronicAdress(primaryOwner, "electronicAddresses", PHONENUMBER.toString(), "96711125");
             addPostalAdress(primaryOwner);
         });
     }
@@ -536,87 +541,11 @@ public class ContractDefinition {
             }));
     }
 
-    private void addElectronicAdress(LambdaDslObject accountObject, String arrayName, String type, String value) {
-        accountObject.array(arrayName, links ->
+    private void addElectronicAdress(LambdaDslObject primaryOwner, String arrayName, String type, String value) {
+        primaryOwner.array(arrayName, links ->
             links.object(electronicAddressObject -> {
                 electronicAddressObject.stringType("type", type);
                 electronicAddressObject.stringType("value", value);
             }));
-    }
-
-
-    private Accounts unmarhalAccount(String kontolisteJson) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        Accounts accountRoot;
-        try {
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-            accountRoot = objectMapper.readValue(kontolisteJson, Accounts.class);
-            return accountRoot;
-        } catch (IOException | NullPointerException e) {
-            throw new IllegalArgumentException("Kontoliste kan ikke unmarshalles", e);
-        }
-    }
-
-    private AccountDetails unmarhalAccountDetails(String kontodetaljerJson) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        AccountDetails accountDetailsRoot;
-        try {
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-            accountDetailsRoot = objectMapper.readValue(kontodetaljerJson, AccountDetails.class);
-            return accountDetailsRoot;
-        } catch (IOException | NullPointerException e) {
-            throw new IllegalArgumentException("Kontodetaljer kan ikke unmarshalles", e);
-        }
-    }
-
-    private Cards unmarhalCards(String cardsJson) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        Cards cardsRoot;
-        try {
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-            cardsRoot = objectMapper.readValue(cardsJson, Cards.class);
-            return cardsRoot;
-        } catch (IOException | NullPointerException e) {
-            throw new IllegalArgumentException("Cards kan ikke unmarshalles", e);
-        }
-    }
-
-    private Roles unmarhalRoles(String rolesJson) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        Roles rolesRoot;
-        try {
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-            rolesRoot = objectMapper.readValue(rolesJson, Roles.class);
-            return rolesRoot;
-        } catch (IOException | NullPointerException e) {
-            throw new IllegalArgumentException("Cards kan ikke unmarshalles", e);
-        }
-    }
-
-    private Transactions unmarhalTransactions(String transactionsJson) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        Transactions transactionsRoot;
-        try {
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-            transactionsRoot = objectMapper.readValue(transactionsJson, Transactions.class);
-            return transactionsRoot;
-        } catch (IOException | NullPointerException e) {
-            throw new IllegalArgumentException("Transactions kan ikke unmarshalles", e);
-        }
     }
 }

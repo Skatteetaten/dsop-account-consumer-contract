@@ -2,11 +2,6 @@
   "transactions": [
     {
       "reversalIndicator": true,
-      "identifier": {
-        "countryOfResidence": "NO",
-        "type": "nationalIdentityNumber",
-        "value": "10108054242"
-      },
       "amount": 100.34,
       "counterParties": [
         {
@@ -57,7 +52,6 @@
       "additionalInfo": "info",
       "bookingDate": "2019-05-20T10:23:38",
       "currency": "NOK",
-      "family": "additionalMiscellaneousCreditOperations",
       "status": "booked"
     }
   ]

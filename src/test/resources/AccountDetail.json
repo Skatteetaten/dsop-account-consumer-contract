@@ -33,6 +33,12 @@
       "endDate": "2010-05-20",
       "name": "Boomsma Erika",
       "permission": "noRight",
+      "electronicAddresses": [
+        {
+          "type": "phoneNumber",
+          "value": "96711125"
+        }
+      ],
       "startDate": "2010-05-20"
     },
     "servicer": {
