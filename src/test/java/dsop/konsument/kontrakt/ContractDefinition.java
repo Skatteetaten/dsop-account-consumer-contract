@@ -1,5 +1,9 @@
 package dsop.konsument.kontrakt;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalAccount;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalAccountDetails;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalCards;
@@ -8,27 +12,20 @@ import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalTransactions;
 import static io.pactfoundation.consumer.dsl.LambdaDsl.newJsonBody;
 import static ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.ElectronicAddressType.PHONENUMBER;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+import java.util.logging.Logger;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import au.com.dius.pact.consumer.Pact;
 import au.com.dius.pact.consumer.PactProviderRuleMk2;
@@ -44,6 +41,12 @@ import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Roles;
 import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Transactions;
 
 public class ContractDefinition {
+    private static final Logger LOGGER = Logger.getLogger(ContractDefinition.class.getName());
+
+
+    private static final String PARTY_ID_HEADER ="PartyID";
+    private static final String LEGAL_MANDATE_HEADER ="Legal-Mandate";
+    private static final String CORRELATION_ID_HEADER ="CorrelationID";
 
     private static final String PARTY_ID = "909716212";
     private static final String PARTY_ID_NO_ACCOUNTS = "123456789";
@@ -82,39 +85,39 @@ public class ContractDefinition {
         DslPart pactEmptyAccountsBody = getEmptyAccountsDslPart();
 
         Map<String, String> Listheaders = new HashMap<>();
-        Listheaders.put("PartyID", PARTY_ID);
-        Listheaders.put("Legal-Mandate", LEGAL_MANDATE);
-        Listheaders.put("CorrelationID", CORRELATION_ID_ACCOUNT_LIST);
-        Listheaders.put("Authorization", AUTHORIZATION);
+        Listheaders.put(PARTY_ID_HEADER, PARTY_ID);
+        Listheaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
+        Listheaders.put(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST);
+        Listheaders.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         Map<String, String> EmptyListHeaders = new HashMap<>();
-        EmptyListHeaders.put("PartyID", PARTY_ID_NO_ACCOUNTS);
-        EmptyListHeaders.put("Legal-Mandate", LEGAL_MANDATE);
-        EmptyListHeaders.put("CorrelationID", CORRELATION_ID_ACCOUNT_LIST_EMPTY);
-        EmptyListHeaders.put("Authorization", AUTHORIZATION);
+        EmptyListHeaders.put(PARTY_ID_HEADER, PARTY_ID_NO_ACCOUNTS);
+        EmptyListHeaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
+        EmptyListHeaders.put(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
+        EmptyListHeaders.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         Map<String, String> accountDetailsHeaders = new HashMap<>();
-        accountDetailsHeaders.put("Legal-Mandate", LEGAL_MANDATE);
-        accountDetailsHeaders.put("CorrelationID", CORRELATION_ID_ACCOUNT_DETAILS);
-        accountDetailsHeaders.put("Authorization", AUTHORIZATION);
+        accountDetailsHeaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
+        accountDetailsHeaders.put(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_DETAILS);
+        accountDetailsHeaders.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         Map<String, String> cardsHeaders = new HashMap<>();
-        cardsHeaders.put("Legal-Mandate", LEGAL_MANDATE);
-        cardsHeaders.put("CorrelationID", CORRELATION_ID_CARDS);
-        cardsHeaders.put("Authorization", AUTHORIZATION);
+        cardsHeaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
+        cardsHeaders.put(CORRELATION_ID_HEADER, CORRELATION_ID_CARDS);
+        cardsHeaders.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         Map<String, String> rolesHeaders = new HashMap<>();
-        rolesHeaders.put("Legal-Mandate", LEGAL_MANDATE);
-        rolesHeaders.put("CorrelationID", CORRELATION_ID_ROLES);
-        rolesHeaders.put("Authorization", AUTHORIZATION);
+        rolesHeaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
+        rolesHeaders.put(CORRELATION_ID_HEADER, CORRELATION_ID_ROLES);
+        rolesHeaders.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         Map<String, String> transactionsHeaders = new HashMap<>();
-        transactionsHeaders.put("Legal-Mandate", LEGAL_MANDATE);
-        transactionsHeaders.put("CorrelationID", CORRELATION_ID_TRANSACTIONS);
-        transactionsHeaders.put("Authorization", AUTHORIZATION);
+        transactionsHeaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
+        transactionsHeaders.put(CORRELATION_ID_HEADER, CORRELATION_ID_TRANSACTIONS);
+        transactionsHeaders.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         Map<String, String> responseHeaders = new HashMap<>();
-        responseHeaders.put("Content-Type", "application/json");
+        responseHeaders.put(HttpHeaders.CONTENT_TYPE, "application/json");
 
         return builder
         .given("test GET AccountList")
@@ -212,37 +215,31 @@ public class ContractDefinition {
     private void createRequestHeaders(HttpHeaders accountListHeaders, HttpHeaders emptyAccountListHeaders,
         HttpHeaders detailsHeaders, HttpHeaders cardsHeaders, HttpHeaders rolesHeaders, HttpHeaders transactionHeaders) {
 
-        accountListHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        accountListHeaders.set("PartyID", PARTY_ID);
-        accountListHeaders.set("Legal-Mandate", LEGAL_MANDATE);
-        accountListHeaders.set("CorrelationID", CORRELATION_ID_ACCOUNT_LIST);
-        accountListHeaders.set("Authorization", AUTHORIZATION);
+        accountListHeaders.set(PARTY_ID_HEADER, PARTY_ID);
+        accountListHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
+        accountListHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST);
+        accountListHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
-        emptyAccountListHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        emptyAccountListHeaders.set("PartyID", PARTY_ID_NO_ACCOUNTS);
-        emptyAccountListHeaders.set("Legal-Mandate", LEGAL_MANDATE);
-        emptyAccountListHeaders.set("CorrelationID", CORRELATION_ID_ACCOUNT_LIST_EMPTY);
-        emptyAccountListHeaders.set("Authorization", AUTHORIZATION);
+        emptyAccountListHeaders.set(PARTY_ID_HEADER, PARTY_ID_NO_ACCOUNTS);
+        emptyAccountListHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
+        emptyAccountListHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
+        emptyAccountListHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
-        detailsHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        detailsHeaders.set("Legal-Mandate", LEGAL_MANDATE);
-        detailsHeaders.set("CorrelationID", CORRELATION_ID_ACCOUNT_DETAILS);
-        detailsHeaders.set("Authorization", AUTHORIZATION);
+        detailsHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
+        detailsHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_DETAILS);
+        detailsHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
-        cardsHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        cardsHeaders.set("Legal-Mandate", LEGAL_MANDATE);
-        cardsHeaders.set("CorrelationID", CORRELATION_ID_CARDS);
-        cardsHeaders.set("Authorization", AUTHORIZATION);
+        cardsHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
+        cardsHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_CARDS);
+        cardsHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
-        rolesHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        rolesHeaders.set("Legal-Mandate", LEGAL_MANDATE);
-        rolesHeaders.set("CorrelationID", CORRELATION_ID_ROLES);
-        rolesHeaders.set("Authorization", AUTHORIZATION);
+        rolesHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
+        rolesHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ROLES);
+        rolesHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
-        transactionHeaders.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        transactionHeaders.set("Legal-Mandate", LEGAL_MANDATE);
-        transactionHeaders.set("CorrelationID", CORRELATION_ID_TRANSACTIONS);
-        transactionHeaders.set("Authorization", AUTHORIZATION);
+        transactionHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
+        transactionHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_TRANSACTIONS);
+        transactionHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
     }
 
     private void verifyRoles(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
@@ -250,9 +247,9 @@ public class ContractDefinition {
         ResponseEntity<String> rolesResponse = sendRequest(restTemplate, accountCommonHeaders, RolesUrl);
         String jsonRoles = rolesResponse.getBody();
 
-        System.out.println("Roles : " + jsonRoles);
+        LOGGER.info("Roles : " + jsonRoles);
         Roles roles = unmarhalRoles(jsonRoles);
-        System.out.println(roles.getRoles());
+        LOGGER.info(roles.getRoles().toString());
     }
 
     private void verifyCards(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
@@ -260,9 +257,9 @@ public class ContractDefinition {
         ResponseEntity<String> cardsResponse = sendRequest(restTemplate, accountCommonHeaders, cardsUrl);
 
         String jsonCards = cardsResponse.getBody();
-        System.out.println("Cards : " + jsonCards);
+        LOGGER.info("Cards : " + jsonCards);
         Cards cards = unmarhalCards(jsonCards);
-        System.out.println(cards.getPaymentCards());
+        LOGGER.info(cards.getPaymentCards().toString());
     }
 
     private void verifyTransactions(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
@@ -271,9 +268,9 @@ public class ContractDefinition {
         ResponseEntity<String> transactionsResponse = sendRequest(restTemplate, accountCommonHeaders, transactionsUrl);
 
         String jsonTransactions = transactionsResponse.getBody();
-        System.out.println("Transactions : " + jsonTransactions);
+        LOGGER.info("Transactions : " + jsonTransactions);
         Transactions transactions = unmarhalTransactions(jsonTransactions);
-        System.out.println(transactions.getTransactions());
+        LOGGER.info(transactions.getTransactions().toString());
     }
 
     private void verifyAccountDetails(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
@@ -282,9 +279,9 @@ public class ContractDefinition {
             sendRequest(restTemplate, accountListHeaders, accountDetailsUrl);
 
         String jsonAccountDetails = accountDetailsResponse.getBody();
-        System.out.println("AccountDetails : " + jsonAccountDetails);
+        LOGGER.info("AccountDetails : " + jsonAccountDetails);
         AccountDetails accountDetails = unmarhalAccountDetails(jsonAccountDetails);
-        System.out.println(accountDetails.getAccount());
+        LOGGER.info(accountDetails.getAccount().toString());
     }
 
     private void verifyAccountList(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
@@ -293,9 +290,9 @@ public class ContractDefinition {
             sendRequest(restTemplate, accountListHeaders, accountList);
 
         String jsonAccounts = accountsResponse.getBody();
-        System.out.println("AccountList : " + jsonAccounts);
+        LOGGER.info("AccountList : " + jsonAccounts);
         Accounts accounts = unmarhalAccount(jsonAccounts);
-        System.out.println(accounts.getAccounts());
+        LOGGER.info(accounts.getAccounts().toString());
     }
 
     private void verifyEmptyAccountList(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
@@ -304,9 +301,9 @@ public class ContractDefinition {
             sendRequest(restTemplate, accountListHeaders, accountList);
 
         String jsonAccounts = accountsResponse.getBody();
-        System.out.println(jsonAccounts);
+        LOGGER.info(jsonAccounts);
         Accounts accounts = unmarhalAccount(jsonAccounts);
-        System.out.println(accounts.getAccounts());
+        LOGGER.info(accounts.getAccounts().toString());
     }
 
     private ResponseEntity<String> sendRequest(RestTemplate restTemplate, HttpHeaders accountListHeaders,
@@ -442,7 +439,8 @@ public class ContractDefinition {
         Date startDate = new SimpleDateFormat("yyyy-mm").parse("2010-05");
         Date expiryDate = new SimpleDateFormat("yyyy-mm").parse("2010-05");
 
-        return newJsonBody((transactionsBody) ->
+        return newJsonBody((transactionsBody) -> {
+            transactionsBody.stringValue("responseStatus", "complete");
             transactionsBody.array("transactions", transactions -> transactions.object(transactionsObject -> {
                 transactionsObject.date("bookingDate", "yyyy-MM-dd'T'HH:mm:ss", bookingDate);
                 transactionsObject.date("valueDate", "yyyy-MM-dd'T'HH:mm:ss", valueDate);
@@ -470,8 +468,8 @@ public class ContractDefinition {
                         counterPartyObject.stringValue("type", "creditor");
                         addPostalAdress(counterPartyObject);
                     }));
-
-            }))).build();
+            }));
+        }).build();
     }
 
     private void addCardIdentifier(Date startDate, Date expiryDate, LambdaDslObject parentDslObject) {

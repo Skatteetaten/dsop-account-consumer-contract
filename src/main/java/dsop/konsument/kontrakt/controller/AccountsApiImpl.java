@@ -15,19 +15,12 @@ import java.util.logging.Logger;
 import javax.validation.Valid;
 
 import org.apache.commons.io.FileUtils;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import io.swagger.annotations.ApiParam;
 import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.AccountDetails;
@@ -57,12 +50,12 @@ public class AccountsApiImpl implements AccountsApi {
     @RequestHeader(value = "AccountID", required = false) String accountID) {
 
         if ("123456789".equals(partyID)) {
-            String emptyResponseList = getResposeFromFile("AccountListEmpty.json");
+            String emptyResponseList = getResposeFromFile("responses/AccountListEmpty.json");
             Accounts accounts = unmarhalAccount(emptyResponseList);
 
             return ResponseEntity.ok(accounts);
         } else {
-            String responseList = getResposeFromFile("AccountList.json");
+            String responseList = getResposeFromFile("responses/AccountList.json");
             Accounts accounts = unmarhalAccount(responseList);
             return ResponseEntity.ok(accounts);
         }
@@ -80,7 +73,7 @@ public class AccountsApiImpl implements AccountsApi {
         @ApiParam(value = "Til dato, dagens dato dersom ikke oppgitt") @Valid
         @RequestParam(value = "toDate", required = false) LocalDate toDate) {
 
-        String cardsResponse = getResposeFromFile("AccountCard.json");
+        String cardsResponse = getResposeFromFile("responses/AccountCard.json");
         Cards cards = unmarhalCards(cardsResponse);
         return ResponseEntity.ok(cards);
     }
@@ -97,7 +90,7 @@ public class AccountsApiImpl implements AccountsApi {
         @ApiParam(value = "Til dato, dagens dato dersom ikke oppgitt") @Valid
         @RequestParam(value = "toDate", required = false) LocalDate toDate) {
 
-        String rolesResponse = getResposeFromFile("AccountRoles.json");
+        String rolesResponse = getResposeFromFile("responses/AccountRoles.json");
         Roles roles = unmarhalRoles(rolesResponse);
         return ResponseEntity.ok(roles);
     }
@@ -114,7 +107,7 @@ public class AccountsApiImpl implements AccountsApi {
         @ApiParam(value = "Til dato, dagens dato dersom ikke oppgitt") @Valid
         @RequestParam(value = "toDate", required = false) LocalDate toDate) {
 
-        String accountDetailsResponse = getResposeFromFile("AccountDetail.json");
+        String accountDetailsResponse = getResposeFromFile("responses/AccountDetail.json");
         AccountDetails accountDetails = unmarhalAccountDetails(accountDetailsResponse);
         return ResponseEntity.ok(accountDetails);
     }
@@ -130,7 +123,7 @@ public class AccountsApiImpl implements AccountsApi {
         @ApiParam(value = "Til dato, dagens dato dersom ikke oppgitt") @Valid
         @RequestParam(value = "toDate", required = false) LocalDate toDate) {
 
-        String transactionsResponse = getResposeFromFile("AccountTransactions.json");
+        String transactionsResponse = getResposeFromFile("responses/AccountTransactions.json");
         Transactions transactions = unmarhalTransactions(transactionsResponse);
         return ResponseEntity.ok(transactions);
     }

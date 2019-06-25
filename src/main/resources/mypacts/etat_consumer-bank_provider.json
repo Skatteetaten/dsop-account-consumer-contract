@@ -509,6 +509,7 @@
           "Content-Type": "application/json"
         },
         "body": {
+          "responseStatus": "complete",
           "transactions": [
             {
               "reversalIndicator": true,
