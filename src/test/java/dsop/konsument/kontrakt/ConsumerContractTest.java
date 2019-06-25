@@ -1,9 +1,5 @@
 package dsop.konsument.kontrakt;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalAccount;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalAccountDetails;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalCards;
@@ -40,13 +36,12 @@ import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Cards;
 import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Roles;
 import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Transactions;
 
-public class ContractDefinition {
-    private static final Logger LOGGER = Logger.getLogger(ContractDefinition.class.getName());
+public class ConsumerContractTest {
+    private static final Logger LOGGER = Logger.getLogger(ConsumerContractTest.class.getName());
 
-
-    private static final String PARTY_ID_HEADER ="PartyID";
-    private static final String LEGAL_MANDATE_HEADER ="Legal-Mandate";
-    private static final String CORRELATION_ID_HEADER ="CorrelationID";
+    private static final String PARTY_ID_HEADER = "PartyID";
+    private static final String LEGAL_MANDATE_HEADER = "Legal-Mandate";
+    private static final String CORRELATION_ID_HEADER = "CorrelationID";
 
     private static final String PARTY_ID = "909716212";
     private static final String PARTY_ID_NO_ACCOUNTS = "123456789";
@@ -73,7 +68,7 @@ public class ContractDefinition {
         + "AoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ";
 
     @Rule
-    public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("bank_provider", "localhost", 8080, this);
+    public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("bank_provider", "localhost", 8082, this);
 
     @Pact(consumer = "etat_consumer")
     public RequestResponsePact createPact(PactDslWithProvider builder) throws ParseException {
@@ -120,7 +115,7 @@ public class ContractDefinition {
         responseHeaders.put(HttpHeaders.CONTENT_TYPE, "application/json");
 
         return builder
-        .given("test GET AccountList")
+            .given("test GET AccountList")
             .uponReceiving("GET AccountList REQUEST") // lag beskrivelse av testen
             .path("/accounts")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
@@ -131,7 +126,7 @@ public class ContractDefinition {
             .status(200)
             .body(pactAccountsBody)
 
-        .given("test GET AccountDetails")
+            .given("test GET AccountDetails")
             .uponReceiving("GET AccountDetails REQUEST")
             .path("/accounts/5687123451")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
@@ -142,7 +137,7 @@ public class ContractDefinition {
             .status(200)
             .body(pactAccountDetailsBody)
 
-        .given("test GET Cards")
+            .given("test GET Cards")
             .uponReceiving("GET Cards REQUEST")
             .path("/accounts/5687123451/cards")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
@@ -153,7 +148,7 @@ public class ContractDefinition {
             .status(200)
             .body(pactCardsBody)
 
-        .given("test GET Roles")
+            .given("test GET Roles")
             .uponReceiving("GET Roles REQUEST")
             .headers(rolesHeaders)
             .path("/accounts/5687123451/roles")
@@ -164,7 +159,7 @@ public class ContractDefinition {
             .status(200)
             .body(pactRolesBody)
 
-        .given("test GET Transactions")
+            .given("test GET Transactions")
             .uponReceiving("GET Transactions REQUEST")
             .path("/accounts/5687123451/transactions")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
@@ -176,7 +171,7 @@ public class ContractDefinition {
             .body(pactTransactionsBody)
 
             // legg på negative tester
-        .given("test GET empty AccountList")
+            .given("test GET empty AccountList")
             .uponReceiving("GET empty AccountList REQUEST")
             .path("/accounts")
             .query("fromDate=2016-12-09&toDate=2016-12-09")
@@ -201,7 +196,8 @@ public class ContractDefinition {
         HttpHeaders rolesHeaders = new HttpHeaders();
         HttpHeaders transactionHeaders = new HttpHeaders();
 
-        createRequestHeaders(accountListHeaders, emptyAccountListHeaders, detailsHeaders, cardsHeaders, rolesHeaders, transactionHeaders);
+        createRequestHeaders(accountListHeaders, emptyAccountListHeaders, detailsHeaders, cardsHeaders, rolesHeaders,
+            transactionHeaders);
 
         verifyAccountList(restTemplate, accountListHeaders);
         verifyEmptyAccountList(restTemplate, emptyAccountListHeaders);
@@ -213,7 +209,8 @@ public class ContractDefinition {
     }
 
     private void createRequestHeaders(HttpHeaders accountListHeaders, HttpHeaders emptyAccountListHeaders,
-        HttpHeaders detailsHeaders, HttpHeaders cardsHeaders, HttpHeaders rolesHeaders, HttpHeaders transactionHeaders) {
+        HttpHeaders detailsHeaders, HttpHeaders cardsHeaders, HttpHeaders rolesHeaders,
+        HttpHeaders transactionHeaders) {
 
         accountListHeaders.set(PARTY_ID_HEADER, PARTY_ID);
         accountListHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
@@ -247,9 +244,7 @@ public class ContractDefinition {
         ResponseEntity<String> rolesResponse = sendRequest(restTemplate, accountCommonHeaders, RolesUrl);
         String jsonRoles = rolesResponse.getBody();
 
-        LOGGER.info("Roles : " + jsonRoles);
         Roles roles = unmarhalRoles(jsonRoles);
-        LOGGER.info(roles.getRoles().toString());
     }
 
     private void verifyCards(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
@@ -257,9 +252,7 @@ public class ContractDefinition {
         ResponseEntity<String> cardsResponse = sendRequest(restTemplate, accountCommonHeaders, cardsUrl);
 
         String jsonCards = cardsResponse.getBody();
-        LOGGER.info("Cards : " + jsonCards);
         Cards cards = unmarhalCards(jsonCards);
-        LOGGER.info(cards.getPaymentCards().toString());
     }
 
     private void verifyTransactions(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
@@ -268,9 +261,7 @@ public class ContractDefinition {
         ResponseEntity<String> transactionsResponse = sendRequest(restTemplate, accountCommonHeaders, transactionsUrl);
 
         String jsonTransactions = transactionsResponse.getBody();
-        LOGGER.info("Transactions : " + jsonTransactions);
         Transactions transactions = unmarhalTransactions(jsonTransactions);
-        LOGGER.info(transactions.getTransactions().toString());
     }
 
     private void verifyAccountDetails(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
@@ -279,9 +270,7 @@ public class ContractDefinition {
             sendRequest(restTemplate, accountListHeaders, accountDetailsUrl);
 
         String jsonAccountDetails = accountDetailsResponse.getBody();
-        LOGGER.info("AccountDetails : " + jsonAccountDetails);
         AccountDetails accountDetails = unmarhalAccountDetails(jsonAccountDetails);
-        LOGGER.info(accountDetails.getAccount().toString());
     }
 
     private void verifyAccountList(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
@@ -290,9 +279,7 @@ public class ContractDefinition {
             sendRequest(restTemplate, accountListHeaders, accountList);
 
         String jsonAccounts = accountsResponse.getBody();
-        LOGGER.info("AccountList : " + jsonAccounts);
         Accounts accounts = unmarhalAccount(jsonAccounts);
-        LOGGER.info(accounts.getAccounts().toString());
     }
 
     private void verifyEmptyAccountList(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
@@ -301,13 +288,11 @@ public class ContractDefinition {
             sendRequest(restTemplate, accountListHeaders, accountList);
 
         String jsonAccounts = accountsResponse.getBody();
-        LOGGER.info(jsonAccounts);
         Accounts accounts = unmarhalAccount(jsonAccounts);
-        LOGGER.info(accounts.getAccounts().toString());
     }
 
     private ResponseEntity<String> sendRequest(RestTemplate restTemplate, HttpHeaders accountListHeaders,
-                                               String transactionsUrl) {
+        String transactionsUrl) {
         HttpEntity<String> entityTransactions = new HttpEntity<>(accountListHeaders);
         return restTemplate.exchange(transactionsUrl, HttpMethod.GET, entityTransactions, String.class);
     }
@@ -372,7 +357,8 @@ public class ContractDefinition {
                         })
                 );
                 accountObject.stringValue("accountIdentifier", "78770517388"); // 11 siffer regexp
-                accountObject.stringValue("accountReference", "MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr"); //.* string -> StringType
+                accountObject.stringValue("accountReference",
+                    "MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr"); //.* string -> StringType
                 accountObject.stringValue("type", "loanAccount"); //stringMatcher test mot alle verdier
                 accountObject.stringValue("currency", "NOK"); // Stringmatcher Uppercase 3 letters A-Z
                 addPrimaryOwner(startDate, expiryDate, accountObject);
@@ -531,7 +517,7 @@ public class ContractDefinition {
     }
 
     private void addLinks(LambdaDslObject accountObject, String links2, String rel,
-                                     String type, String href) {
+        String type, String href) {
         accountObject.array(links2, links ->
             links.object(link -> {
                 link.stringType(rel, type);
