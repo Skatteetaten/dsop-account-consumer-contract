@@ -2,7 +2,7 @@
 
 This project contains a REST contract first pattern and an Consumer Driven Contract pattern. 
 The former is implemented with OPEN API, the latter with PACT.
-They complement eachother and combined implement a Congruity API pattern across services.
+They complement eachother and give api congruity across services.
 
 ## Scope
 Pact kontrakt/tester skal dekke følgende behov:
@@ -45,5 +45,32 @@ The **request** field contains the information about the request that will be se
 The Requests will be sent when PACT's TestTarget and a test class is implemented.
 The financial institutions will have to mock or create test data. The test data will 
 create a response that matches the PACT response for a given state. 
+
+Implementation Provider (financial Institution)
+1. Inserts file in a project folder
+1. Inserts PACT dependency
+1. Creates test class for pact provider tests
+1. Wires up test class with PACT
+   1. @Provider([Provider name])
+      1. The provider name is stated in the pact file
+   1. @PactFolder([Folder name])
+      1. The folder where the pact file is located.
+   1. @TestTarget
+      1. Specifies the the protocol, host and host of your backend
+   1. @State([testState])
+      1. The state that is under test. The relevant states are defined in the pact (providerStates.name)               
+   1.	Mock and stub the required classes to produce the expected response
+   
+   Example of mocking a bean to produce the exptected response : 
+```java
+    @MockBean
+    private Service service;
+
+
+    @State({"test State"})
+    public void toState() {
+        when(service.get(anyString()).thenReturn("requiredValue");
+    }
+```
 
  
