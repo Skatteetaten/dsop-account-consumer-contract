@@ -1,6 +1,6 @@
 # dsop-account-consumer-contract
 
-This project contains a REST contract first pattern and an Consumer Driven Contract pattern. 
+This project contains a REST contract first pattern and a Consumer Driven Contract pattern. 
 The former is implemented with OPEN API, the latter with PACT.
 They complement eachother and give api congruity across services.
 
@@ -62,7 +62,7 @@ Implementation Provider (financial Institution)
    1.	Mock and stub the required classes to produce the expected response
    
    Example of mocking a bean to produce the exptected response : 
-```java
+```
     @MockBean
     private Service service;
 
