@@ -2,21 +2,18 @@ package dsop.konsument.kontrakt;
 
 import static org.mockito.Mockito.doReturn;
 
+import static dsop.konsument.kontrakt.util.TestUtils.getResposeFromFile;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalAccount;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalAccountDetails;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalCards;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalRoles;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalTransactions;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.logging.Logger;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.core.io.ClassPathResource;
 
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.State;
@@ -90,15 +87,4 @@ public class ProviderIntegrationTest {
         doReturn(emptyAccounts).when(accountsService).getAccounts("123456789");
     }
 
-    private static String getResposeFromFile(final String fileName) {
-        File responseMessage;
-        try {
-            responseMessage = new ClassPathResource(fileName).getFile();
-            return FileUtils.readFileToString(responseMessage, "utf-8");
-
-        } catch (IOException e) {
-            LOGGER.warning("Error when reading file " + e.getMessage());
-        }
-        return null;
-    }
 }

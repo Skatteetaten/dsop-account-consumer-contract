@@ -1,11 +1,15 @@
 package dsop.konsument.kontrakt;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import static dsop.konsument.kontrakt.util.TestUtils.getResposeFromFile;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalAccount;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalAccountDetails;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalCards;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalRoles;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalTransactions;
 import static io.pactfoundation.consumer.dsl.LambdaDsl.newJsonBody;
+import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.ElectronicAddressType.PHONENUMBER;
 
 import java.text.ParseException;
@@ -20,6 +24,7 @@ import org.junit.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,6 +35,7 @@ import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.model.RequestResponsePact;
 import io.pactfoundation.consumer.dsl.LambdaDslObject;
+import net.javacrumbs.jsonunit.core.Option;
 import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.AccountDetails;
 import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Accounts;
 import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Cards;
@@ -243,8 +249,14 @@ public class ConsumerContractTest {
         String RolesUrl = mockProvider.getUrl() + "/accounts/5687123451/roles?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> rolesResponse = sendRequest(restTemplate, accountCommonHeaders, RolesUrl);
         String jsonRoles = rolesResponse.getBody();
+        assertThat(rolesResponse.getStatusCode()).isSameAs(HttpStatus.OK);
+        assertThatJson(jsonRoles)
+            .when(Option.IGNORING_ARRAY_ORDER)
+            .isEqualTo(getResposeFromFile("responses/AccountRoles.json"));
 
         Roles roles = unmarhalRoles(jsonRoles);
+        assertThat(roles).isNotNull();
+        assertThat(roles.getRoles()).isNotNull();
     }
 
     private void verifyCards(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
@@ -252,7 +264,16 @@ public class ConsumerContractTest {
         ResponseEntity<String> cardsResponse = sendRequest(restTemplate, accountCommonHeaders, cardsUrl);
 
         String jsonCards = cardsResponse.getBody();
+
+        assertThat(cardsResponse.getStatusCode()).isSameAs(HttpStatus.OK);
+        assertThatJson(jsonCards)
+            .when(Option.IGNORING_ARRAY_ORDER)
+            .isEqualTo(getResposeFromFile("responses/AccountCard.json"));
+
         Cards cards = unmarhalCards(jsonCards);
+        assertThat(cards).isNotNull();
+        assertThat(cards.getPaymentCards()).isNotNull();
+        assertThat(cards.getResponseStatus()).isNotNull();
     }
 
     private void verifyTransactions(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
@@ -261,7 +282,15 @@ public class ConsumerContractTest {
         ResponseEntity<String> transactionsResponse = sendRequest(restTemplate, accountCommonHeaders, transactionsUrl);
 
         String jsonTransactions = transactionsResponse.getBody();
+        assertThat(transactionsResponse.getStatusCode()).isSameAs(HttpStatus.OK);
+        assertThatJson(jsonTransactions)
+            .when(Option.IGNORING_ARRAY_ORDER)
+            .isEqualTo(getResposeFromFile("responses/AccountTransactions.json"));
+
         Transactions transactions = unmarhalTransactions(jsonTransactions);
+        assertThat(transactions).isNotNull();
+        assertThat(transactions.getResponseStatus()).isNotNull();
+        assertThat(transactions.getTransactions()).isNotNull();
     }
 
     private void verifyAccountDetails(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
@@ -270,7 +299,15 @@ public class ConsumerContractTest {
             sendRequest(restTemplate, accountListHeaders, accountDetailsUrl);
 
         String jsonAccountDetails = accountDetailsResponse.getBody();
+        assertThat(accountDetailsResponse.getStatusCode()).isSameAs(HttpStatus.OK);
+        assertThatJson(jsonAccountDetails)
+            .when(Option.IGNORING_ARRAY_ORDER)
+            .isEqualTo(getResposeFromFile("responses/AccountDetail.json"));
+
         AccountDetails accountDetails = unmarhalAccountDetails(jsonAccountDetails);
+        assertThat(accountDetails).isNotNull();
+        assertThat(accountDetails.getAccount()).isNotNull();
+        assertThat(accountDetails.getResponseStatus()).isNotNull();
     }
 
     private void verifyAccountList(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
@@ -279,16 +316,29 @@ public class ConsumerContractTest {
             sendRequest(restTemplate, accountListHeaders, accountList);
 
         String jsonAccounts = accountsResponse.getBody();
+        assertThat(accountsResponse.getStatusCode()).isSameAs(HttpStatus.OK);
+        assertThatJson(jsonAccounts)
+            .when(Option.IGNORING_ARRAY_ORDER)
+            .isEqualTo(getResposeFromFile("responses/AccountList.json"));
+
         Accounts accounts = unmarhalAccount(jsonAccounts);
+        assertThat(accounts).isNotNull();
+        assertThat(accounts.getAccounts()).isNotNull();
     }
 
     private void verifyEmptyAccountList(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
         String accountList = mockProvider.getUrl() + "/accounts?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> accountsResponse =
             sendRequest(restTemplate, accountListHeaders, accountList);
-
         String jsonAccounts = accountsResponse.getBody();
+
+        assertThat(accountsResponse.getStatusCode()).isSameAs(HttpStatus.OK);
+        assertThatJson(jsonAccounts)
+            .when(Option.IGNORING_ARRAY_ORDER)
+            .isEqualTo(getResposeFromFile("responses/AccountListEmpty.json"));
+
         Accounts accounts = unmarhalAccount(jsonAccounts);
+        assertThat(accounts).isNotNull();
     }
 
     private ResponseEntity<String> sendRequest(RestTemplate restTemplate, HttpHeaders accountListHeaders,
