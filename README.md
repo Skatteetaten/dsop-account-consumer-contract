@@ -1,8 +1,10 @@
 # dsop-account-consumer-contract
 
 This project contains a REST contract first pattern and a Consumer Driven Contract pattern. 
-The former is implemented with OPEN API, the latter with PACT.
+The former is implemented with OPEN API, the latter with PACT. 
 They complement eachother and give api congruity across services.
+An implementation of the OPEN API specification can be found in the AccountsApiImpl class.
+The PACT contract can be found in resources/mypacts
 
 ## Scope
 Pact kontrakt/tester skal dekke følgende behov:
