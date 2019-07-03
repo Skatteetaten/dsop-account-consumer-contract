@@ -22,17 +22,25 @@ Below is a description of the REST requests that will be made by pact.
 The tests assume a **JSON response**. In production the response must be encrypted.
 
 ### Requests
-* Account List: /accounts?fromDate=2016-12-09&toDate=2016-12-09 (PartyID: 909716212)
+The following states should be tested by the providers:
+ 
+* @State("test GET AccountList")
+  - Account List: /accounts?fromDate=2016-12-09&toDate=2016-12-09 (PartyID: 909716212)
 
-* Account Details: /accounts/5687123451?fromDate=2016-12-09&toDate=2016-12-09
+* @State("test GET AccountDetails")
+  - Account Details: /accounts/5687123451?fromDate=2016-12-09&toDate=2016-12-09
 
-* Account Roles : /accounts/5687123451/roles?fromDate=2016-12-09&toDate=2016-12-09
+* @State("test GET Roles")
+  - Account Roles : /accounts/5687123451/roles?fromDate=2016-12-09&toDate=2016-12-09
 
-* Account Cards : /accounts/5687123451/cards?fromDate=2016-12-09&toDate=2016-12-09
+* @State("test GET Cards")
+  - Account Cards : /accounts/5687123451/cards?fromDate=2016-12-09&toDate=2016-12-09
 
-* Account Transactions : /accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09
+* @State("test GET Transactions")
+  - Account Transactions : /accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09
 
-* Account Empty List: /accounts?fromDate=2016-12-09&toDate=2016-12-09 (PartyID: 123456789)
+* @State("test GET empty AccountList")
+  - Account Empty List: /accounts?fromDate=2016-12-09&toDate=2016-12-09 (PartyID: 123456789)
 
 For more information about the requests see the json pact file. The **interactions** field 
 contains an array of requests that will be executed during test. 
