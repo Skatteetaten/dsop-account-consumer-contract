@@ -7,13 +7,14 @@ An implementation of the OPEN API specification can be found in the AccountsApiI
 The PACT contract can be found in resources/mypacts
 
 ## Scope
-Pact kontrakt/tester skal dekke følgende behov:
-1. Tester at alle felter har riktig navn
-2. Tester at verdier har riktig format
-3. Tester at alle parametere i requesten har riktig navn og format
-4. Tester at alle headere i requesten og responsen har riktig navn og format
-5. Tester "state" - forskjellige http status koder og riktig svar i samsvar med forventet format og verdier
-6. Tester at vi kan bygge DTO objekter med json svar som bankene returnerer
+
+Pact contract and tests meets the following requirements:
+1. Tests that all fields have the correct name
+2. Tests that values have the correct format
+3. Tests that the headers in the request and the response have the correct name and format
+4. Tests several states.
+
+This ensures that the response from the providers is congruent with the expectations from the consumer 
 
 ## Providers
  Consumer Driven Contracts is a pattern that solves the challange of having many consumers and providers.
