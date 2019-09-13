@@ -1,20 +1,33 @@
+
 # dsop-account-consumer-contract
 
 This project contains a REST contract first pattern and a Consumer Driven Contract pattern. 
 The former is implemented with OPEN API, the latter with PACT. 
 They complement eachother and give api congruity across services.
 An implementation of the OPEN API specification can be found in the AccountsApiImpl class.
-The PACT contract can be found in resources/mypacts
+The PACT contract can be found in resources/mypacts. This project provides a pact test example. 
+The financial institutions are meant to create their own tests.
 
-## Scope
+## Getting started
+1. Download the [Pact Contract](mypacts/etat_consumer-bank_provider.json)
+to your project. 
+2. Configure your maven dependency to import pact
+```
+    <dependency>
+      <groupId>au.com.dius</groupId>
+      <artifactId>pact-jvm-provider-spring_2.12</artifactId>
+      <version>${your.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>au.com.dius</groupId>
+      <artifactId>pact-jvm-matchers_2.12</artifactId>
+      <version>${your.version}</version>
+    </dependency>
+```
+2. Write a test class. (Here is one [example](/home/m90497/Dev/Code/githubben/dsop-account-consumer-contract/src/test/java/dsop/konsument/kontrakt/ProviderIntegrationTest.java). Implement your own)
+3. Configure your test class to run the tests. See the implmentation [section](#Implemenation) for more details. We have 6 tests you need to write. You will find an example implementation in the class mentionted above..
+3. Run the tests as a part of your test stage. 
 
-Pact contract and tests meets the following requirements:
-1. Tests that all fields have the correct name
-2. Tests that values have the correct format
-3. Tests that the headers in the request and the response have the correct name and format
-4. Tests several states.
-
-This ensures that the response from the providers is congruent with the expectations from the consumer 
 
 ## Providers
  Consumer Driven Contracts is a pattern that solves the challange of having many consumers and providers.
@@ -58,11 +71,32 @@ The financial institutions will have to mock or create test data. The test data 
 create a response that matches the PACT response for a given state. 
 
 Implementation Provider (financial Institution)
-1. Inserts file in a project folder
+1. Inserts pact file in a project folder
 1. Inserts PACT dependency
 1. Creates test class for pact provider tests
-1. Wires up test class with PACT
-   1. @Provider([Provider name])
+1. Wires up test class with PACT. You will see the following annotations for the test class in our example.
+Implement your own.  
+```
+@RunWith(SpringRestPactRunner.class)
+@Provider("bank_provider")
+@PactFolder("mypacts")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = "server.port=8080")
+public class ProviderIntegrationTest {
+
+    @TestTarget
+    public final Target target = new SpringBootHttpTarget();
+
+    @State("test GET AccountList")
+    public void getAccountList() {
+        String responseList = getResposeFromFile("responses/AccountList.json");
+        Accounts accounts = unmarhalAccount(responseList);
+        doReturn(accounts).when(accountsService).getAccounts("909716212");
+    }
+
+```
+
+
+   1. @Provider("bank_provider")
       1. The provider name is stated in the pact file
    1. @PactFolder([Folder name])
       1. The folder where the pact file is located.
@@ -75,13 +109,26 @@ Implementation Provider (financial Institution)
    Example of mocking a bean to produce the exptected response : 
 ```
     @MockBean
-    private Service service;
+    private AccountsService accountsService;
 
 
-    @State({"test State"})
-    public void toState() {
-        when(service.get(anyString()).thenReturn("requiredValue");
+    @State("test GET AccountList")
+    public void getAccountList() {
+        String responseList = getResposeFromFile("responses/AccountList.json");
+        Accounts accounts = unmarhalAccount(responseList);
+        doReturn(accounts).when(accountsService).getAccounts("909716212");
     }
 ```
+
+
+## Scope
+
+Pact contract and tests meets the following requirements:
+1. Tests that all fields have the correct name
+2. Tests that values have the correct format
+3. Tests that the headers in the request and the response have the correct name and format
+4. Tests several states.
+
+This ensures that the response from the providers is congruent with the expectations from the consumer 
 
  
