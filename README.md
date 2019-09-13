@@ -9,7 +9,7 @@ The PACT contract can be found in resources/mypacts. This project provides a pac
 The financial institutions are meant to create their own tests.
 
 ## Getting started
-1. Download the [Pact Contract](mypacts/etat_consumer-bank_provider.json)
+1. Download the [Pact Contract](src/main/resources/mypacts/etat_consumer-bank_provider.json)
 to your project. 
 2. Configure your maven dependency to import pact
 ```
@@ -24,7 +24,7 @@ to your project.
       <version>${your.version}</version>
     </dependency>
 ```
-2. Write a test class. (Here is one [example](/home/m90497/Dev/Code/githubben/dsop-account-consumer-contract/src/test/java/dsop/konsument/kontrakt/ProviderIntegrationTest.java). Implement your own)
+2. Write a test class. (Here is one [example](src/test/java/dsop/konsument/kontrakt/ProviderIntegrationTest.java). Implement your own)
 3. Configure your test class to run the tests. See the implmentation [section](#Implemenation) for more details. We have 6 tests you need to write. You will find an example implementation in the class mentionted above..
 3. Run the tests as a part of your test stage. 
 
