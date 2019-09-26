@@ -9,7 +9,7 @@
           "value": "10108054242"
         },
         "postalAddress": {
-          "country": "Norway",
+          "country": "NO",
           "streetName": "trysilgata",
           "townName": "Oslo",
           "buildingNumber": "2",
@@ -19,7 +19,7 @@
           ],
           "type": "residential"
         },
-        "endDate": "2010-05-20",
+        "endDate": "2017-05-20",
         "name": "Boomsma Erika",
         "permission": "noRight",
         "electronicAddresses": [

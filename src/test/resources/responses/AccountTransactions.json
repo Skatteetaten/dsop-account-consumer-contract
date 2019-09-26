@@ -12,7 +12,7 @@
             "value": "10108054242"
           },
           "postalAddress": {
-            "country": "Norway",
+            "country": "NO",
             "streetName": "trysilgata",
             "townName": "Oslo",
             "buildingNumber": "2",
@@ -38,9 +38,9 @@
         "family": "additionalMiscellaneousCreditOperations"
       },
       "paymentCard": {
-        "expiryDate": "2010-05",
+        "expiryDate": "2017-05",
         "holderName": "Alma",
-        "cardIssuerName": "Mastercard AS",
+        "cardIssuerName": "Sparebanken AS",
         "cardIssuerIdentifier": {
           "countryOfResidence": "NO",
           "type": "nationalIdentityNumber",

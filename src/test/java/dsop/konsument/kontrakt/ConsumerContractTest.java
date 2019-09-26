@@ -33,6 +33,7 @@ import au.com.dius.pact.consumer.PactProviderRuleMk2;
 import au.com.dius.pact.consumer.PactVerification;
 import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
+import au.com.dius.pact.model.PactSpecVersion;
 import au.com.dius.pact.model.RequestResponsePact;
 import io.pactfoundation.consumer.dsl.LambdaDslObject;
 import net.javacrumbs.jsonunit.core.Option;
@@ -74,7 +75,7 @@ public class ConsumerContractTest {
         + "AoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ";
 
     @Rule
-    public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("bank_provider", "localhost", 8082, this);
+    public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("bank_provider", "localhost", 8082, PactSpecVersion.V2, this);
 
     @Pact(consumer = "etat_consumer")
     public RequestResponsePact createPact(PactDslWithProvider builder) throws ParseException {
@@ -380,7 +381,7 @@ public class ConsumerContractTest {
     private DslPart getAccountListDslPart() throws ParseException {
 
         Date startDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
-        Date expiryDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
+        Date expiryDate = new SimpleDateFormat("yyyy-mm-dd").parse("2017-05-20");
 
         return newJsonBody((accountsList) -> {
             accountsList.stringValue("responseStatus", "complete");
@@ -428,7 +429,7 @@ public class ConsumerContractTest {
     private DslPart getCardsDslPart() throws ParseException {
 
         Date startDate = new SimpleDateFormat("yyyy-mm").parse("2010-05");
-        Date expiryDate = new SimpleDateFormat("yyyy-mm").parse("2010-05");
+        Date expiryDate = new SimpleDateFormat("yyyy-mm").parse("2017-05");
 
         return newJsonBody((cardsBody) -> {
             cardsBody.stringValue("responseStatus", "complete");
@@ -455,7 +456,7 @@ public class ConsumerContractTest {
                     postalAddress.stringValue("streetName", "trysilgata");
                     postalAddress.stringValue("buildingNumber", "2");
                     postalAddress.stringValue("townName", "Oslo");
-                    postalAddress.stringValue("country", "Norway");
+                    postalAddress.stringValue("country", "NO");
                 });
                 addIdentifier(roleObject);
                 roleObject.array("electronicAddresses", electronicAddress ->
@@ -473,7 +474,7 @@ public class ConsumerContractTest {
         Date valueDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2019-04-20T10:23:38");
         Date registredDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2019-04-20T10:23:38");
         Date startDate = new SimpleDateFormat("yyyy-mm").parse("2010-05");
-        Date expiryDate = new SimpleDateFormat("yyyy-mm").parse("2010-05");
+        Date expiryDate = new SimpleDateFormat("yyyy-mm").parse("2017-05");
 
         return newJsonBody((transactionsBody) -> {
             transactionsBody.stringValue("responseStatus", "complete");
@@ -510,7 +511,7 @@ public class ConsumerContractTest {
 
     private void addCardIdentifier(Date startDate, Date expiryDate, LambdaDslObject parentDslObject) {
         parentDslObject.stringValue("holderName", "Alma"); // String
-        parentDslObject.stringValue("cardIssuerName", "Mastercard AS"); //String
+        parentDslObject.stringValue("cardIssuerName", "Sparebanken AS"); //String
         parentDslObject.stringValue("type", "creditCard"); //Enum
         parentDslObject.date("startDate", "yyyy-mm", startDate); // må være med
         parentDslObject.date("expiryDate", "yyyy-mm", expiryDate); // må være med
@@ -529,7 +530,7 @@ public class ConsumerContractTest {
             postalAddress.stringValue("streetName", "trysilgata");
             postalAddress.stringValue("buildingNumber", "2");
             postalAddress.stringValue("townName", "Oslo");
-            postalAddress.stringValue("country", "Norway");
+            postalAddress.stringValue("country", "NO");
             postalAddress.array("addressLines", addressLine -> addressLine.stringValue("bondes vei 4"));
         });
     }

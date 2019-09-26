@@ -16,14 +16,7 @@
           "CorrelationID": "5cba4c0d-afc3-4e96-b6c8-e9de2e81a31d",
           "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
         },
-        "query": {
-          "fromDate": [
-            "2016-12-09"
-          ],
-          "toDate": [
-            "2016-12-09"
-          ]
-        }
+        "query": "fromDate=2016-12-09&toDate=2016-12-09"
       },
       "response": {
         "status": 200,
@@ -52,7 +45,7 @@
                 "value": "10108054242"
               },
               "postalAddress": {
-                "country": "Norway",
+                "country": "NO",
                 "streetName": "trysilgata",
                 "townName": "Oslo",
                 "buildingNumber": "2",
@@ -88,66 +81,30 @@
           }
         },
         "matchingRules": {
-          "body": {
-            "$.account.balances[0].creditLineIncluded": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.account.balances[0].registered": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-MM-dd'T'HH:mm:ss"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.account.primaryOwner.startDate": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-mm-dd"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.account.primaryOwner.endDate": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-mm-dd"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.account.primaryOwner.electronicAddresses[0].type": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.account.primaryOwner.electronicAddresses[0].value": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            }
+          "$.body.account.balances[0].creditLineIncluded": {
+            "match": "type"
+          },
+          "$.body.account.balances[0].registered": {
+            "match": "date",
+            "date": "yyyy-MM-dd'T'HH:mm:ss"
+          },
+          "$.body.account.primaryOwner.startDate": {
+            "match": "date",
+            "date": "yyyy-mm-dd"
+          },
+          "$.body.account.primaryOwner.endDate": {
+            "match": "date",
+            "date": "yyyy-mm-dd"
+          },
+          "$.body.account.primaryOwner.electronicAddresses[0].type": {
+            "match": "type"
+          },
+          "$.body.account.primaryOwner.electronicAddresses[0].value": {
+            "match": "type"
           }
         }
       },
-      "providerStates": [
-        {
-          "name": "test GET AccountDetails"
-        }
-      ]
+      "providerState": "test GET AccountDetails"
     },
     {
       "description": "GET AccountList REQUEST",
@@ -160,14 +117,7 @@
           "PartyID": "909716212",
           "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
         },
-        "query": {
-          "fromDate": [
-            "2016-12-09"
-          ],
-          "toDate": [
-            "2016-12-09"
-          ]
-        }
+        "query": "fromDate=2016-12-09&toDate=2016-12-09"
       },
       "response": {
         "status": 200,
@@ -185,7 +135,7 @@
                   "value": "10108054242"
                 },
                 "postalAddress": {
-                  "country": "Norway",
+                  "country": "NO",
                   "streetName": "trysilgata",
                   "townName": "Oslo",
                   "buildingNumber": "2",
@@ -195,7 +145,7 @@
                   ],
                   "type": "residential"
                 },
-                "endDate": "2010-05-20",
+                "endDate": "2017-05-20",
                 "name": "Boomsma Erika",
                 "permission": "noRight",
                 "electronicAddresses": [
@@ -238,97 +188,41 @@
           "responseStatus": "complete"
         },
         "matchingRules": {
-          "body": {
-            "$.accounts[0].links[0].rel": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.accounts[0].links[0].href": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.accounts[0].links[1].rel": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.accounts[0].links[1].href": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.accounts[0].links[2].rel": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.accounts[0].links[2].href": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.accounts[0].primaryOwner.startDate": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-mm-dd"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.accounts[0].primaryOwner.endDate": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-mm-dd"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.accounts[0].primaryOwner.electronicAddresses[0].type": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.accounts[0].primaryOwner.electronicAddresses[0].value": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            }
+          "$.body.accounts[0].links[0].rel": {
+            "match": "type"
+          },
+          "$.body.accounts[0].links[0].href": {
+            "match": "type"
+          },
+          "$.body.accounts[0].links[1].rel": {
+            "match": "type"
+          },
+          "$.body.accounts[0].links[1].href": {
+            "match": "type"
+          },
+          "$.body.accounts[0].links[2].rel": {
+            "match": "type"
+          },
+          "$.body.accounts[0].links[2].href": {
+            "match": "type"
+          },
+          "$.body.accounts[0].primaryOwner.startDate": {
+            "match": "date",
+            "date": "yyyy-mm-dd"
+          },
+          "$.body.accounts[0].primaryOwner.endDate": {
+            "match": "date",
+            "date": "yyyy-mm-dd"
+          },
+          "$.body.accounts[0].primaryOwner.electronicAddresses[0].type": {
+            "match": "type"
+          },
+          "$.body.accounts[0].primaryOwner.electronicAddresses[0].value": {
+            "match": "type"
           }
         }
       },
-      "providerStates": [
-        {
-          "name": "test GET AccountList"
-        }
-      ]
+      "providerState": "test GET AccountList"
     },
     {
       "description": "GET Cards REQUEST",
@@ -340,14 +234,7 @@
           "CorrelationID": "c049c99f-8a60-41ea-90c9-1889471394d0",
           "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
         },
-        "query": {
-          "fromDate": [
-            "2016-12-09"
-          ],
-          "toDate": [
-            "2016-12-09"
-          ]
-        }
+        "query": "fromDate=2016-12-09&toDate=2016-12-09"
       },
       "response": {
         "status": 200,
@@ -357,9 +244,9 @@
         "body": {
           "paymentCards": [
             {
-              "expiryDate": "2010-05",
+              "expiryDate": "2017-05",
               "holderName": "Alma",
-              "cardIssuerName": "Mastercard AS",
+              "cardIssuerName": "Sparebanken AS",
               "cardIssuerIdentifier": {
                 "countryOfResidence": "NO",
                 "type": "nationalIdentityNumber",
@@ -373,33 +260,17 @@
           "responseStatus": "complete"
         },
         "matchingRules": {
-          "body": {
-            "$.paymentCards[0].startDate": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-mm"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.paymentCards[0].expiryDate": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-mm"
-                }
-              ],
-              "combine": "AND"
-            }
+          "$.body.paymentCards[0].startDate": {
+            "match": "date",
+            "date": "yyyy-mm"
+          },
+          "$.body.paymentCards[0].expiryDate": {
+            "match": "date",
+            "date": "yyyy-mm"
           }
         }
       },
-      "providerStates": [
-        {
-          "name": "test GET Cards"
-        }
-      ]
+      "providerState": "test GET Cards"
     },
     {
       "description": "GET Roles REQUEST",
@@ -411,14 +282,7 @@
           "CorrelationID": "8981b032-bdc2-4a01-a9d4-f0e5d938cce9",
           "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
         },
-        "query": {
-          "fromDate": [
-            "2016-12-09"
-          ],
-          "toDate": [
-            "2016-12-09"
-          ]
-        }
+        "query": "fromDate=2016-12-09&toDate=2016-12-09"
       },
       "response": {
         "status": 200,
@@ -434,7 +298,7 @@
                 "value": "10108054242"
               },
               "postalAddress": {
-                "country": "Norway",
+                "country": "NO",
                 "streetName": "trysilgata",
                 "townName": "Oslo",
                 "buildingNumber": "2",
@@ -456,33 +320,17 @@
           "responseStatus": "complete"
         },
         "matchingRules": {
-          "body": {
-            "$.roles[0].startDate": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-mm-dd"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.roles[0].endDate": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-mm-dd"
-                }
-              ],
-              "combine": "AND"
-            }
+          "$.body.roles[0].startDate": {
+            "match": "date",
+            "date": "yyyy-mm-dd"
+          },
+          "$.body.roles[0].endDate": {
+            "match": "date",
+            "date": "yyyy-mm-dd"
           }
         }
       },
-      "providerStates": [
-        {
-          "name": "test GET Roles"
-        }
-      ]
+      "providerState": "test GET Roles"
     },
     {
       "description": "GET Transactions REQUEST",
@@ -494,14 +342,7 @@
           "CorrelationID": "b2e25cd6-8bb6-40c1-9aa8-29d7ca114cb3",
           "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
         },
-        "query": {
-          "fromDate": [
-            "2016-12-09"
-          ],
-          "toDate": [
-            "2016-12-09"
-          ]
-        }
+        "query": "fromDate=2016-12-09&toDate=2016-12-09"
       },
       "response": {
         "status": 200,
@@ -522,7 +363,7 @@
                     "value": "10108054242"
                   },
                   "postalAddress": {
-                    "country": "Norway",
+                    "country": "NO",
                     "streetName": "trysilgata",
                     "townName": "Oslo",
                     "buildingNumber": "2",
@@ -548,9 +389,9 @@
                 "family": "additionalMiscellaneousCreditOperations"
               },
               "paymentCard": {
-                "expiryDate": "2010-05",
+                "expiryDate": "2017-05",
                 "holderName": "Alma",
-                "cardIssuerName": "Mastercard AS",
+                "cardIssuerName": "Sparebanken AS",
                 "cardIssuerIdentifier": {
                   "countryOfResidence": "NO",
                   "type": "nationalIdentityNumber",
@@ -568,68 +409,32 @@
           ]
         },
         "matchingRules": {
-          "body": {
-            "$.transactions[0].bookingDate": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-MM-dd'T'HH:mm:ss"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.transactions[0].valueDate": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-MM-dd'T'HH:mm:ss"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.transactions[0].reversalIndicator": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.transactions[0].registered": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-MM-dd'T'HH:mm:ss"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.transactions[0].paymentCard.startDate": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-mm"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.transactions[0].paymentCard.expiryDate": {
-              "matchers": [
-                {
-                  "match": "date",
-                  "date": "yyyy-mm"
-                }
-              ],
-              "combine": "AND"
-            }
+          "$.body.transactions[0].bookingDate": {
+            "match": "date",
+            "date": "yyyy-MM-dd'T'HH:mm:ss"
+          },
+          "$.body.transactions[0].valueDate": {
+            "match": "date",
+            "date": "yyyy-MM-dd'T'HH:mm:ss"
+          },
+          "$.body.transactions[0].reversalIndicator": {
+            "match": "type"
+          },
+          "$.body.transactions[0].registered": {
+            "match": "date",
+            "date": "yyyy-MM-dd'T'HH:mm:ss"
+          },
+          "$.body.transactions[0].paymentCard.startDate": {
+            "match": "date",
+            "date": "yyyy-mm"
+          },
+          "$.body.transactions[0].paymentCard.expiryDate": {
+            "match": "date",
+            "date": "yyyy-mm"
           }
         }
       },
-      "providerStates": [
-        {
-          "name": "test GET Transactions"
-        }
-      ]
+      "providerState": "test GET Transactions"
     },
     {
       "description": "GET empty AccountList REQUEST",
@@ -642,14 +447,7 @@
           "PartyID": "123456789",
           "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
         },
-        "query": {
-          "fromDate": [
-            "2016-12-09"
-          ],
-          "toDate": [
-            "2016-12-09"
-          ]
-        }
+        "query": "fromDate=2016-12-09&toDate=2016-12-09"
       },
       "response": {
         "status": 200,
@@ -663,16 +461,12 @@
           "responseStatus": "complete"
         }
       },
-      "providerStates": [
-        {
-          "name": "test GET empty AccountList"
-        }
-      ]
+      "providerState": "test GET empty AccountList"
     }
   ],
   "metadata": {
     "pactSpecification": {
-      "version": "3.0.0"
+      "version": "2.0.0"
     },
     "pact-jvm": {
       "version": "3.5.23"
