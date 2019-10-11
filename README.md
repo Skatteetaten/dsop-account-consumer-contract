@@ -1,12 +1,38 @@
 
 # dsop-account-consumer-contract
+[Consumer driven contract tests](https://martinfowler.com/articles/consumerDrivenContracts.html) 
+involves Providers(financial institutions) and Consumers(agencies).
+A contract specifies the interaction between providers and consumers. 
+Tests are implemented based on the shared contract.  
 
 This project contains a REST contract first pattern and a Consumer Driven Contract pattern. 
 The former is implemented with OPEN API, the latter with PACT. 
 They complement eachother and give api congruity across services.
 An implementation of the OPEN API specification can be found in the AccountsApiImpl class.
-The PACT contract can be found in resources/mypacts. This project provides a pact test example. 
+The PACT contract can be found in resources/mypacts. 
+
+This project provides a pact test example. 
 The financial institutions are meant to create their own tests.
+
+## Scope
+Pact contract tests meet the following requirements:
+1. Tests that all fields have the correct name
+2. Tests that values have the correct format
+3. Tests that the headers in the request and the response have the correct name and format
+4. Tests several states.
+
+This ensures that the response from the providers is congruent with the expectations from the consumer 
+
+## Audience
+This document is intented for developers and testers.
+
+## Version1.0.2
+Accesstoken som er gyldig.
+Fjerne bondesvei4.
+* ta med v1 i URL
+
+## Test case
+
 
 ## Getting started
 1. Download the [Pact Contract](src/main/resources/mypacts/etat_consumer-bank_provider.json)
@@ -121,14 +147,3 @@ public class ProviderIntegrationTest {
 ```
 
 
-## Scope
-
-Pact contract and tests meets the following requirements:
-1. Tests that all fields have the correct name
-2. Tests that values have the correct format
-3. Tests that the headers in the request and the response have the correct name and format
-4. Tests several states.
-
-This ensures that the response from the providers is congruent with the expectations from the consumer 
-
- 

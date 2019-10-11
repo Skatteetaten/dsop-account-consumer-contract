@@ -124,7 +124,7 @@ public class ConsumerContractTest {
         return builder
             .given("test GET AccountList")
                 .uponReceiving("GET AccountList REQUEST") // lag beskrivelse av testen
-                .path("/accounts")
+                .path("/v1/accounts")
                 .query("fromDate=2016-12-09&toDate=2016-12-09")
                 .headers(Listheaders)
                 .method("GET")
@@ -135,7 +135,7 @@ public class ConsumerContractTest {
 
             .given("test GET AccountDetails")
                 .uponReceiving("GET AccountDetails REQUEST")
-                .path("/accounts/5687123451")
+                .path("/v1/accounts/5687123451")
                 .query("fromDate=2016-12-09&toDate=2016-12-09")
                 .method("GET")
                 .headers(accountDetailsHeaders)
@@ -146,7 +146,7 @@ public class ConsumerContractTest {
 
             .given("test GET Cards")
                 .uponReceiving("GET Cards REQUEST")
-                .path("/accounts/5687123451/cards")
+                .path("/v1/accounts/5687123451/cards")
                 .query("fromDate=2016-12-09&toDate=2016-12-09")
                 .method("GET")
                 .headers(cardsHeaders)
@@ -158,7 +158,7 @@ public class ConsumerContractTest {
             .given("test GET Roles")
                 .uponReceiving("GET Roles REQUEST")
                 .headers(rolesHeaders)
-                .path("/accounts/5687123451/roles")
+                .path("/v1/accounts/5687123451/roles")
                 .query("fromDate=2016-12-09&toDate=2016-12-09")
                 .method("GET")
             .willRespondWith()
@@ -168,7 +168,7 @@ public class ConsumerContractTest {
 
             .given("test GET Transactions")
                 .uponReceiving("GET Transactions REQUEST")
-                .path("/accounts/5687123451/transactions")
+                .path("/v1/accounts/5687123451/transactions")
                 .query("fromDate=2016-12-09&toDate=2016-12-09")
                 .method("GET")
                 .headers(transactionsHeaders)
@@ -180,7 +180,7 @@ public class ConsumerContractTest {
             // legg på negative tester
             .given("test GET empty AccountList")
                 .uponReceiving("GET empty AccountList REQUEST")
-                .path("/accounts")
+                .path("/v1/accounts")
                 .query("fromDate=2016-12-09&toDate=2016-12-09")
                 .method("GET")
                 .headers(EmptyListHeaders)
@@ -207,8 +207,8 @@ public class ConsumerContractTest {
             transactionHeaders);
 
         verifyAccountList(restTemplate, accountListHeaders);
-        verifyEmptyAccountList(restTemplate, emptyAccountListHeaders);
         verifyAccountDetails(restTemplate, detailsHeaders);
+        verifyEmptyAccountList(restTemplate, emptyAccountListHeaders);
         verifyTransactions(restTemplate, transactionHeaders);
         verifyCards(restTemplate, cardsHeaders);
         verifyRoles(restTemplate, rolesHeaders);
@@ -247,7 +247,7 @@ public class ConsumerContractTest {
     }
 
     private void verifyRoles(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
-        String RolesUrl = mockProvider.getUrl() + "/accounts/5687123451/roles?fromDate=2016-12-09&toDate=2016-12-09";
+        String RolesUrl = mockProvider.getUrl() + "/v1/accounts/5687123451/roles?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> rolesResponse = sendRequest(restTemplate, accountCommonHeaders, RolesUrl);
         String jsonRoles = rolesResponse.getBody();
         assertThat(rolesResponse.getStatusCode()).isSameAs(HttpStatus.OK);
@@ -261,7 +261,7 @@ public class ConsumerContractTest {
     }
 
     private void verifyCards(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
-        String cardsUrl = mockProvider.getUrl() + "/accounts/5687123451/cards?fromDate=2016-12-09&toDate=2016-12-09";
+        String cardsUrl = mockProvider.getUrl() + "/v1/accounts/5687123451/cards?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> cardsResponse = sendRequest(restTemplate, accountCommonHeaders, cardsUrl);
 
         String jsonCards = cardsResponse.getBody();
@@ -279,7 +279,7 @@ public class ConsumerContractTest {
 
     private void verifyTransactions(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
         String transactionsUrl =
-            mockProvider.getUrl() + "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09";
+            mockProvider.getUrl() + "/v1/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> transactionsResponse = sendRequest(restTemplate, accountCommonHeaders, transactionsUrl);
 
         String jsonTransactions = transactionsResponse.getBody();
@@ -295,7 +295,7 @@ public class ConsumerContractTest {
     }
 
     private void verifyAccountDetails(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
-        String accountDetailsUrl = mockProvider.getUrl() + "/accounts/5687123451?fromDate=2016-12-09&toDate=2016-12-09";
+        String accountDetailsUrl = mockProvider.getUrl() + "/v1/accounts/5687123451?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> accountDetailsResponse =
             sendRequest(restTemplate, accountListHeaders, accountDetailsUrl);
 
@@ -312,7 +312,7 @@ public class ConsumerContractTest {
     }
 
     private void verifyAccountList(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
-        String accountList = mockProvider.getUrl() + "/accounts?fromDate=2016-12-09&toDate=2016-12-09";
+        String accountList = mockProvider.getUrl() + "/v1/accounts?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> accountsResponse =
             sendRequest(restTemplate, accountListHeaders, accountList);
 
@@ -328,7 +328,7 @@ public class ConsumerContractTest {
     }
 
     private void verifyEmptyAccountList(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
-        String accountList = mockProvider.getUrl() + "/accounts?fromDate=2016-12-09&toDate=2016-12-09";
+        String accountList = mockProvider.getUrl() + "/v1/accounts?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> accountsResponse =
             sendRequest(restTemplate, accountListHeaders, accountList);
         String jsonAccounts = accountsResponse.getBody();
