@@ -10,7 +10,7 @@
       "description": "GET AccountDetails REQUEST",
       "request": {
         "method": "GET",
-        "path": "/accounts/5687123451",
+        "path": "/v1/accounts/5687123451",
         "headers": {
           "Authorization": "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ",
           "CorrelationID": "5cba4c0d-afc3-4e96-b6c8-e9de2e81a31d",
@@ -29,8 +29,8 @@
             "balances": [
               {
                 "amount": 20.2,
-                "creditLineIncluded": true,
                 "creditLineAmount": 10.9,
+                "creditLineIncluded": false,
                 "registered": "2019-05-20T10:23:38",
                 "creditLineCurrency": "NOK",
                 "type": "availableBalance",
@@ -81,9 +81,6 @@
           }
         },
         "matchingRules": {
-          "$.body.account.balances[0].creditLineIncluded": {
-            "match": "type"
-          },
           "$.body.account.balances[0].registered": {
             "match": "date",
             "date": "yyyy-MM-dd'T'HH:mm:ss"
@@ -110,7 +107,7 @@
       "description": "GET AccountList REQUEST",
       "request": {
         "method": "GET",
-        "path": "/accounts",
+        "path": "/v1/accounts",
         "headers": {
           "Authorization": "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ",
           "CorrelationID": "14aea0c2-0742-4b84-8ac9-0844d05d4673",
@@ -228,7 +225,7 @@
       "description": "GET Cards REQUEST",
       "request": {
         "method": "GET",
-        "path": "/accounts/5687123451/cards",
+        "path": "/v1/accounts/5687123451/cards",
         "headers": {
           "Authorization": "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ",
           "CorrelationID": "c049c99f-8a60-41ea-90c9-1889471394d0",
@@ -276,7 +273,7 @@
       "description": "GET Roles REQUEST",
       "request": {
         "method": "GET",
-        "path": "/accounts/5687123451/roles",
+        "path": "/v1/accounts/5687123451/roles",
         "headers": {
           "Authorization": "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ",
           "CorrelationID": "8981b032-bdc2-4a01-a9d4-f0e5d938cce9",
@@ -336,7 +333,7 @@
       "description": "GET Transactions REQUEST",
       "request": {
         "method": "GET",
-        "path": "/accounts/5687123451/transactions",
+        "path": "/v1/accounts/5687123451/transactions",
         "headers": {
           "Authorization": "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ",
           "CorrelationID": "b2e25cd6-8bb6-40c1-9aa8-29d7ca114cb3",
@@ -440,7 +437,7 @@
       "description": "GET empty AccountList REQUEST",
       "request": {
         "method": "GET",
-        "path": "/accounts",
+        "path": "/v1/accounts",
         "headers": {
           "Authorization": "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ",
           "CorrelationID": "fa9d1bcf-e6f5-47ec-95b8-37e47e2d0868",

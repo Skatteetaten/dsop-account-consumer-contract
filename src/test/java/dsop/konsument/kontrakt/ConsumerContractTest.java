@@ -365,13 +365,13 @@ public class ConsumerContractTest {
                 account.stringValue("currency", "NOK");  //se over
                 account.array("balances", balance ->
                     balance.object(balanceObject -> {
-                        balanceObject.booleanType("creditLineIncluded", true);
                         balanceObject.numberValue("amount", 20.2); // type så lenge det er med 2 desimaler
                         balanceObject.stringValue("creditDebitIndicator", "credit"); // enum
                         balanceObject.date("registered", "yyyy-MM-dd'T'HH:mm:ss", registered);
                         balanceObject.stringValue("type", "availableBalance"); //enum
                         balanceObject.numberValue("creditLineAmount", 10.9); //se over
                         balanceObject.stringValue("creditLineCurrency", "NOK"); //se over
+                        balanceObject.booleanValue("creditLineIncluded", false); //se over
                     }));
                 addPrimaryOwner(startDate, endDate, account);
             });
