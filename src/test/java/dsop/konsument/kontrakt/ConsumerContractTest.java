@@ -26,6 +26,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import au.com.dius.pact.consumer.Pact;
@@ -47,12 +48,14 @@ public class ConsumerContractTest {
     private static final Logger LOGGER = Logger.getLogger(ConsumerContractTest.class.getName());
 
     private static final String PARTY_ID_HEADER = "PartyID";
+
     private static final String LEGAL_MANDATE_HEADER = "Legal-Mandate";
     private static final String CORRELATION_ID_HEADER = "CorrelationID";
 
     private static final String PARTY_ID = "909716212";
     private static final String PARTY_ID_NO_ACCOUNTS = "123456789";
     private static final String LEGAL_MANDATE = "Skatteforvaltningsloven%20%C2%A7%2010-2%201";
+    private static final String LEGAL_MANDATE_ERROR = "ERROR";
     private static final String CORRELATION_ID_ACCOUNT_LIST = "14aea0c2-0742-4b84-8ac9-0844d05d4673";
     private static final String CORRELATION_ID_ACCOUNT_LIST_EMPTY = "fa9d1bcf-e6f5-47ec-95b8-37e47e2d0868";
     private static final String CORRELATION_ID_ACCOUNT_DETAILS = "5cba4c0d-afc3-4e96-b6c8-e9de2e81a31d";
@@ -85,6 +88,7 @@ public class ConsumerContractTest {
         DslPart pactRolesBody = getRolesDslPart();
         DslPart pactTransactionsBody = getTransactionsDslPart();
         DslPart pactEmptyAccountsBody = getEmptyAccountsDslPart();
+        DslPart pactErrorAccountListDsl = getErrorDslPart();
 
         Map<String, String> Listheaders = new HashMap<>();
         Listheaders.put(PARTY_ID_HEADER, PARTY_ID);
@@ -97,6 +101,12 @@ public class ConsumerContractTest {
         EmptyListHeaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         EmptyListHeaders.put(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
         EmptyListHeaders.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
+
+        Map<String, String> WrongParameters = new HashMap<>();
+        WrongParameters.put(PARTY_ID_HEADER, PARTY_ID);
+        WrongParameters.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE_ERROR);
+        WrongParameters.put(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
+        WrongParameters.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         Map<String, String> accountDetailsHeaders = new HashMap<>();
         accountDetailsHeaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
@@ -188,6 +198,18 @@ public class ConsumerContractTest {
                 .headers(responseHeaders)
                 .status(200)
                 .body(pactEmptyAccountsBody)
+
+            .given("test GET missing header AccountList")
+                .uponReceiving("GET AccountList with missing header REQUEST")
+                .path("/v1/accounts")
+                .query("fromDate=2016-12-09&toDate=2016-12-09")
+                .method("GET")
+                .headers(WrongParameters)
+            .willRespondWith()
+                .headers(responseHeaders)
+                .status(400)
+            .body(pactErrorAccountListDsl)
+
             .toPact();
     }
 
@@ -198,24 +220,26 @@ public class ConsumerContractTest {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders accountListHeaders = new HttpHeaders();
         HttpHeaders emptyAccountListHeaders = new HttpHeaders();
+        HttpHeaders wrongAccountListHeaders = new HttpHeaders();
         HttpHeaders detailsHeaders = new HttpHeaders();
         HttpHeaders cardsHeaders = new HttpHeaders();
         HttpHeaders rolesHeaders = new HttpHeaders();
         HttpHeaders transactionHeaders = new HttpHeaders();
 
-        createRequestHeaders(accountListHeaders, emptyAccountListHeaders, detailsHeaders, cardsHeaders, rolesHeaders,
+        createRequestHeaders(accountListHeaders, emptyAccountListHeaders, wrongAccountListHeaders, detailsHeaders, cardsHeaders, rolesHeaders,
             transactionHeaders);
 
         verifyAccountList(restTemplate, accountListHeaders);
         verifyAccountDetails(restTemplate, detailsHeaders);
         verifyEmptyAccountList(restTemplate, emptyAccountListHeaders);
+        verifyWrongParameterAccountList(restTemplate, wrongAccountListHeaders);
         verifyTransactions(restTemplate, transactionHeaders);
         verifyCards(restTemplate, cardsHeaders);
         verifyRoles(restTemplate, rolesHeaders);
 
     }
 
-    private void createRequestHeaders(HttpHeaders accountListHeaders, HttpHeaders emptyAccountListHeaders,
+    private void createRequestHeaders(HttpHeaders accountListHeaders, HttpHeaders emptyAccountListHeaders, HttpHeaders wrongAccountListHeaders,
         HttpHeaders detailsHeaders, HttpHeaders cardsHeaders, HttpHeaders rolesHeaders,
         HttpHeaders transactionHeaders) {
 
@@ -228,6 +252,11 @@ public class ConsumerContractTest {
         emptyAccountListHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         emptyAccountListHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
         emptyAccountListHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
+
+        wrongAccountListHeaders.set(PARTY_ID_HEADER, PARTY_ID);
+        wrongAccountListHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE_ERROR);
+        wrongAccountListHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
+        wrongAccountListHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         detailsHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         detailsHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_DETAILS);
@@ -342,6 +371,18 @@ public class ConsumerContractTest {
         assertThat(accounts).isNotNull();
     }
 
+    private void verifyWrongParameterAccountList(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
+        String accountList = mockProvider.getUrl() + "/v1/accounts?fromDate=2016-12-09&toDate=2016-12-09";
+        try {
+            ResponseEntity<String> accountsResponse =
+                sendRequest(restTemplate, accountListHeaders, accountList);
+        } catch (HttpClientErrorException e ) {
+            assertThat(e).hasMessage("400 Bad Request");
+            assertThat(e.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
     private ResponseEntity<String> sendRequest(RestTemplate restTemplate, HttpHeaders accountListHeaders,
         String transactionsUrl) {
         HttpEntity<String> entityTransactions = new HttpEntity<>(accountListHeaders);
@@ -415,6 +456,13 @@ public class ConsumerContractTest {
                 addPrimaryOwner(startDate, expiryDate, accountObject);
                 accountObject.stringValue("name", "Boomsma Erika");
             }));
+        }).build();
+    }
+
+    private DslPart getErrorDslPart() throws ParseException {
+        return newJsonBody((error) -> {
+            error.stringValue("code", "ACC-001");
+            error.stringValue("message", "ACC-001 Bad request. Ugyldige parametere i forespørselen");
         }).build();
     }
 
