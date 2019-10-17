@@ -80,6 +80,11 @@ The following states should be tested by the providers:
 
 * @State("test GET Transactions")
   - Account Transactions : /accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09
+  - First page
+
+* @State("test GET Transactions Last Page")
+  - Account Transactions : /accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09
+  - Last page
 
 * @State("test GET empty AccountList")
   - Account Empty List: /accounts?fromDate=2016-12-09&toDate=2016-12-09 (PartyID: 123456789)

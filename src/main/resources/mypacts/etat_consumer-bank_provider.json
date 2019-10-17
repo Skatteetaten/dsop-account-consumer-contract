@@ -330,6 +330,121 @@
       "providerState": "test GET Roles"
     },
     {
+      "description": "GET Transactions Last REQUEST",
+      "request": {
+        "method": "GET",
+        "path": "/v1/accounts/3186625432/transactions",
+        "headers": {
+          "Authorization": "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRlZm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRwb3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_YgMLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkCDLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJv-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxTAoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ",
+          "CorrelationID": "b2e25cd6-8bb6-40c1-9aa8-29d7ca114cb3",
+          "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
+        },
+        "query": "fromDate=2016-12-09&toDate=2016-12-09"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "links": [
+            {
+              "rel": "self",
+              "href": "/accounts/3186625432/transactions?fromDate=2016-12-09&toDate=2016-12-09"
+            },
+            {
+              "rel": "last",
+              "href": "/accounts/3186625432/transactions?fromDate=2016-12-09&toDate=2016-12-09"
+            }
+          ],
+          "responseStatus": "complete",
+          "transactions": [
+            {
+              "reversalIndicator": false,
+              "amount": 1434.65,
+              "counterParties": [
+                {
+                  "identifier": {
+                    "countryOfResidence": "NO",
+                    "type": "nationalIdentityNumber",
+                    "value": "10108054242"
+                  },
+                  "postalAddress": {
+                    "country": "NO",
+                    "streetName": "trysilgata",
+                    "townName": "Oslo",
+                    "buildingNumber": "2",
+                    "postCode": "1598",
+                    "addressLines": [
+                      "bondes vei 4"
+                    ],
+                    "type": "residential"
+                  },
+                  "name": "Selskapet AS",
+                  "accountIdentifier": "9867123111",
+                  "type": "creditor"
+                }
+              ],
+              "transactionIdentifier": "DSOP10000000318309",
+              "registered": "2019-04-20T10:23:38",
+              "merchant": "Power",
+              "valueDate": "2019-04-20T10:23:38",
+              "transactionCode": {
+                "subFamily": "valueDate",
+                "domain": "accountManagement",
+                "freeText": "VISA Varekj\u00f8p",
+                "family": "additionalMiscellaneousCreditOperations"
+              },
+              "creditDebitIndicator": "credit",
+              "paymentCard": {
+                "expiryDate": "2017-05",
+                "holderName": "Alma",
+                "cardIssuerName": "Sparebanken AS",
+                "cardIssuerIdentifier": {
+                  "countryOfResidence": "NO",
+                  "type": "nationalIdentityNumber",
+                  "value": "123456879"
+                },
+                "type": "creditCard",
+                "startDate": "2010-05",
+                "cardIdentifier": "4567xxxxxxxx9809"
+              },
+              "additionalInfo": "info",
+              "bookingDate": "2019-05-20T10:23:38",
+              "currency": "NOK",
+              "status": "booked"
+            }
+          ]
+        },
+        "matchingRules": {
+          "$.body.transactions[0].bookingDate": {
+            "match": "date",
+            "date": "yyyy-MM-dd'T'HH:mm:ss"
+          },
+          "$.body.transactions[0].valueDate": {
+            "match": "date",
+            "date": "yyyy-MM-dd'T'HH:mm:ss"
+          },
+          "$.body.transactions[0].reversalIndicator": {
+            "match": "type"
+          },
+          "$.body.transactions[0].registered": {
+            "match": "date",
+            "date": "yyyy-MM-dd'T'HH:mm:ss"
+          },
+          "$.body.transactions[0].paymentCard.startDate": {
+            "match": "date",
+            "date": "yyyy-mm"
+          },
+          "$.body.transactions[0].paymentCard.expiryDate": {
+            "match": "date",
+            "date": "yyyy-mm"
+          }
+        }
+      },
+      "providerState": "test GET Transactions Last Page"
+    },
+    {
       "description": "GET Transactions REQUEST",
       "request": {
         "method": "GET",
@@ -347,6 +462,16 @@
           "Content-Type": "application/json"
         },
         "body": {
+          "links": [
+            {
+              "rel": "self",
+              "href": "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09"
+            },
+            {
+              "rel": "next",
+              "href": "/accounts/3186625432/transactions?fromDate=2016-12-09&toDate=2016-12-09"
+            }
+          ],
           "responseStatus": "complete",
           "transactions": [
             {
@@ -385,6 +510,7 @@
                 "freeText": "VISA Varekj\u00f8p",
                 "family": "additionalMiscellaneousCreditOperations"
               },
+              "creditDebitIndicator": "credit",
               "paymentCard": {
                 "expiryDate": "2017-05",
                 "holderName": "Alma",

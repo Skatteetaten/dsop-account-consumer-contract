@@ -87,6 +87,7 @@ public class ConsumerContractTest {
         DslPart pactCardsBody = getCardsDslPart();
         DslPart pactRolesBody = getRolesDslPart();
         DslPart pactTransactionsBody = getTransactionsDslPart();
+        DslPart pactTransactionsLastBody = getTransactionsLastDslPart();
         DslPart pactEmptyAccountsBody = getEmptyAccountsDslPart();
         DslPart pactErrorAccountListDsl = getErrorDslPart();
 
@@ -187,6 +188,17 @@ public class ConsumerContractTest {
                 .status(200)
                 .body(pactTransactionsBody)
 
+            .given("test GET Transactions Last Page")
+                .uponReceiving("GET Transactions Last REQUEST")
+                .path("/v1/accounts/3186625432/transactions")
+                .query("fromDate=2016-12-09&toDate=2016-12-09")
+                .method("GET")
+                .headers(transactionsHeaders)
+            .willRespondWith()
+                .headers(responseHeaders)
+                .status(200)
+                .body(pactTransactionsLastBody)
+
             // legg på negative tester
             .given("test GET empty AccountList")
                 .uponReceiving("GET empty AccountList REQUEST")
@@ -208,7 +220,7 @@ public class ConsumerContractTest {
             .willRespondWith()
                 .headers(responseHeaders)
                 .status(400)
-            .body(pactErrorAccountListDsl)
+                .body(pactErrorAccountListDsl)
 
             .toPact();
     }
@@ -234,6 +246,7 @@ public class ConsumerContractTest {
         verifyEmptyAccountList(restTemplate, emptyAccountListHeaders);
         verifyWrongParameterAccountList(restTemplate, wrongAccountListHeaders);
         verifyTransactions(restTemplate, transactionHeaders);
+        verifyTransactionsLast(restTemplate, transactionHeaders);
         verifyCards(restTemplate, cardsHeaders);
         verifyRoles(restTemplate, rolesHeaders);
 
@@ -316,6 +329,23 @@ public class ConsumerContractTest {
         assertThatJson(jsonTransactions)
             .when(Option.IGNORING_ARRAY_ORDER)
             .isEqualTo(getResposeFromFile("responses/AccountTransactions.json"));
+
+        Transactions transactions = unmarhalTransactions(jsonTransactions);
+        assertThat(transactions).isNotNull();
+        assertThat(transactions.getResponseStatus()).isNotNull();
+        assertThat(transactions.getTransactions()).isNotNull();
+    }
+
+    private void verifyTransactionsLast(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
+        String transactionsUrl =
+            mockProvider.getUrl() + "/v1/accounts/3186625432/transactions?fromDate=2016-12-09&toDate=2016-12-09";
+        ResponseEntity<String> transactionsResponse = sendRequest(restTemplate, accountCommonHeaders, transactionsUrl);
+
+        String jsonTransactions = transactionsResponse.getBody();
+        assertThat(transactionsResponse.getStatusCode()).isSameAs(HttpStatus.OK);
+        assertThatJson(jsonTransactions)
+            .when(Option.IGNORING_ARRAY_ORDER)
+            .isEqualTo(getResposeFromFile("responses/AccountTransactionsLast.json"));
 
         Transactions transactions = unmarhalTransactions(jsonTransactions);
         assertThat(transactions).isNotNull();
@@ -534,6 +564,7 @@ public class ConsumerContractTest {
                 transactionsObject.stringValue("status", "booked");
                 transactionsObject.date("registered", "yyyy-MM-dd'T'HH:mm:ss", registredDate);
                 transactionsObject.numberValue("amount", 100.34);
+                transactionsObject.stringValue("creditDebitIndicator", "credit"); // enum
                 transactionsObject.stringValue("currency", "NOK");
                 transactionsObject.stringValue("additionalInfo", "info");
                 transactionsObject.stringValue("merchant", "Power");
@@ -554,8 +585,71 @@ public class ConsumerContractTest {
                         addPostalAdress(counterPartyObject);
                     }));
             }));
+            transactionsBody.array("links", links -> {
+                links.object(link -> {
+                    link.stringValue("rel", "self");
+                    link.stringValue("href", "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09");
+                });
+                links.object(link -> {
+                    link.stringValue("rel", "next");
+                    link.stringValue("href", "/accounts/3186625432/transactions?fromDate=2016-12-09&toDate=2016-12-09");
+                });
+            });
+
         }).build();
     }
+
+    private DslPart getTransactionsLastDslPart() throws ParseException {
+        Date bookingDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2019-05-20T10:23:38");
+        Date valueDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2019-04-20T10:23:38");
+        Date registredDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2019-04-20T10:23:38");
+        Date startDate = new SimpleDateFormat("yyyy-mm").parse("2010-05");
+        Date expiryDate = new SimpleDateFormat("yyyy-mm").parse("2017-05");
+
+        return newJsonBody((transactionsBody) -> {
+            transactionsBody.stringValue("responseStatus", "complete");
+            transactionsBody.array("transactions", transactions -> transactions.object(transactionsObject -> {
+                transactionsObject.date("bookingDate", "yyyy-MM-dd'T'HH:mm:ss", bookingDate);
+                transactionsObject.date("valueDate", "yyyy-MM-dd'T'HH:mm:ss", valueDate);
+                transactionsObject.stringValue("transactionIdentifier", "DSOP10000000318309");
+                transactionsObject.booleanType("reversalIndicator", false);
+                transactionsObject.stringValue("status", "booked");
+                transactionsObject.date("registered", "yyyy-MM-dd'T'HH:mm:ss", registredDate);
+                transactionsObject.numberValue("amount", 1434.65);
+                transactionsObject.stringValue("creditDebitIndicator", "credit"); // enum
+                transactionsObject.stringValue("currency", "NOK");
+                transactionsObject.stringValue("additionalInfo", "info");
+                transactionsObject.stringValue("merchant", "Power");
+                transactionsObject
+                    .object("paymentCard", paymentCard -> addCardIdentifier(startDate, expiryDate, paymentCard));
+                transactionsObject.object("transactionCode", transactionCode -> {
+                    transactionCode.stringValue("domain", "accountManagement");
+                    transactionCode.stringValue("family", "additionalMiscellaneousCreditOperations");
+                    transactionCode.stringValue("subFamily", "valueDate"); // sjekke
+                    transactionCode.stringValue("freeText", "VISA Varekjøp");
+                });
+                transactionsObject.array("counterParties", counterParty ->
+                    counterParty.object(counterPartyObject -> {
+                        addIdentifier(counterPartyObject);
+                        counterPartyObject.stringValue("accountIdentifier", "9867123111");
+                        counterPartyObject.stringValue("name", "Selskapet AS");
+                        counterPartyObject.stringValue("type", "creditor");
+                        addPostalAdress(counterPartyObject);
+                    }));
+            }));
+            transactionsBody.array("links", links -> {
+                links.object(link -> {
+                    link.stringValue("rel", "self");
+                    link.stringValue("href", "/accounts/3186625432/transactions?fromDate=2016-12-09&toDate=2016-12-09");
+                });
+                links.object(link -> {
+                    link.stringValue("rel", "last");
+                    link.stringValue("href", "/accounts/3186625432/transactions?fromDate=2016-12-09&toDate=2016-12-09");
+                });
+            });
+        }).build();
+    }
+
 
     private void addCardIdentifier(Date startDate, Date expiryDate, LambdaDslObject parentDslObject) {
         parentDslObject.stringValue("holderName", "Alma"); // String
