@@ -679,7 +679,7 @@ public class ConsumerContractTest {
 
     private void addPrimaryOwner(Date startDate, Date expiryDate, LambdaDslObject parentDslObject) {
         parentDslObject.object("primaryOwner", primaryOwner -> {
-            primaryOwner.stringValue("permission", "noRight"); //StringMatch enums
+            primaryOwner.stringValue("permission", "rightToUseAlone"); //StringMatch enums
             addIdentifier(primaryOwner);
             primaryOwner.stringValue("name", "Boomsma Erika"); // String
             primaryOwner.date("startDate", "yyyy-mm-dd", startDate);
