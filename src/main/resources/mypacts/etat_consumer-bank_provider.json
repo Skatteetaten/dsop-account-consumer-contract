@@ -57,7 +57,7 @@
               },
               "endDate": "2010-05-20",
               "name": "Boomsma Erika",
-              "permission": "noRight",
+              "permission": "rightToUseAlone",
               "electronicAddresses": [
                 {
                   "type": "phoneNumber",
@@ -144,7 +144,7 @@
                 },
                 "endDate": "2017-05-20",
                 "name": "Boomsma Erika",
-                "permission": "noRight",
+                "permission": "rightToUseAlone",
                 "electronicAddresses": [
                   {
                     "type": "phoneNumber",
