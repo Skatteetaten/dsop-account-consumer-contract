@@ -26,12 +26,21 @@ This ensures that the response from the providers is congruent with the expectat
 ## Audience
 This document is intented for developers and testers.
 
-## Version1.0.2
-Accesstoken som er gyldig.
-Fjerne bondesvei4.
-* ta med v1 i URL
+## Test cases
+### 200 scenario
+| Test state               | Interaction                                           |
+| -------------            | -------------                                         |
+| test GET AccountList     | Sends an AccountList request with PartyID: 909716212  |
+| test GET AccountDetails  | Sends an AccountDetails request for the given party   |
+| test GET Roles           | Sends a Roles request for the given party             |
+| test GET Cards           | Sends a Cards request for the given party             |
+| test GET Transactions    | Sends a Transaction request for the given party       |
 
-## Test case
+### Other test scenarios
+| Test state                           | Interaction                                          |
+| -------------                        | -------------                                        |
+| test GET empty AccountList           | Sends an AccountList request withPartyID: 123456789. Expects Empty Accountlist |
+| test GET missing header AccountList  | Sends an AccountList request with wrong Legal-Mandate header. Expects 400 bad request                                        |
 
 
 ## Getting started
@@ -82,12 +91,11 @@ The following states should be tested by the providers:
   - Account Transactions : /accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09
   - First page
 
-* @State("test GET Transactions Last Page")
-  - Account Transactions : /accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09
-  - Last page
-
 * @State("test GET empty AccountList")
   - Account Empty List: /accounts?fromDate=2016-12-09&toDate=2016-12-09 (PartyID: 123456789)
+
+* @State("test GET missing header AccountList")
+  - Account Empty List wrongHeader: /accounts?fromDate=2016-12-09&toDate=2016-12-09
 
 For more information about the requests see the json pact file. The **interactions** field 
 contains an array of requests that will be executed during test. 
