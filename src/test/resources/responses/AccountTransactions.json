@@ -5,8 +5,8 @@
       "href": "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09"
     },
     {
-      "rel": "next",
-      "href": "/accounts/3186625432/transactions?fromDate=2016-12-09&toDate=2016-12-09"
+      "rel": "last",
+      "href": "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09"
     }
   ],
   "responseStatus": "complete",
