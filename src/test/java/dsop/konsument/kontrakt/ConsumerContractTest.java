@@ -63,19 +63,15 @@ public class ConsumerContractTest {
     private static final String CORRELATION_ID_ROLES = "8981b032-bdc2-4a01-a9d4-f0e5d938cce9";
     private static final String CORRELATION_ID_TRANSACTIONS = "b2e25cd6-8bb6-40c1-9aa8-29d7ca114cb3";
 
-    private static final String AUTHORIZATION = "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0"
-        + "NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJh"
-        + "dWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRl"
-        + "Zm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRw"
-        + "b3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4"
-        + "cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5"
-        + "NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03"
-        + "LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO"
-        + "-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_Yg"
-        + "MLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkC"
-        + "DLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJ"
-        + "v-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxT"
-        + "AoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ";
+    private static final String AUTHORIZATION = "Bearer eyJraWQiOiJjWmswME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxn"
+        + "IjoiUlMyNTYifQ.eyJhdWQiOiJodHRwczpcL1wvdGVzdC5wdWJsaWNzZWN0b3IuZG5iLm5vXC92MVwvIiwic2NvcGUiOiJiaXRzOmtvbnRvaW5mb3JtYXNqb2"
+        + "4iLCJpc3MiOiJodHRwczpcL1wvb2lkYy12ZXIyLmRpZmkubm9cL2lkcG9ydGVuLW9pZGMtcHJvdmlkZXJcLyIsInRva2VuX3R5cGUiOiJCZWFyZXIiLCJleHA"
+        + "iOjE1NzEzMTE3NTIsImlhdCI6MTU3MTMxMTYzMiwiY2xpZW50X2lkIjoiNTg3ZjFlMTMtNjJkMS00ODgwLThlZmItNTBiZjIxYTVhYWM5IiwiY2xpZW50X29y"
+        + "Z25vIjoiOTc0NzYxMDc2IiwianRpIjoidE83bDBOZWNUel9PMTFfOFJKYU40bGJXaW5zZ09JeS14dWUzbWJNd1pDdyIsImNvbnN1bWVyIjp7ImF1dGhvcml0e"
+        + "SI6ImlzbzY1MjMtYWN0b3JpZC11cGlzIiwiSUQiOiIwMTkyOjk3NDc2MTA3NiJ9fQ.s-xpZYFd7indeAyDet8eph3DxrK4AErNHkoDvOps7kaU5OVDrHxHDEK"
+        + "JsX5bJjR5J3RfaoRt0QfgorQzfes9BmnSVleGjxwkhcsY32K17Q78dRar1RlRzgHlKUE3x6x0mf-N0DXJc2-vx6OeUxn2BDZADo9-n8deRalXzj0mX8NG9Jds"
+        + "ZKH-WjWgFfEm6ekFHIv2lyQZz3govsxLYKahTpMBkjhx2hhaK0OKRGtPP8ggfn0Q3GfUkmMe3S2n1KmFvYVuoTGWmjUWm4r1bJavTR2xknr33i9t9yZXFCJIQ"
+        + "W55c78WjcEr5UGijvZ5XVt3IZzUrt8UYtkJtnzYjtvY1w";
 
     @Rule
     public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("bank_provider", "localhost", 8082, PactSpecVersion.V2, this);
