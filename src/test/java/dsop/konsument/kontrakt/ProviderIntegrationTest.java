@@ -75,13 +75,6 @@ public class ProviderIntegrationTest {
         doReturn(transactions).when(accountsService).getTransactions();
     }
 
-    @State("test GET Transactions Last Page")
-    public void getTransactionsLastPage() {
-        String transactionsResponse = getResposeFromFile("responses/AccountTransactionsLast.json");
-        Transactions transactions = unmarhalTransactions(transactionsResponse);
-        doReturn(transactions).when(accountsService).getTransactions();
-    }
-
     @State("test GET empty AccountList")
     public void getEmptyAccountList() {
         String emptyResponseList = getResposeFromFile("responses/AccountListEmpty.json");
