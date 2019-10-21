@@ -195,7 +195,7 @@ public class ConsumerContractTest {
                 .status(200)
                 .body(pactEmptyAccountsBody)
 
-            .given("test GET missing header AccountList")
+            .given("test GET wrong header AccountList")
                 .uponReceiving("GET AccountList with missing header REQUEST")
                 .path("/v1/accounts")
                 .query("fromDate=2016-12-09&toDate=2016-12-09")

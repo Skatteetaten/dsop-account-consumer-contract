@@ -40,7 +40,7 @@ This document is intented for developers and testers.
 | Test state                           | Interaction                                          |
 | -------------                        | -------------                                        |
 | test GET empty AccountList           | Sends an AccountList request withPartyID: 123456789. Expects Empty Accountlist |
-| test GET missing header AccountList  | Sends an AccountList request with wrong Legal-Mandate header. Expects 400 bad request                                        |
+| test GET worng header AccountList  | Sends an AccountList request with wrong Legal-Mandate header. Expects 400 bad request                                        |
 
 
 ## Getting started
@@ -94,7 +94,7 @@ The following states should be tested by the providers:
 * @State("test GET empty AccountList")
   - Account Empty List: /accounts?fromDate=2016-12-09&toDate=2016-12-09 (PartyID: 123456789)
 
-* @State("test GET missing header AccountList")
+* @State("test GET wrong header AccountList")
   - Account Empty List wrongHeader: /accounts?fromDate=2016-12-09&toDate=2016-12-09
 
 For more information about the requests see the json pact file. The **interactions** field 

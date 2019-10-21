@@ -82,7 +82,7 @@ public class ProviderIntegrationTest {
         doReturn(emptyAccounts).when(accountsService).getAccounts("123456789");
     }
 
-    @State("test GET missing header AccountList")
+    @State("test GET wrong header AccountList")
     public void getErrorOnMissingAccountList() {
         // exception is triggered in AccountsApiImpl.class, if Legal-Mandate is wrong.
     }

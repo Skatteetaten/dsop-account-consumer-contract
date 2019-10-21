@@ -494,7 +494,7 @@
           "message": "ACC-001 Bad request. Ugyldige parametere i foresp\u00f8rselen"
         }
       },
-      "providerState": "test GET missing header AccountList"
+      "providerState": "test GET wrong header AccountList"
     }
   ],
   "metadata": {
