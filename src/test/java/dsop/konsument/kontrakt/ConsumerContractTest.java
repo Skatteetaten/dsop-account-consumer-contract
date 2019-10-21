@@ -53,6 +53,7 @@ public class ConsumerContractTest {
     private static final String CORRELATION_ID_HEADER = "CorrelationID";
 
     private static final String PARTY_ID = "909716212";
+    private static final String PARTY_ID_2 = "124678913";
     private static final String PARTY_ID_NO_ACCOUNTS = "123456789";
     private static final String LEGAL_MANDATE = "Skatteforvaltningsloven%20%C2%A7%2010-2%201";
     private static final String LEGAL_MANDATE_ERROR = "ERROR";
@@ -99,7 +100,7 @@ public class ConsumerContractTest {
         EmptyListHeaders.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         Map<String, String> WrongParameters = new HashMap<>();
-        WrongParameters.put(PARTY_ID_HEADER, PARTY_ID);
+        WrongParameters.put(PARTY_ID_HEADER, PARTY_ID_2);
         WrongParameters.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE_ERROR);
         WrongParameters.put(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
         WrongParameters.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
@@ -249,7 +250,7 @@ public class ConsumerContractTest {
         emptyAccountListHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
         emptyAccountListHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
-        wrongAccountListHeaders.set(PARTY_ID_HEADER, PARTY_ID);
+        wrongAccountListHeaders.set(PARTY_ID_HEADER, PARTY_ID_2);
         wrongAccountListHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE_ERROR);
         wrongAccountListHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
         wrongAccountListHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);

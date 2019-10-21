@@ -37,10 +37,10 @@ This document is intented for developers and testers.
 | test GET Transactions    | Sends a Transaction request for the given party       |
 
 ### Other test scenarios
-| Test state                           | Interaction                                          |
-| -------------                        | -------------                                        |
-| test GET empty AccountList           | Sends an AccountList request withPartyID: 123456789. Expects Empty Accountlist |
-| test GET worng header AccountList  | Sends an AccountList request with wrong Legal-Mandate header. Expects 400 bad request                                        |
+| Test state                           | Interaction                                                                                                  |
+| -------------                        | -------------                                                                                                |
+| test GET empty AccountList           | Sends an AccountList request with PartyID: 123456789. Expects Empty Accountlist                              |
+| test GET worng header AccountList    | Sends an AccountList request with wrong Legal-Mandate header and PartyID: 124678913. Expects 400 bad request |
 
 
 ## Getting started
