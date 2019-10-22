@@ -553,16 +553,10 @@ public class ConsumerContractTest {
                         addPostalAdress(counterPartyObject);
                     }));
             }));
-            transactionsBody.array("links", links -> {
-                links.object(link -> {
-                    link.stringValue("rel", "self");
-                    link.stringValue("href", "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09");
-                });
-                links.object(link -> {
-                    link.stringValue("rel", "last");
-                    link.stringValue("href", "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09");
-                });
-            });
+            transactionsBody.array("links", links -> links.object(link -> {
+                link.stringValue("rel", "next");
+                link.stringType("href", "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09&page=0");
+            }));
 
         }).build();
     }
