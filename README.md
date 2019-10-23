@@ -3,14 +3,14 @@
 
  [Consumer driven contracts](https://martinfowler.com/articles/consumerDrivenContracts.html) is a pattern that 
 solves the communication challange of having many consumers(agencies) and 
-providers(financial institutions).
-Pact is used as a framework for the implementation of Consumer Driven Contracts.
-A contract specifies the interaction between providers and consumers. 
-The providers(financial institutions) implement a pact-file and configure tests based on the shared contract.  
+providers(financial institutions). Pact is used as a framework for the 
+implementation of Consumer Driven Contracts. A contract specifies the interaction 
+between providers and consumers. The providers(financial institutions) implement
+a pact-file and configure tests based on the shared contract.  
 
 This project provides a pact test example implementation. 
 The financial institutions are meant to create their own tests.
-See the test cases [section](#Test cases) for more information
+See the test cases [section](##Test cases) for more information
 
 ## Architectural patterns
 This project contains a REST contract first pattern and a Consumer Driven Contract pattern. 
