@@ -10,7 +10,7 @@ a pact-file and configure tests based on the shared contract.
 
 This project provides a pact test example implementation. 
 The financial institutions are meant to create their own tests.
-See the test cases [section](##Test cases) for more information
+See the *test cases section* for more information.
 
 ## Architectural patterns
 This project contains a REST contract first pattern and a Consumer Driven Contract pattern. 
