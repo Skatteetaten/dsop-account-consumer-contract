@@ -26,6 +26,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import au.com.dius.pact.consumer.Pact;
@@ -47,12 +48,15 @@ public class ConsumerContractTest {
     private static final Logger LOGGER = Logger.getLogger(ConsumerContractTest.class.getName());
 
     private static final String PARTY_ID_HEADER = "PartyID";
+
     private static final String LEGAL_MANDATE_HEADER = "Legal-Mandate";
     private static final String CORRELATION_ID_HEADER = "CorrelationID";
 
     private static final String PARTY_ID = "909716212";
+    private static final String PARTY_ID_2 = "124678913";
     private static final String PARTY_ID_NO_ACCOUNTS = "123456789";
     private static final String LEGAL_MANDATE = "Skatteforvaltningsloven%20%C2%A7%2010-2%201";
+    private static final String LEGAL_MANDATE_ERROR = "ERROR";
     private static final String CORRELATION_ID_ACCOUNT_LIST = "14aea0c2-0742-4b84-8ac9-0844d05d4673";
     private static final String CORRELATION_ID_ACCOUNT_LIST_EMPTY = "fa9d1bcf-e6f5-47ec-95b8-37e47e2d0868";
     private static final String CORRELATION_ID_ACCOUNT_DETAILS = "5cba4c0d-afc3-4e96-b6c8-e9de2e81a31d";
@@ -60,19 +64,15 @@ public class ConsumerContractTest {
     private static final String CORRELATION_ID_ROLES = "8981b032-bdc2-4a01-a9d4-f0e5d938cce9";
     private static final String CORRELATION_ID_TRANSACTIONS = "b2e25cd6-8bb6-40c1-9aa8-29d7ca114cb3";
 
-    private static final String AUTHORIZATION = "Bearer eyJraWQiOiJjWmbwME1rbTVIQzRnN3Z0"
-        + "NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJh"
-        + "dWQiOiJvaWRjX2JpdHNfc2thdHRlZXRhdGVuIiwic2NvcGUiOiJiaXRzOmt1bmRl"
-        + "Zm9yaG9sZCIsImlzcyI6Iah0dHBzOlwvXC9vaWRjLXZlcjIuZGlmaS5ub1wvaWRw"
-        + "b3J0ZW4tb2lkYy1wcm92aWRlclwvIiwidG9rZW5fdHlwZbI6IkJlYXJlciIsImV4"
-        + "cCI6MTU1NTA2MjE2OSwiaWF0IjoxNTU1MDYyMDQ5LCJjbGllbnRfb3Jnbm8iOiI5"
-        + "NzQ3NjEwNzYiLCJqdGkiOiJxS0l0bXpQakh4cEdxSC1rcEtXZ21Pc25DbkxWaU03"
-        + "LU9hbnBEcDZxd2NJPSJ9.1qQ2jjequOz0OLKbvlCIa8oqzmsWQ1cYmsO5w4y4ufO"
-        + "-_o5sQQ4VX6jqdc3Lrop2VYe9gyggDBsj1oMhzAcF0u09FmmEc752Mlv3ALWT_Yg"
-        + "MLdcrz03jnfR9FE1GdhDtSQlJWkU-Oq9Izoxlc8lCKXOdJnNFjUFpm_pgfHe0LkC"
-        + "DLCPV7AsrCGXxhsvXWHRLpTZ0a1rp7hQEMb9_uzlbyWC2ztOGQJGEZlysl1iI5HJ"
-        + "v-Vzp2Y_DJ03NvtZN1ZYbsjBB-3__kGj6He6URuSj3bJp0FErRhbyAOVuZgxMlxT"
-        + "AoeVdTqFDHeQMyF4vUNY_83a-2fkFa6RPdZX_2OlXmQ";
+    private static final String AUTHORIZATION = "Bearer eyJraWQiOiJjWmswME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxn"
+        + "IjoiUlMyNTYifQ.eyJhdWQiOiJodHRwczpcL1wvdGVzdC5wdWJsaWNzZWN0b3IuZG5iLm5vXC92MVwvIiwic2NvcGUiOiJiaXRzOmtvbnRvaW5mb3JtYXNqb2"
+        + "4iLCJpc3MiOiJodHRwczpcL1wvb2lkYy12ZXIyLmRpZmkubm9cL2lkcG9ydGVuLW9pZGMtcHJvdmlkZXJcLyIsInRva2VuX3R5cGUiOiJCZWFyZXIiLCJleHA"
+        + "iOjE1NzEzMTE3NTIsImlhdCI6MTU3MTMxMTYzMiwiY2xpZW50X2lkIjoiNTg3ZjFlMTMtNjJkMS00ODgwLThlZmItNTBiZjIxYTVhYWM5IiwiY2xpZW50X29y"
+        + "Z25vIjoiOTc0NzYxMDc2IiwianRpIjoidE83bDBOZWNUel9PMTFfOFJKYU40bGJXaW5zZ09JeS14dWUzbWJNd1pDdyIsImNvbnN1bWVyIjp7ImF1dGhvcml0e"
+        + "SI6ImlzbzY1MjMtYWN0b3JpZC11cGlzIiwiSUQiOiIwMTkyOjk3NDc2MTA3NiJ9fQ.s-xpZYFd7indeAyDet8eph3DxrK4AErNHkoDvOps7kaU5OVDrHxHDEK"
+        + "JsX5bJjR5J3RfaoRt0QfgorQzfes9BmnSVleGjxwkhcsY32K17Q78dRar1RlRzgHlKUE3x6x0mf-N0DXJc2-vx6OeUxn2BDZADo9-n8deRalXzj0mX8NG9Jds"
+        + "ZKH-WjWgFfEm6ekFHIv2lyQZz3govsxLYKahTpMBkjhx2hhaK0OKRGtPP8ggfn0Q3GfUkmMe3S2n1KmFvYVuoTGWmjUWm4r1bJavTR2xknr33i9t9yZXFCJIQ"
+        + "W55c78WjcEr5UGijvZ5XVt3IZzUrt8UYtkJtnzYjtvY1w";
 
     @Rule
     public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("bank_provider", "localhost", 8082, PactSpecVersion.V2, this);
@@ -85,6 +85,7 @@ public class ConsumerContractTest {
         DslPart pactRolesBody = getRolesDslPart();
         DslPart pactTransactionsBody = getTransactionsDslPart();
         DslPart pactEmptyAccountsBody = getEmptyAccountsDslPart();
+        DslPart pactErrorAccountListDsl = getErrorDslPart();
 
         Map<String, String> Listheaders = new HashMap<>();
         Listheaders.put(PARTY_ID_HEADER, PARTY_ID);
@@ -97,6 +98,12 @@ public class ConsumerContractTest {
         EmptyListHeaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         EmptyListHeaders.put(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
         EmptyListHeaders.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
+
+        Map<String, String> WrongParameters = new HashMap<>();
+        WrongParameters.put(PARTY_ID_HEADER, PARTY_ID_2);
+        WrongParameters.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE_ERROR);
+        WrongParameters.put(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
+        WrongParameters.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         Map<String, String> accountDetailsHeaders = new HashMap<>();
         accountDetailsHeaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
@@ -124,7 +131,7 @@ public class ConsumerContractTest {
         return builder
             .given("test GET AccountList")
                 .uponReceiving("GET AccountList REQUEST") // lag beskrivelse av testen
-                .path("/accounts")
+                .path("/v1/accounts")
                 .query("fromDate=2016-12-09&toDate=2016-12-09")
                 .headers(Listheaders)
                 .method("GET")
@@ -135,7 +142,7 @@ public class ConsumerContractTest {
 
             .given("test GET AccountDetails")
                 .uponReceiving("GET AccountDetails REQUEST")
-                .path("/accounts/5687123451")
+                .path("/v1/accounts/5687123451")
                 .query("fromDate=2016-12-09&toDate=2016-12-09")
                 .method("GET")
                 .headers(accountDetailsHeaders)
@@ -146,7 +153,7 @@ public class ConsumerContractTest {
 
             .given("test GET Cards")
                 .uponReceiving("GET Cards REQUEST")
-                .path("/accounts/5687123451/cards")
+                .path("/v1/accounts/5687123451/cards")
                 .query("fromDate=2016-12-09&toDate=2016-12-09")
                 .method("GET")
                 .headers(cardsHeaders)
@@ -158,7 +165,7 @@ public class ConsumerContractTest {
             .given("test GET Roles")
                 .uponReceiving("GET Roles REQUEST")
                 .headers(rolesHeaders)
-                .path("/accounts/5687123451/roles")
+                .path("/v1/accounts/5687123451/roles")
                 .query("fromDate=2016-12-09&toDate=2016-12-09")
                 .method("GET")
             .willRespondWith()
@@ -168,7 +175,7 @@ public class ConsumerContractTest {
 
             .given("test GET Transactions")
                 .uponReceiving("GET Transactions REQUEST")
-                .path("/accounts/5687123451/transactions")
+                .path("/v1/accounts/5687123451/transactions")
                 .query("fromDate=2016-12-09&toDate=2016-12-09")
                 .method("GET")
                 .headers(transactionsHeaders)
@@ -180,7 +187,7 @@ public class ConsumerContractTest {
             // legg på negative tester
             .given("test GET empty AccountList")
                 .uponReceiving("GET empty AccountList REQUEST")
-                .path("/accounts")
+                .path("/v1/accounts")
                 .query("fromDate=2016-12-09&toDate=2016-12-09")
                 .method("GET")
                 .headers(EmptyListHeaders)
@@ -188,6 +195,18 @@ public class ConsumerContractTest {
                 .headers(responseHeaders)
                 .status(200)
                 .body(pactEmptyAccountsBody)
+
+            .given("test GET wrong header AccountList")
+                .uponReceiving("GET AccountList with missing header REQUEST")
+                .path("/v1/accounts")
+                .query("fromDate=2016-12-09&toDate=2016-12-09")
+                .method("GET")
+                .headers(WrongParameters)
+            .willRespondWith()
+                .headers(responseHeaders)
+                .status(400)
+                .body(pactErrorAccountListDsl)
+
             .toPact();
     }
 
@@ -198,24 +217,26 @@ public class ConsumerContractTest {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders accountListHeaders = new HttpHeaders();
         HttpHeaders emptyAccountListHeaders = new HttpHeaders();
+        HttpHeaders wrongAccountListHeaders = new HttpHeaders();
         HttpHeaders detailsHeaders = new HttpHeaders();
         HttpHeaders cardsHeaders = new HttpHeaders();
         HttpHeaders rolesHeaders = new HttpHeaders();
         HttpHeaders transactionHeaders = new HttpHeaders();
 
-        createRequestHeaders(accountListHeaders, emptyAccountListHeaders, detailsHeaders, cardsHeaders, rolesHeaders,
+        createRequestHeaders(accountListHeaders, emptyAccountListHeaders, wrongAccountListHeaders, detailsHeaders, cardsHeaders, rolesHeaders,
             transactionHeaders);
 
         verifyAccountList(restTemplate, accountListHeaders);
-        verifyEmptyAccountList(restTemplate, emptyAccountListHeaders);
         verifyAccountDetails(restTemplate, detailsHeaders);
+        verifyEmptyAccountList(restTemplate, emptyAccountListHeaders);
+        verifyWrongParameterAccountList(restTemplate, wrongAccountListHeaders);
         verifyTransactions(restTemplate, transactionHeaders);
         verifyCards(restTemplate, cardsHeaders);
         verifyRoles(restTemplate, rolesHeaders);
 
     }
 
-    private void createRequestHeaders(HttpHeaders accountListHeaders, HttpHeaders emptyAccountListHeaders,
+    private void createRequestHeaders(HttpHeaders accountListHeaders, HttpHeaders emptyAccountListHeaders, HttpHeaders wrongAccountListHeaders,
         HttpHeaders detailsHeaders, HttpHeaders cardsHeaders, HttpHeaders rolesHeaders,
         HttpHeaders transactionHeaders) {
 
@@ -228,6 +249,11 @@ public class ConsumerContractTest {
         emptyAccountListHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         emptyAccountListHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
         emptyAccountListHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
+
+        wrongAccountListHeaders.set(PARTY_ID_HEADER, PARTY_ID_2);
+        wrongAccountListHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE_ERROR);
+        wrongAccountListHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
+        wrongAccountListHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         detailsHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         detailsHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_DETAILS);
@@ -247,7 +273,7 @@ public class ConsumerContractTest {
     }
 
     private void verifyRoles(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
-        String RolesUrl = mockProvider.getUrl() + "/accounts/5687123451/roles?fromDate=2016-12-09&toDate=2016-12-09";
+        String RolesUrl = mockProvider.getUrl() + "/v1/accounts/5687123451/roles?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> rolesResponse = sendRequest(restTemplate, accountCommonHeaders, RolesUrl);
         String jsonRoles = rolesResponse.getBody();
         assertThat(rolesResponse.getStatusCode()).isSameAs(HttpStatus.OK);
@@ -261,7 +287,7 @@ public class ConsumerContractTest {
     }
 
     private void verifyCards(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
-        String cardsUrl = mockProvider.getUrl() + "/accounts/5687123451/cards?fromDate=2016-12-09&toDate=2016-12-09";
+        String cardsUrl = mockProvider.getUrl() + "/v1/accounts/5687123451/cards?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> cardsResponse = sendRequest(restTemplate, accountCommonHeaders, cardsUrl);
 
         String jsonCards = cardsResponse.getBody();
@@ -279,7 +305,7 @@ public class ConsumerContractTest {
 
     private void verifyTransactions(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
         String transactionsUrl =
-            mockProvider.getUrl() + "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09";
+            mockProvider.getUrl() + "/v1/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> transactionsResponse = sendRequest(restTemplate, accountCommonHeaders, transactionsUrl);
 
         String jsonTransactions = transactionsResponse.getBody();
@@ -294,8 +320,9 @@ public class ConsumerContractTest {
         assertThat(transactions.getTransactions()).isNotNull();
     }
 
+
     private void verifyAccountDetails(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
-        String accountDetailsUrl = mockProvider.getUrl() + "/accounts/5687123451?fromDate=2016-12-09&toDate=2016-12-09";
+        String accountDetailsUrl = mockProvider.getUrl() + "/v1/accounts/5687123451?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> accountDetailsResponse =
             sendRequest(restTemplate, accountListHeaders, accountDetailsUrl);
 
@@ -312,7 +339,7 @@ public class ConsumerContractTest {
     }
 
     private void verifyAccountList(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
-        String accountList = mockProvider.getUrl() + "/accounts?fromDate=2016-12-09&toDate=2016-12-09";
+        String accountList = mockProvider.getUrl() + "/v1/accounts?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> accountsResponse =
             sendRequest(restTemplate, accountListHeaders, accountList);
 
@@ -328,7 +355,7 @@ public class ConsumerContractTest {
     }
 
     private void verifyEmptyAccountList(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
-        String accountList = mockProvider.getUrl() + "/accounts?fromDate=2016-12-09&toDate=2016-12-09";
+        String accountList = mockProvider.getUrl() + "/v1/accounts?fromDate=2016-12-09&toDate=2016-12-09";
         ResponseEntity<String> accountsResponse =
             sendRequest(restTemplate, accountListHeaders, accountList);
         String jsonAccounts = accountsResponse.getBody();
@@ -341,6 +368,18 @@ public class ConsumerContractTest {
         Accounts accounts = unmarhalAccount(jsonAccounts);
         assertThat(accounts).isNotNull();
     }
+
+    private void verifyWrongParameterAccountList(RestTemplate restTemplate, HttpHeaders accountListHeaders) {
+        String accountList = mockProvider.getUrl() + "/v1/accounts?fromDate=2016-12-09&toDate=2016-12-09";
+        try {
+            ResponseEntity<String> accountsResponse =
+                sendRequest(restTemplate, accountListHeaders, accountList);
+        } catch (HttpClientErrorException e ) {
+            assertThat(e).hasMessage("400 Bad Request");
+            assertThat(e.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     private ResponseEntity<String> sendRequest(RestTemplate restTemplate, HttpHeaders accountListHeaders,
         String transactionsUrl) {
@@ -365,13 +404,13 @@ public class ConsumerContractTest {
                 account.stringValue("currency", "NOK");  //se over
                 account.array("balances", balance ->
                     balance.object(balanceObject -> {
-                        balanceObject.booleanType("creditLineIncluded", true);
                         balanceObject.numberValue("amount", 20.2); // type så lenge det er med 2 desimaler
                         balanceObject.stringValue("creditDebitIndicator", "credit"); // enum
                         balanceObject.date("registered", "yyyy-MM-dd'T'HH:mm:ss", registered);
                         balanceObject.stringValue("type", "availableBalance"); //enum
                         balanceObject.numberValue("creditLineAmount", 10.9); //se over
                         balanceObject.stringValue("creditLineCurrency", "NOK"); //se over
+                        balanceObject.booleanValue("creditLineIncluded", false); //se over
                     }));
                 addPrimaryOwner(startDate, endDate, account);
             });
@@ -415,6 +454,13 @@ public class ConsumerContractTest {
                 addPrimaryOwner(startDate, expiryDate, accountObject);
                 accountObject.stringValue("name", "Boomsma Erika");
             }));
+        }).build();
+    }
+
+    private DslPart getErrorDslPart() throws ParseException {
+        return newJsonBody((error) -> {
+            error.stringValue("code", "ACC-001");
+            error.stringValue("message", "ACC-001 Bad request. Ugyldige parametere i forespørselen");
         }).build();
     }
 
@@ -486,6 +532,7 @@ public class ConsumerContractTest {
                 transactionsObject.stringValue("status", "booked");
                 transactionsObject.date("registered", "yyyy-MM-dd'T'HH:mm:ss", registredDate);
                 transactionsObject.numberValue("amount", 100.34);
+                transactionsObject.stringValue("creditDebitIndicator", "credit"); // enum
                 transactionsObject.stringValue("currency", "NOK");
                 transactionsObject.stringValue("additionalInfo", "info");
                 transactionsObject.stringValue("merchant", "Power");
@@ -506,6 +553,11 @@ public class ConsumerContractTest {
                         addPostalAdress(counterPartyObject);
                     }));
             }));
+            transactionsBody.array("links", links -> links.object(link -> {
+                link.stringValue("rel", "next");
+                link.stringType("href", "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09&page=0");
+            }));
+
         }).build();
     }
 
@@ -537,7 +589,7 @@ public class ConsumerContractTest {
 
     private void addPrimaryOwner(Date startDate, Date expiryDate, LambdaDslObject parentDslObject) {
         parentDslObject.object("primaryOwner", primaryOwner -> {
-            primaryOwner.stringValue("permission", "noRight"); //StringMatch enums
+            primaryOwner.stringValue("permission", "rightToUseAlone"); //StringMatch enums
             addIdentifier(primaryOwner);
             primaryOwner.stringValue("name", "Boomsma Erika"); // String
             primaryOwner.date("startDate", "yyyy-mm-dd", startDate);

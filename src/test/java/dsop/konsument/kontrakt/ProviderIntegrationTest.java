@@ -9,8 +9,6 @@ import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalCards;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalRoles;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalTransactions;
 
-import java.util.logging.Logger;
-
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,7 +23,6 @@ import au.com.dius.pact.provider.spring.target.SpringBootHttpTarget;
 import dsop.konsument.kontrakt.service.AccountsService;
 import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.AccountDetails;
 import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Accounts;
-import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.AccountsApi;
 import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Cards;
 import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Roles;
 import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Transactions;
@@ -35,8 +32,6 @@ import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Transactions;
 @PactFolder("mypacts")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = "server.port=8080")
 public class ProviderIntegrationTest {
-
-    private static final Logger LOGGER = Logger.getLogger(AccountsApi.class.getName());
 
     @MockBean
     private AccountsService accountsService;
@@ -87,4 +82,8 @@ public class ProviderIntegrationTest {
         doReturn(emptyAccounts).when(accountsService).getAccounts("123456789");
     }
 
+    @State("test GET wrong header AccountList")
+    public void getErrorOnMissingAccountList() {
+        // exception is triggered in AccountsApiImpl.class, if Legal-Mandate is wrong.
+    }
 }

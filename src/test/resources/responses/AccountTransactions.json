@@ -1,4 +1,10 @@
 {
+  "links": [
+    {
+      "rel": "next",
+      "href": "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09&page=0"
+    }
+  ],
   "responseStatus": "complete",
   "transactions": [
     {
@@ -34,9 +40,10 @@
       "transactionCode": {
         "subFamily": "valueDate",
         "domain": "accountManagement",
-        "freeText": "VISA Varekj\u00f8p",
+        "freeText": "VISA Varekjøp",
         "family": "additionalMiscellaneousCreditOperations"
       },
+      "creditDebitIndicator": "credit",
       "paymentCard": {
         "expiryDate": "2017-05",
         "holderName": "Alma",

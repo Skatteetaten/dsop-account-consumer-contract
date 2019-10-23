@@ -25,6 +25,7 @@ import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Transactions;
 public class AccountsApiImpl implements AccountsApi {
 
     private AccountsService accountsService;
+    private static final String LEGAL_MANDATE = "Skatteforvaltningsloven%20%C2%A7%2010-2%201";
 
     @Autowired
     public AccountsApiImpl(AccountsService accountsService) {
@@ -46,7 +47,12 @@ public class AccountsApiImpl implements AccountsApi {
     @RequestHeader(value = "AccountID", required = false) String accountID) {
 
         Accounts accounts = accountsService.getAccounts(partyID);
-        return ResponseEntity.ok(accounts);
+        if (legalMandate.equals(LEGAL_MANDATE)) {
+            return ResponseEntity.ok(accounts);
+        }
+        else {
+            throw new IllegalArgumentException("Missing legalMandate");
+        }
     }
 
     @Override

@@ -4,7 +4,7 @@
     "balances": [
       {
         "amount": 20.2,
-        "creditLineIncluded": true,
+        "creditLineIncluded": false,
         "creditLineAmount": 10.9,
         "registered": "2019-05-20T10:23:38",
         "creditLineCurrency": "NOK",
@@ -32,7 +32,7 @@
       },
       "endDate": "2010-05-20",
       "name": "Boomsma Erika",
-      "permission": "noRight",
+      "permission": "rightToUseAlone",
       "electronicAddresses": [
         {
           "type": "phoneNumber",

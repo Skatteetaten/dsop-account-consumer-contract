@@ -88,6 +88,4 @@ public class Unmarshaller {
             throw new IllegalArgumentException("Transactions kan ikke unmarshalles", e);
         }
     }
-
-
 }
