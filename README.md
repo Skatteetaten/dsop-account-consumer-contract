@@ -1,18 +1,23 @@
 
 # dsop-account-consumer-contract
-[Consumer driven contract tests](https://martinfowler.com/articles/consumerDrivenContracts.html) 
-involves Providers(financial institutions) and Consumers(agencies).
-A contract specifies the interaction between providers and consumers. 
-Tests are implemented based on the shared contract.  
 
+ [Consumer driven contracts](https://martinfowler.com/articles/consumerDrivenContracts.html) 
+is a pattern that solves the communication challange of having many consumers(agencies) and 
+providers(financial institutions).
+Pact is used as a framework for the implementation of Consumer Driven Contracts.
+A contract specifies the interaction between providers and consumers. 
+The providers(financial institutions) implement a pact-file and configure tests based on the shared contract.  
+
+This project provides a pact test example implementation. 
+The financial institutions are meant to create their own tests.
+
+## Architectural patterns
 This project contains a REST contract first pattern and a Consumer Driven Contract pattern. 
-The former is implemented with OPEN API, the latter with PACT. 
+REST contract first is implemented with OPEN API. Consumer Driven Contract is implemented PACT. 
 They complement eachother and give api congruity across services.
 An implementation of the OPEN API specification can be found in the AccountsApiImpl class.
 The PACT contract can be found in resources/mypacts. 
 
-This project provides a pact test example. 
-The financial institutions are meant to create their own tests.
 
 ## Scope
 Pact contract tests meet the following requirements:
@@ -64,10 +69,7 @@ to your project.
 3. Run the tests as a part of your test stage. 
 
 
-## Providers
- Consumer Driven Contracts is a pattern that solves the challange of having many consumers and providers.
-Pact is used as a framework for the implementation of Consumer Driven Contracts.
-The providers(financial institutions) implement a pact-file and configure tests. 
+## Providers (Financial Institutions)
 Below is a description of the REST requests that will be made by pact.
  
 The tests assume a **JSON response**. In production the response must be encrypted.
