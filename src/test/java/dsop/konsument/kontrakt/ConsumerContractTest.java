@@ -555,7 +555,7 @@ public class ConsumerContractTest {
             }));
             transactionsBody.array("links", links -> links.object(link -> {
                 link.stringValue("rel", "next");
-                link.stringType("href", "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09&page=0");
+                link.stringType("href", "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09");
             }));
 
         }).build();

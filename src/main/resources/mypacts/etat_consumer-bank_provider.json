@@ -7,103 +7,6 @@
   },
   "interactions": [
     {
-      "description": "GET AccountDetails REQUEST",
-      "request": {
-        "method": "GET",
-        "path": "/v1/accounts/5687123451",
-        "headers": {
-          "Authorization": "Bearer eyJraWQiOiJjWmswME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJodHRwczpcL1wvdGVzdC5wdWJsaWNzZWN0b3IuZG5iLm5vXC92MVwvIiwic2NvcGUiOiJiaXRzOmtvbnRvaW5mb3JtYXNqb24iLCJpc3MiOiJodHRwczpcL1wvb2lkYy12ZXIyLmRpZmkubm9cL2lkcG9ydGVuLW9pZGMtcHJvdmlkZXJcLyIsInRva2VuX3R5cGUiOiJCZWFyZXIiLCJleHAiOjE1NzEzMTE3NTIsImlhdCI6MTU3MTMxMTYzMiwiY2xpZW50X2lkIjoiNTg3ZjFlMTMtNjJkMS00ODgwLThlZmItNTBiZjIxYTVhYWM5IiwiY2xpZW50X29yZ25vIjoiOTc0NzYxMDc2IiwianRpIjoidE83bDBOZWNUel9PMTFfOFJKYU40bGJXaW5zZ09JeS14dWUzbWJNd1pDdyIsImNvbnN1bWVyIjp7ImF1dGhvcml0eSI6ImlzbzY1MjMtYWN0b3JpZC11cGlzIiwiSUQiOiIwMTkyOjk3NDc2MTA3NiJ9fQ.s-xpZYFd7indeAyDet8eph3DxrK4AErNHkoDvOps7kaU5OVDrHxHDEKJsX5bJjR5J3RfaoRt0QfgorQzfes9BmnSVleGjxwkhcsY32K17Q78dRar1RlRzgHlKUE3x6x0mf-N0DXJc2-vx6OeUxn2BDZADo9-n8deRalXzj0mX8NG9JdsZKH-WjWgFfEm6ekFHIv2lyQZz3govsxLYKahTpMBkjhx2hhaK0OKRGtPP8ggfn0Q3GfUkmMe3S2n1KmFvYVuoTGWmjUWm4r1bJavTR2xknr33i9t9yZXFCJIQW55c78WjcEr5UGijvZ5XVt3IZzUrt8UYtkJtnzYjtvY1w",
-          "CorrelationID": "5cba4c0d-afc3-4e96-b6c8-e9de2e81a31d",
-          "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
-        },
-        "query": "fromDate=2016-12-09&toDate=2016-12-09"
-      },
-      "response": {
-        "status": 200,
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "body": {
-          "responseStatus": "complete",
-          "account": {
-            "balances": [
-              {
-                "amount": 20.2,
-                "creditLineAmount": 10.9,
-                "creditLineIncluded": false,
-                "registered": "2019-05-20T10:23:38",
-                "creditLineCurrency": "NOK",
-                "type": "availableBalance",
-                "creditDebitIndicator": "credit"
-              }
-            ],
-            "accountReference": "MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr",
-            "primaryOwner": {
-              "identifier": {
-                "countryOfResidence": "NO",
-                "type": "nationalIdentityNumber",
-                "value": "10108054242"
-              },
-              "postalAddress": {
-                "country": "NO",
-                "streetName": "trysilgata",
-                "townName": "Oslo",
-                "buildingNumber": "2",
-                "postCode": "1598",
-                "addressLines": [
-                  "bondes vei 4"
-                ],
-                "type": "residential"
-              },
-              "endDate": "2010-05-20",
-              "name": "Boomsma Erika",
-              "permission": "rightToUseAlone",
-              "electronicAddresses": [
-                {
-                  "type": "phoneNumber",
-                  "value": "96711125"
-                }
-              ],
-              "startDate": "2010-05-20"
-            },
-            "servicer": {
-              "identifier": {
-                "countryOfResidence": "NO",
-                "type": "countryIdentificationCode",
-                "value": "123456879"
-              },
-              "name": "DNB"
-            },
-            "accountIdentifier": "78770517388",
-            "currency": "NOK",
-            "type": "loanAccount",
-            "status": "enabled"
-          }
-        },
-        "matchingRules": {
-          "$.body.account.balances[0].registered": {
-            "match": "date",
-            "date": "yyyy-MM-dd'T'HH:mm:ss"
-          },
-          "$.body.account.primaryOwner.startDate": {
-            "match": "date",
-            "date": "yyyy-mm-dd"
-          },
-          "$.body.account.primaryOwner.endDate": {
-            "match": "date",
-            "date": "yyyy-mm-dd"
-          },
-          "$.body.account.primaryOwner.electronicAddresses[0].type": {
-            "match": "type"
-          },
-          "$.body.account.primaryOwner.electronicAddresses[0].value": {
-            "match": "type"
-          }
-        }
-      },
-      "providerState": "test GET AccountDetails"
-    },
-    {
       "description": "GET AccountList REQUEST",
       "request": {
         "method": "GET",
@@ -220,6 +123,103 @@
         }
       },
       "providerState": "test GET AccountList"
+    },
+    {
+      "description": "GET AccountDetails REQUEST",
+      "request": {
+        "method": "GET",
+        "path": "/v1/accounts/5687123451",
+        "headers": {
+          "Authorization": "Bearer eyJraWQiOiJjWmswME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxnIjoiUlMyNTYifQ.eyJhdWQiOiJodHRwczpcL1wvdGVzdC5wdWJsaWNzZWN0b3IuZG5iLm5vXC92MVwvIiwic2NvcGUiOiJiaXRzOmtvbnRvaW5mb3JtYXNqb24iLCJpc3MiOiJodHRwczpcL1wvb2lkYy12ZXIyLmRpZmkubm9cL2lkcG9ydGVuLW9pZGMtcHJvdmlkZXJcLyIsInRva2VuX3R5cGUiOiJCZWFyZXIiLCJleHAiOjE1NzEzMTE3NTIsImlhdCI6MTU3MTMxMTYzMiwiY2xpZW50X2lkIjoiNTg3ZjFlMTMtNjJkMS00ODgwLThlZmItNTBiZjIxYTVhYWM5IiwiY2xpZW50X29yZ25vIjoiOTc0NzYxMDc2IiwianRpIjoidE83bDBOZWNUel9PMTFfOFJKYU40bGJXaW5zZ09JeS14dWUzbWJNd1pDdyIsImNvbnN1bWVyIjp7ImF1dGhvcml0eSI6ImlzbzY1MjMtYWN0b3JpZC11cGlzIiwiSUQiOiIwMTkyOjk3NDc2MTA3NiJ9fQ.s-xpZYFd7indeAyDet8eph3DxrK4AErNHkoDvOps7kaU5OVDrHxHDEKJsX5bJjR5J3RfaoRt0QfgorQzfes9BmnSVleGjxwkhcsY32K17Q78dRar1RlRzgHlKUE3x6x0mf-N0DXJc2-vx6OeUxn2BDZADo9-n8deRalXzj0mX8NG9JdsZKH-WjWgFfEm6ekFHIv2lyQZz3govsxLYKahTpMBkjhx2hhaK0OKRGtPP8ggfn0Q3GfUkmMe3S2n1KmFvYVuoTGWmjUWm4r1bJavTR2xknr33i9t9yZXFCJIQW55c78WjcEr5UGijvZ5XVt3IZzUrt8UYtkJtnzYjtvY1w",
+          "CorrelationID": "5cba4c0d-afc3-4e96-b6c8-e9de2e81a31d",
+          "Legal-Mandate": "Skatteforvaltningsloven%20%C2%A7%2010-2%201"
+        },
+        "query": "fromDate=2016-12-09&toDate=2016-12-09"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "responseStatus": "complete",
+          "account": {
+            "balances": [
+              {
+                "amount": 20.2,
+                "creditLineAmount": 10.9,
+                "creditLineIncluded": false,
+                "registered": "2019-05-20T10:23:38",
+                "creditLineCurrency": "NOK",
+                "type": "availableBalance",
+                "creditDebitIndicator": "credit"
+              }
+            ],
+            "accountReference": "MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr",
+            "primaryOwner": {
+              "identifier": {
+                "countryOfResidence": "NO",
+                "type": "nationalIdentityNumber",
+                "value": "10108054242"
+              },
+              "postalAddress": {
+                "country": "NO",
+                "streetName": "trysilgata",
+                "townName": "Oslo",
+                "buildingNumber": "2",
+                "postCode": "1598",
+                "addressLines": [
+                  "bondes vei 4"
+                ],
+                "type": "residential"
+              },
+              "endDate": "2010-05-20",
+              "name": "Boomsma Erika",
+              "permission": "rightToUseAlone",
+              "electronicAddresses": [
+                {
+                  "type": "phoneNumber",
+                  "value": "96711125"
+                }
+              ],
+              "startDate": "2010-05-20"
+            },
+            "servicer": {
+              "identifier": {
+                "countryOfResidence": "NO",
+                "type": "countryIdentificationCode",
+                "value": "123456879"
+              },
+              "name": "DNB"
+            },
+            "accountIdentifier": "78770517388",
+            "currency": "NOK",
+            "type": "loanAccount",
+            "status": "enabled"
+          }
+        },
+        "matchingRules": {
+          "$.body.account.balances[0].registered": {
+            "match": "date",
+            "date": "yyyy-MM-dd'T'HH:mm:ss"
+          },
+          "$.body.account.primaryOwner.startDate": {
+            "match": "date",
+            "date": "yyyy-mm-dd"
+          },
+          "$.body.account.primaryOwner.endDate": {
+            "match": "date",
+            "date": "yyyy-mm-dd"
+          },
+          "$.body.account.primaryOwner.electronicAddresses[0].type": {
+            "match": "type"
+          },
+          "$.body.account.primaryOwner.electronicAddresses[0].value": {
+            "match": "type"
+          }
+        }
+      },
+      "providerState": "test GET AccountDetails"
     },
     {
       "description": "GET Cards REQUEST",
@@ -350,7 +350,7 @@
           "links": [
             {
               "rel": "next",
-              "href": "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09&page=0"
+              "href": "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09"
             }
           ],
           "responseStatus": "complete",
