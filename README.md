@@ -32,6 +32,10 @@ This ensures that the response from the providers is congruent with the expectat
 ## Audience
 This document is intented for developers and testers.
 
+## Languages
+* Documentation for **.Net** is available here: https://github.com/pact-foundation/pact-net
+* Documentation for **Java** is available here: https://github.com/DiUS/pact-jvm
+
 ## Test cases
 ### 200 scenario
 | Test state               | Interaction                                           |
