@@ -34,6 +34,7 @@ This document is intented for developers and testers.
 
 ## Languages
 * Documentation for **.Net** is available here: https://github.com/pact-foundation/pact-net
+* Example for PACT with **.Net core** is available here: https://github.com/tdshipley/pact-workshop-dotnet-core-v1
 * Documentation for **Java** is available here: https://github.com/DiUS/pact-jvm
 
 ## Test cases
