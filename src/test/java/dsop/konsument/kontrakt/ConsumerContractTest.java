@@ -55,7 +55,7 @@ public class ConsumerContractTest {
     private static final String PARTY_ID = "909716212";
     private static final String PARTY_ID_2 = "124678913";
     private static final String PARTY_ID_NO_ACCOUNTS = "123456789";
-    private static final String LEGAL_MANDATE = "Skatteforvaltningsloven%20%C2%A7%2010-2%201";
+    private static final String LEGAL_MANDATE = "Skatteforvaltningsloven%20%C2%A7%2010-2";
     private static final String LEGAL_MANDATE_ERROR = "ERROR";
     private static final String CORRELATION_ID_ACCOUNT_LIST = "14aea0c2-0742-4b84-8ac9-0844d05d4673";
     private static final String CORRELATION_ID_ACCOUNT_LIST_EMPTY = "fa9d1bcf-e6f5-47ec-95b8-37e47e2d0868";
@@ -460,7 +460,7 @@ public class ConsumerContractTest {
     private DslPart getErrorDslPart() throws ParseException {
         return newJsonBody((error) -> {
             error.stringValue("code", "ACC-001");
-            error.stringValue("message", "ACC-001 Bad request. Ugyldige parametere i forespørselen");
+            error.stringValue("message", "Bad request. Ugyldige parametere i forespørselen");
         }).build();
     }
 
@@ -493,7 +493,7 @@ public class ConsumerContractTest {
         return newJsonBody((rolesBody) -> {
             rolesBody.stringValue("responseStatus", "complete"); //enum
             rolesBody.array("roles", roles -> roles.object(roleObject -> {
-                roleObject.stringValue("name", "Nicolai"); //string
+                roleObject.stringValue("name", "Boomsma Erika"); //string
                 roleObject.date("startDate", "yyyy-mm-dd", startDate); // sjekk oblig.
                 roleObject.date("endDate", "yyyy-mm-dd", endDate); // sjekk oblig.
                 roleObject.object("postalAddress", postalAddress -> {

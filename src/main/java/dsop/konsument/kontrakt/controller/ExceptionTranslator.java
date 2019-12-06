@@ -19,7 +19,7 @@ public class ExceptionTranslator {
     public ResponseEntity<Error> processIllegalArgumentException(IllegalArgumentException e) throws Exception {
         Error error = new Error();
         error.setCode("ACC-001");
-        error.setMessage("ACC-001 Bad request. Ugyldige parametere i forespørselen");
+        error.setMessage("Bad request. Ugyldige parametere i forespørselen");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 }

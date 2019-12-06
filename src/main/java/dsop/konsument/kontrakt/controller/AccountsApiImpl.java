@@ -25,7 +25,7 @@ import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Transactions;
 public class AccountsApiImpl implements AccountsApi {
 
     private AccountsService accountsService;
-    private static final String LEGAL_MANDATE = "Skatteforvaltningsloven%20%C2%A7%2010-2%201";
+    private static final String LEGAL_MANDATE = "Skatteforvaltningsloven%20%C2%A7%2010-2";
 
     @Autowired
     public AccountsApiImpl(AccountsService accountsService) {
