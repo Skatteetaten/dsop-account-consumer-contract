@@ -8,13 +8,9 @@ import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalAccountDetails;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalCards;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalRoles;
 import static dsop.konsument.kontrakt.util.Unmarshaller.unmarhalTransactions;
-import static io.pactfoundation.consumer.dsl.LambdaDsl.newJsonBody;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
-import static ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.ElectronicAddressType.PHONENUMBER;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -36,7 +32,13 @@ import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.model.PactSpecVersion;
 import au.com.dius.pact.model.RequestResponsePact;
-import io.pactfoundation.consumer.dsl.LambdaDslObject;
+import dsop.konsument.kontrakt.util.AccountDetailsCreator;
+import dsop.konsument.kontrakt.util.AccountListCreator;
+import dsop.konsument.kontrakt.util.CardsCreator;
+import dsop.konsument.kontrakt.util.EmptyAccountListCreator;
+import dsop.konsument.kontrakt.util.ErrorCreator;
+import dsop.konsument.kontrakt.util.RolesCreator;
+import dsop.konsument.kontrakt.util.TransactionsCreator;
 import net.javacrumbs.jsonunit.core.Option;
 import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.AccountDetails;
 import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Accounts;
@@ -46,6 +48,13 @@ import ske.ekstkom.utsending.kontoopplysninger.interfaces.ekstern.Transactions;
 
 public class ConsumerContractTest {
     private static final Logger LOGGER = Logger.getLogger(ConsumerContractTest.class.getName());
+    private TransactionsCreator transactionsCreator;
+    private RolesCreator rolesCreator;
+    private AccountListCreator accountListCreator;
+    private CardsCreator cardsCreator;
+    private AccountDetailsCreator accountDetailsCreator;
+    private ErrorCreator errorCreator;
+    private EmptyAccountListCreator emptyAccountListCreator;
 
     private static final String PARTY_ID_HEADER = "PartyID";
 
@@ -74,18 +83,37 @@ public class ConsumerContractTest {
         + "ZKH-WjWgFfEm6ekFHIv2lyQZz3govsxLYKahTpMBkjhx2hhaK0OKRGtPP8ggfn0Q3GfUkmMe3S2n1KmFvYVuoTGWmjUWm4r1bJavTR2xknr33i9t9yZXFCJIQ"
         + "W55c78WjcEr5UGijvZ5XVt3IZzUrt8UYtkJtnzYjtvY1w";
 
+    private void setupDslPartCreators() {
+        transactionsCreator = new TransactionsCreator();
+        rolesCreator = new RolesCreator();
+        accountListCreator = new AccountListCreator();
+        cardsCreator = new CardsCreator();
+        accountDetailsCreator = new AccountDetailsCreator();
+        errorCreator = new ErrorCreator();
+        emptyAccountListCreator = new EmptyAccountListCreator();
+    }
+
     @Rule
     public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("bank_provider", "localhost", 8082, PactSpecVersion.V2, this);
 
+
+    private Map createHeaderMap(String key, String value) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put(key, value);
+
+        return headers;
+    }
+
     @Pact(consumer = "etat_consumer")
     public RequestResponsePact createPact(PactDslWithProvider builder) throws ParseException {
-        DslPart pactAccountsBody = getAccountListDslPart();
-        DslPart pactAccountDetailsBody = getAccountDetailsDslPart();
-        DslPart pactCardsBody = getCardsDslPart();
-        DslPart pactRolesBody = getRolesDslPart();
-        DslPart pactTransactionsBody = getTransactionsDslPart();
-        DslPart pactEmptyAccountsBody = getEmptyAccountsDslPart();
-        DslPart pactErrorAccountListDsl = getErrorDslPart();
+        setupDslPartCreators();
+        DslPart pactAccountsBody = accountListCreator.getAccountListDslPart();
+        DslPart pactAccountDetailsBody = accountDetailsCreator.getAccountDetailsDslPart();
+        DslPart pactCardsBody = cardsCreator.getCardsDslPart();
+        DslPart pactRolesBody = rolesCreator.getRolesDslPart();
+        DslPart pactTransactionsBody = transactionsCreator.getTransactionsDslPart();
+        DslPart pactEmptyAccountsBody = emptyAccountListCreator.getEmptyAccountsDslPart();
+        DslPart pactErrorAccountListDsl = errorCreator.getErrorDslPart();
 
         Map<String, String> Listheaders = new HashMap<>();
         Listheaders.put(PARTY_ID_HEADER, PARTY_ID);
@@ -385,254 +413,5 @@ public class ConsumerContractTest {
         String transactionsUrl) {
         HttpEntity<String> entityTransactions = new HttpEntity<>(accountListHeaders);
         return restTemplate.exchange(transactionsUrl, HttpMethod.GET, entityTransactions, String.class);
-    }
-
-    private DslPart getAccountDetailsDslPart() throws ParseException {
-
-        Date registered = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2019-05-20T10:23:38");
-        Date startDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
-        Date endDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
-
-        return newJsonBody((accountDetails) -> {
-            accountDetails.stringValue("responseStatus", "complete");
-            accountDetails.object("account", account -> {
-                account.stringValue("status", "enabled"); // enum
-                addServicer(account); // se over
-                account.stringValue("accountIdentifier", "78770517388"); // se over
-                account.stringValue("accountReference", "MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr"); // se over
-                account.stringValue("type", "loanAccount"); //enum
-                account.stringValue("currency", "NOK");  //se over
-                account.array("balances", balance ->
-                    balance.object(balanceObject -> {
-                        balanceObject.numberValue("amount", 20.2); // type så lenge det er med 2 desimaler
-                        balanceObject.stringValue("creditDebitIndicator", "credit"); // enum
-                        balanceObject.date("registered", "yyyy-MM-dd'T'HH:mm:ss", registered);
-                        balanceObject.stringValue("type", "availableBalance"); //enum
-                        balanceObject.numberValue("creditLineAmount", 10.9); //se over
-                        balanceObject.stringValue("creditLineCurrency", "NOK"); //se over
-                        balanceObject.booleanValue("creditLineIncluded", false); //se over
-                    }));
-                addPrimaryOwner(startDate, endDate, account);
-            });
-        }).build();
-    }
-
-    private DslPart getAccountListDslPart() throws ParseException {
-
-        Date startDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
-        Date expiryDate = new SimpleDateFormat("yyyy-mm-dd").parse("2017-05-20");
-
-        return newJsonBody((accountsList) -> {
-            accountsList.stringValue("responseStatus", "complete");
-            accountsList.array("accounts", accounts -> accounts.object(accountObject -> {
-                accountObject.stringValue("status", "enabled");
-                addServicer(accountObject);
-
-                accountObject.array("links", links ->
-                    links
-                        .object(link -> {
-                            link.stringType("rel", "cards");
-                            link.stringType("href",
-                                "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/" + "cards");
-                        })
-                        .object(link -> {
-                            link.stringType("rel", "roles");
-                            link.stringType("href",
-                                "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/" + "roles");
-                        })
-                        .object(link -> {
-                            link.stringType("rel", "transactions");
-                            link.stringType("href",
-                                "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/" + "transactions");
-                        })
-                );
-                accountObject.stringValue("accountIdentifier", "78770517388"); // 11 siffer regexp
-                accountObject.stringValue("accountReference",
-                    "MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr"); //.* string -> StringType
-                accountObject.stringValue("type", "loanAccount"); //stringMatcher test mot alle verdier
-                accountObject.stringValue("currency", "NOK"); // Stringmatcher Uppercase 3 letters A-Z
-                addPrimaryOwner(startDate, expiryDate, accountObject);
-                accountObject.stringValue("name", "Boomsma Erika");
-            }));
-        }).build();
-    }
-
-    private DslPart getErrorDslPart() throws ParseException {
-        return newJsonBody((error) -> {
-            error.stringValue("code", "ACC-001");
-            error.stringValue("message", "Bad request. Ugyldige parametere i forespørselen");
-        }).build();
-    }
-
-    private DslPart getEmptyAccountsDslPart() throws ParseException {
-        return newJsonBody((accountsList) -> {
-            accountsList.stringValue("responseStatus", "complete");
-            accountsList.array("accounts", account -> {
-            });
-        }).build();
-    }
-
-    private DslPart getCardsDslPart() throws ParseException {
-
-        Date startDate = new SimpleDateFormat("yyyy-mm").parse("2010-05");
-        Date expiryDate = new SimpleDateFormat("yyyy-mm").parse("2017-05");
-
-        return newJsonBody((cardsBody) -> {
-            cardsBody.stringValue("responseStatus", "complete");
-            cardsBody.array("paymentCards", paymentCards -> paymentCards.object(cardObject -> {
-                addCardIdentifier(startDate, expiryDate, cardObject);
-            }));
-        }).build();
-    }
-
-    private DslPart getRolesDslPart() throws ParseException {
-
-        Date startDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
-        Date endDate = new SimpleDateFormat("yyyy-mm-dd").parse("2010-05-20");
-
-        return newJsonBody((rolesBody) -> {
-            rolesBody.stringValue("responseStatus", "complete"); //enum
-            rolesBody.array("roles", roles -> roles.object(roleObject -> {
-                roleObject.stringValue("name", "Boomsma Erika"); //string
-                roleObject.date("startDate", "yyyy-mm-dd", startDate); // sjekk oblig.
-                roleObject.date("endDate", "yyyy-mm-dd", endDate); // sjekk oblig.
-                roleObject.object("postalAddress", postalAddress -> {
-                    postalAddress.stringValue("postCode", "1598");
-                    postalAddress.stringValue("type", "residential");
-                    postalAddress.stringValue("streetName", "trysilgata");
-                    postalAddress.stringValue("buildingNumber", "2");
-                    postalAddress.stringValue("townName", "Oslo");
-                    postalAddress.stringValue("country", "NO");
-                });
-                addIdentifier(roleObject);
-                roleObject.array("electronicAddresses", electronicAddress ->
-                    electronicAddress.object(electronicAddressObject -> {
-                        electronicAddressObject.stringValue("type", "emailAddress");
-                        electronicAddressObject.stringValue("value", "test@test.no");
-                    }));
-                roleObject.stringValue("permission", "rightToUseAlone");
-            }));
-        }).build();
-    }
-
-    private DslPart getTransactionsDslPart() throws ParseException {
-        Date bookingDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2019-05-20T10:23:38");
-        Date valueDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2019-04-20T10:23:38");
-        Date registredDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse("2019-04-20T10:23:38");
-        Date startDate = new SimpleDateFormat("yyyy-mm").parse("2010-05");
-        Date expiryDate = new SimpleDateFormat("yyyy-mm").parse("2017-05");
-
-        return newJsonBody((transactionsBody) -> {
-            transactionsBody.stringValue("responseStatus", "complete");
-            transactionsBody.array("transactions", transactions -> transactions.object(transactionsObject -> {
-                transactionsObject.date("bookingDate", "yyyy-MM-dd'T'HH:mm:ss", bookingDate);
-                transactionsObject.date("valueDate", "yyyy-MM-dd'T'HH:mm:ss", valueDate);
-                transactionsObject.stringValue("transactionIdentifier", "DSOP10000000318308");
-                transactionsObject.booleanType("reversalIndicator", true);
-                transactionsObject.stringValue("status", "booked");
-                transactionsObject.date("registered", "yyyy-MM-dd'T'HH:mm:ss", registredDate);
-                transactionsObject.numberValue("amount", 100.34);
-                transactionsObject.stringValue("creditDebitIndicator", "credit"); // enum
-                transactionsObject.stringValue("currency", "NOK");
-                transactionsObject.stringValue("additionalInfo", "info");
-                transactionsObject.stringValue("merchant", "Power");
-                transactionsObject
-                    .object("paymentCard", paymentCard -> addCardIdentifier(startDate, expiryDate, paymentCard));
-                transactionsObject.object("transactionCode", transactionCode -> {
-                    transactionCode.stringValue("domain", "accountManagement");
-                    transactionCode.stringValue("family", "additionalMiscellaneousCreditOperations");
-                    transactionCode.stringValue("subFamily", "valueDate"); // sjekke
-                    transactionCode.stringValue("freeText", "VISA Varekjøp");
-                });
-                transactionsObject.array("counterParties", counterParty ->
-                    counterParty.object(counterPartyObject -> {
-                        addIdentifier(counterPartyObject);
-                        counterPartyObject.stringValue("accountIdentifier", "9867123111");
-                        counterPartyObject.stringValue("name", "Selskapet AS");
-                        counterPartyObject.stringValue("type", "creditor");
-                        addPostalAdress(counterPartyObject);
-                    }));
-            }));
-            transactionsBody.array("links", links -> links.object(link -> {
-                link.stringValue("rel", "next");
-                link.stringType("href", "/accounts/5687123451/transactions?fromDate=2016-12-09&toDate=2016-12-09");
-            }));
-
-        }).build();
-    }
-
-    private void addCardIdentifier(Date startDate, Date expiryDate, LambdaDslObject parentDslObject) {
-        parentDslObject.stringValue("holderName", "Alma"); // String
-        parentDslObject.stringValue("cardIssuerName", "Sparebanken AS"); //String
-        parentDslObject.stringValue("type", "creditCard"); //Enum
-        parentDslObject.date("startDate", "yyyy-mm", startDate); // må være med
-        parentDslObject.date("expiryDate", "yyyy-mm", expiryDate); // må være med
-        parentDslObject.stringValue("cardIdentifier", "4567xxxxxxxx9809"); // maskert regmatcher X eller *
-        parentDslObject.object("cardIssuerIdentifier", cardIssuerIdentifier -> {
-            cardIssuerIdentifier.stringValue("countryOfResidence", "NO"); // se over
-            cardIssuerIdentifier.stringValue("value", "123456879"); // se over
-            cardIssuerIdentifier.stringValue("type", "nationalIdentityNumber"); // se over
-        });
-    }
-
-    private void addPostalAdress(LambdaDslObject parentDslObject) {
-        parentDslObject.object("postalAddress", postalAddress -> {
-            postalAddress.stringValue("postCode", "1598");
-            postalAddress.stringValue("type", "residential");
-            postalAddress.stringValue("streetName", "trysilgata");
-            postalAddress.stringValue("buildingNumber", "2");
-            postalAddress.stringValue("townName", "Oslo");
-            postalAddress.stringValue("country", "NO");
-            postalAddress.array("addressLines", addressLine -> addressLine.stringValue("bondes vei 4"));
-        });
-    }
-
-    private void addPrimaryOwner(Date startDate, Date expiryDate, LambdaDslObject parentDslObject) {
-        parentDslObject.object("primaryOwner", primaryOwner -> {
-            primaryOwner.stringValue("permission", "rightToUseAlone"); //StringMatch enums
-            addIdentifier(primaryOwner);
-            primaryOwner.stringValue("name", "Boomsma Erika"); // String
-            primaryOwner.date("startDate", "yyyy-mm-dd", startDate);
-            primaryOwner.date("endDate", "yyyy-mm-dd", expiryDate);
-            addElectronicAdress(primaryOwner, "electronicAddresses", PHONENUMBER.toString(), "96711125");
-            addPostalAdress(primaryOwner);
-        });
-    }
-
-    private void addServicer(LambdaDslObject account) {
-        account.object("servicer", servicer -> {
-            servicer.stringValue("name", "DNB");
-            servicer.object("identifier", identifier -> {
-                identifier.stringValue("countryOfResidence", "NO");
-                identifier.stringValue("value", "123456879");
-                identifier.stringValue("type", "countryIdentificationCode");
-            });
-        });
-    }
-
-    private void addIdentifier(LambdaDslObject parentDslObject) {
-        parentDslObject.object("identifier", identifier -> {
-            identifier.stringValue("countryOfResidence", "NO"); //ISO standard 2 bokstaver
-            identifier.stringValue("value", "10108054242");
-            identifier.stringValue("type", "nationalIdentityNumber"); // en
-        });
-
-    }
-
-    private void addLinks(LambdaDslObject accountObject, String links2, String rel,
-        String type, String href) {
-        accountObject.array(links2, links ->
-            links.object(link -> {
-                link.stringType(rel, type);
-                link.stringType(href, "/accounts/MFQ9dT2XYx8_aTNftDCtMbvZacI__3VVyM9ZZBOo4_Zr/" + type);
-            }));
-    }
-
-    private void addElectronicAdress(LambdaDslObject primaryOwner, String arrayName, String type, String value) {
-        primaryOwner.array(arrayName, links ->
-            links.object(electronicAddressObject -> {
-                electronicAddressObject.stringType("type", type);
-                electronicAddressObject.stringType("value", value);
-            }));
     }
 }
