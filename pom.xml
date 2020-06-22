@@ -24,7 +24,7 @@
     <springframework-boot.version>2.0.3.RELEASE</springframework-boot.version>
     <junit-jupiter-engine.version>5.4.2</junit-jupiter-engine.version>
     <commons-io.version>2.6</commons-io.version>
-    <jackson-databind.version>2.9.10.4</jackson-databind.version>
+    <jackson-databind.version>2.10.0.pr1</jackson-databind.version>
     <springfox-swagger2.version>2.6.0</springfox-swagger2.version>
     <pact.version>3.5.23</pact.version>
   </properties>
