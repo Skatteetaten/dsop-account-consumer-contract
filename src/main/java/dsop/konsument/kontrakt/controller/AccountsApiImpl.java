@@ -32,19 +32,26 @@ public class AccountsApiImpl implements AccountsApi {
         this.accountsService = accountsService;
     }
 
-    @Override
     public ResponseEntity<Accounts> listAccounts(
-        @ApiParam(value = "Korrelasjonsid, unik identifikator for den tekniske forespørselen", required = true)
-        @RequestHeader(value = "CorrelationID", required = true)
-            UUID correlationID, @ApiParam(value = "Lovhjemmel", required = true)
-    @RequestHeader(value = "Legal-Mandate", required = true) String legalMandate,
-        @ApiParam(value = "Fra dato, dagens dato dersom ikke oppgitt") @Valid
-        @RequestParam(value = "fromDate", required = false) LocalDate fromDate,
-        @ApiParam(value = "Til dato, dagens dato dersom ikke oppgitt") @Valid
-        @RequestParam(value = "toDate", required = false) LocalDate toDate,
-        @ApiParam(value = "Partsidentifikator, fødselsnummer, d-nummer eller organisasjonsnummer.")
-        @RequestHeader(value = "PartyID", required = false) String partyID, @ApiParam(value = "Kontonummeret")
-    @RequestHeader(value = "AccountID", required = false) String accountID) {
+        @ApiParam(value = "Unique reference number / case number that follows the case throughout the different requests." ,required=true)
+        @RequestHeader(value="AccountInfoRequestID", required=true) UUID accountInfoRequestID,
+        @ApiParam(value = "Correlation ID, unique identifier for the technical request" ,required=true)
+        @RequestHeader(value="CorrelationID", required=true) UUID correlationID,
+        @ApiParam(value = "The Legal basis used by data consumers in order to fetch data. Should be validated by the data provider." ,required=true)
+        @RequestHeader(value="Legal-Mandate", required=true) String legalMandate,
+        @ApiParam(value = "Parts identifier, personal identification number, D-number or organization number" )
+        @RequestHeader(value="PartyID", required=false) String partyID,
+        @ApiParam(value = "The account number. Not in use per now." )
+        @RequestHeader(value="AccountID", required=false) String accountID,
+        @ApiParam(value = "Reference ID based on AdditionalReferenceIDType. Should be validated according to the legal-mandate." )
+        @RequestHeader(value="AdditionalReferenceID", required=false) String additionalReferenceID,
+        @ApiParam(value = "What type of reference to expect in AdditionalReferenceID" , allowableValues="pol")
+        @RequestHeader(value="AdditionalReferenceIDType", required=false) String additionalReferenceIDType,
+        @ApiParam(value = "From date, current date if not stated")
+        @Valid @RequestParam(value = "fromDate", required = false) LocalDate fromDate,
+        @ApiParam(value = "To date, current date if not stated")
+        @Valid @RequestParam(value = "toDate", required = false) LocalDate toDate) {
+
 
         Accounts accounts = accountsService.getAccounts(partyID);
         if (legalMandate.equals(LEGAL_MANDATE)) {
@@ -55,65 +62,86 @@ public class AccountsApiImpl implements AccountsApi {
         }
     }
 
-    @Override
     public ResponseEntity<Cards> listCards(
-        @ApiParam(value = "Unik referanse til kontoen", required = true) @PathVariable("accountReference")
-            String accountReference,
-        @ApiParam(value = "Korrelasjonsid, unik identifikator for den tekniske forespørselen", required = true)
-        @RequestHeader(value = "CorrelationID", required = true) UUID correlationID,
-        @ApiParam(value = "Lovhjemmel", required = true) @RequestHeader(value = "Legal-Mandate", required = true)
-            String legalMandate, @ApiParam(value = "Fra dato, dagens dato dersom ikke oppgitt") @Valid
-    @RequestParam(value = "fromDate", required = false) LocalDate fromDate,
-        @ApiParam(value = "Til dato, dagens dato dersom ikke oppgitt") @Valid
-        @RequestParam(value = "toDate", required = false) LocalDate toDate) {
-
+        @ApiParam(value = "Unique reference to the account. Shall not match the account number.",required=true)
+        @PathVariable("accountReference") String accountReference,
+        @ApiParam(value = "Unique reference number / case number that follows the case throughout the different requests." ,required=true)
+        @RequestHeader(value="AccountInfoRequestID", required=true) UUID accountInfoRequestID,
+        @ApiParam(value = "Correlation ID, unique identifier for the technical request" ,required=true)
+        @RequestHeader(value="CorrelationID", required=true) UUID correlationID,
+        @ApiParam(value = "The Legal basis used by data consumers in order to fetch data. Should be validated by the data provider." ,required=true)
+        @RequestHeader(value="Legal-Mandate", required=true) String legalMandate,
+        @ApiParam(value = "Reference ID based on AdditionalReferenceIDType. Should be validated according to the legal-mandate." )
+        @RequestHeader(value="AdditionalReferenceID", required=false) String additionalReferenceID,
+        @ApiParam(value = "What type of reference to expect in AdditionalReferenceID" , allowableValues="pol")
+        @RequestHeader(value="AdditionalReferenceIDType", required=false) String additionalReferenceIDType,
+        @ApiParam(value = "From date, current date if not stated")
+        @Valid @RequestParam(value = "fromDate", required = false) LocalDate fromDate,
+        @ApiParam(value = "To date, current date if not stated")
+        @Valid @RequestParam(value = "toDate", required = false) LocalDate toDate) {
         Cards cards = accountsService.getCards();
         return ResponseEntity.ok(cards);
     }
 
-    @Override
     public ResponseEntity<Roles> listRoles(
-        @ApiParam(value = "Unik referanse til kontoen", required = true) @PathVariable("accountReference")
-            String accountReference,
-        @ApiParam(value = "Korrelasjonsid, unik identifikator for den tekniske forespørselen", required = true)
-        @RequestHeader(value = "CorrelationID", required = true) UUID correlationID,
-        @ApiParam(value = "Lovhjemmelen", required = true) @RequestHeader(value = "Legal-Mandate", required = true)
-            String legalMandate, @ApiParam(value = "Fra dato, dagens dato dersom ikke oppgitt") @Valid
-    @RequestParam(value = "fromDate", required = false) LocalDate fromDate,
-        @ApiParam(value = "Til dato, dagens dato dersom ikke oppgitt") @Valid
-        @RequestParam(value = "toDate", required = false) LocalDate toDate) {
-
+        @ApiParam(value = "Unique reference to the account. Shall not match the account number.",required=true)
+        @PathVariable("accountReference") String accountReference,
+        @ApiParam(value = "Unique reference number / case number that follows the case throughout the different requests." ,required=true)
+        @RequestHeader(value="AccountInfoRequestID", required=true) UUID accountInfoRequestID,
+        @ApiParam(value = "Correlation ID, unique identifier for the technical request" ,required=true)
+        @RequestHeader(value="CorrelationID", required=true) UUID correlationID,
+        @ApiParam(value = "The Legal basis used by data consumers in order to fetch data. Should be validated by the data provider." ,required=true)
+        @RequestHeader(value="Legal-Mandate", required=true) String legalMandate,
+        @ApiParam(value = "Reference ID based on AdditionalReferenceIDType. Should be validated according to the legal-mandate." )
+        @RequestHeader(value="AdditionalReferenceID", required=false) String additionalReferenceID,
+        @ApiParam(value = "What type of reference to expect in AdditionalReferenceID" , allowableValues="pol")
+        @RequestHeader(value="AdditionalReferenceIDType", required=false) String additionalReferenceIDType,
+        @ApiParam(value = "From date, current date if not stated")
+        @Valid @RequestParam(value = "fromDate", required = false) LocalDate fromDate,
+        @ApiParam(value = "To date, current date if not stated")
+        @Valid @RequestParam(value = "toDate", required = false) LocalDate toDate) {
         Roles roles = accountsService.getRoles();
         return ResponseEntity.ok(roles);
     }
 
-    @Override
     public ResponseEntity<AccountDetails> showAccountById(
-        @ApiParam(value = "Korrelasjonsid, unik identifikator for den tekniske forespørselen", required = true)
-        @RequestHeader(value = "CorrelationID", required = true) UUID correlationID,
-        @ApiParam(value = "Legal mandate", required = true) @RequestHeader(value = "Legal-Mandate", required = true)
-            String legalMandate,
-        @ApiParam(value = "Unik referanse til kontoen", required = true) @PathVariable("accountReference")
-            String accountReference, @ApiParam(value = "Fra dato, dagens dato dersom ikke oppgitt") @Valid
-    @RequestParam(value = "fromDate", required = false) LocalDate fromDate,
-        @ApiParam(value = "Til dato, dagens dato dersom ikke oppgitt") @Valid
-        @RequestParam(value = "toDate", required = false) LocalDate toDate) {
-
+        @ApiParam(value = "Unique reference to the account. Shall match the account number.",required=true)
+        @PathVariable("accountReference") String accountReference,
+        @ApiParam(value = "Unique reference number / case number that follows the case throughout the different requests." ,required=true)
+        @RequestHeader(value="AccountInfoRequestID", required=true) UUID accountInfoRequestID,
+        @ApiParam(value = "Correlation ID, unique identifier for the technical request" ,required=true)
+        @RequestHeader(value="CorrelationID", required=true) UUID correlationID,
+        @ApiParam(value = "The Legal basis used by data consumers in order to fetch data. Should be validated by the data provider." ,required=true)
+        @RequestHeader(value="Legal-Mandate", required=true) String legalMandate,
+        @ApiParam(value = "Reference ID based on AdditionalReferenceIDType. Should be validated according to the legal-mandate." )
+        @RequestHeader(value="AdditionalReferenceID", required=false) String additionalReferenceID,
+        @ApiParam(value = "What type of reference to expect in AdditionalReferenceID" , allowableValues="pol")
+        @RequestHeader(value="AdditionalReferenceIDType", required=false) String additionalReferenceIDType,
+        @ApiParam(value = "From date, current date if not stated")
+        @Valid @RequestParam(value = "fromDate", required = false) LocalDate fromDate,
+        @ApiParam(value = "To date, current date if not stated")
+        @Valid @RequestParam(value = "toDate", required = false) LocalDate toDate) {
         AccountDetails accountDetails = accountsService.getAccountDetails();
         return ResponseEntity.ok(accountDetails);
     }
 
     public ResponseEntity<Transactions> listTransactions(
-        @ApiParam(value = "Unik referanse til kontoen", required = true) @PathVariable("accountReference")
-            String accountReference,
-        @ApiParam(value = "Korrelasjonsid, unik identifikator for den tekniske forespørselen", required = true)
-        @RequestHeader(value = "CorrelationID", required = true) UUID correlationID,
-        @ApiParam(value = "Lovhjemmel", required = true) @RequestHeader(value = "Legal-Mandate", required = true)
-            String legalMandate, @ApiParam(value = "Fra dato, dagens dato dersom ikke oppgitt") @Valid
-    @RequestParam(value = "fromDate", required = false) LocalDate fromDate,
-        @ApiParam(value = "Til dato, dagens dato dersom ikke oppgitt") @Valid
-        @RequestParam(value = "toDate", required = false) LocalDate toDate) {
-
+        @ApiParam(value = "Unique reference to the account. Shall match the account number.",required=true)
+        @PathVariable("accountReference") String accountReference,
+        @ApiParam(value = "Unique reference number / case number that follows the case throughout the different requests." ,required=true)
+        @RequestHeader(value="AccountInfoRequestID", required=true) UUID accountInfoRequestID,
+        @ApiParam(value = "Correlation ID, unique identifier for the technical request" ,required=true)
+        @RequestHeader(value="CorrelationID", required=true) UUID correlationID,
+        @ApiParam(value = "The Legal basis used by data consumers in order to fetch data. Should be validated by the data provider." ,required=true)
+        @RequestHeader(value="Legal-Mandate", required=true) String legalMandate,
+        @ApiParam(value = "Reference ID based on AdditionalReferenceIDType. Should be validated according to the legal-mandate." )
+        @RequestHeader(value="AdditionalReferenceID", required=false) String additionalReferenceID,
+        @ApiParam(value = "What type of reference to expect in AdditionalReferenceID" , allowableValues="pol")
+        @RequestHeader(value="AdditionalReferenceIDType", required=false) String additionalReferenceIDType,
+        @ApiParam(value = "From date, current date if not stated")
+        @Valid @RequestParam(value = "fromDate", required = false) LocalDate fromDate,
+        @ApiParam(value = "To date, current date if not stated")
+        @Valid @RequestParam(value = "toDate", required = false) LocalDate toDate) {
         Transactions transactions = accountsService.getTransactions();
         return ResponseEntity.ok(transactions);
     }

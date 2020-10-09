@@ -60,6 +60,7 @@ public class ConsumerContractTest {
 
     private static final String LEGAL_MANDATE_HEADER = "Legal-Mandate";
     private static final String CORRELATION_ID_HEADER = "CorrelationID";
+    private static final String INFO_REQUEST_ID_HEADER = "AccountInfoRequestID";
 
     private static final String PARTY_ID = "909716212";
     private static final String PARTY_ID_2 = "124678913";
@@ -72,6 +73,7 @@ public class ConsumerContractTest {
     private static final String CORRELATION_ID_CARDS = "c049c99f-8a60-41ea-90c9-1889471394d0";
     private static final String CORRELATION_ID_ROLES = "8981b032-bdc2-4a01-a9d4-f0e5d938cce9";
     private static final String CORRELATION_ID_TRANSACTIONS = "b2e25cd6-8bb6-40c1-9aa8-29d7ca114cb3";
+    private static final String INFO_REQUEST_ID = "964261f0-1eb3-4c7b-b5e6-99f40ba6ae4d";
 
     private static final String AUTHORIZATION = "Bearer eyJraWQiOiJjWmswME1rbTVIQzRnN3Z0NmNwUDVGSFpMS0pzdzhmQkFJdUZiUzRSVEQ0IiwiYWxn"
         + "IjoiUlMyNTYifQ.eyJhdWQiOiJodHRwczpcL1wvdGVzdC5wdWJsaWNzZWN0b3IuZG5iLm5vXC92MVwvIiwic2NvcGUiOiJiaXRzOmtvbnRvaW5mb3JtYXNqb2"
@@ -119,39 +121,46 @@ public class ConsumerContractTest {
         Listheaders.put(PARTY_ID_HEADER, PARTY_ID);
         Listheaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         Listheaders.put(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST);
+        Listheaders.put(INFO_REQUEST_ID_HEADER, INFO_REQUEST_ID);
         Listheaders.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         Map<String, String> EmptyListHeaders = new HashMap<>();
         EmptyListHeaders.put(PARTY_ID_HEADER, PARTY_ID_NO_ACCOUNTS);
         EmptyListHeaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         EmptyListHeaders.put(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
+        EmptyListHeaders.put(INFO_REQUEST_ID_HEADER, INFO_REQUEST_ID);
         EmptyListHeaders.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         Map<String, String> WrongParameters = new HashMap<>();
         WrongParameters.put(PARTY_ID_HEADER, PARTY_ID_2);
         WrongParameters.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE_ERROR);
         WrongParameters.put(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
+        WrongParameters.put(INFO_REQUEST_ID_HEADER, INFO_REQUEST_ID);
         WrongParameters.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         Map<String, String> accountDetailsHeaders = new HashMap<>();
         accountDetailsHeaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         accountDetailsHeaders.put(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_DETAILS);
+        accountDetailsHeaders.put(INFO_REQUEST_ID_HEADER, INFO_REQUEST_ID);
         accountDetailsHeaders.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         Map<String, String> cardsHeaders = new HashMap<>();
         cardsHeaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         cardsHeaders.put(CORRELATION_ID_HEADER, CORRELATION_ID_CARDS);
+        cardsHeaders.put(INFO_REQUEST_ID_HEADER, INFO_REQUEST_ID);
         cardsHeaders.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
 
         Map<String, String> rolesHeaders = new HashMap<>();
         rolesHeaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         rolesHeaders.put(CORRELATION_ID_HEADER, CORRELATION_ID_ROLES);
         rolesHeaders.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
+        rolesHeaders.put(INFO_REQUEST_ID_HEADER, INFO_REQUEST_ID);
 
         Map<String, String> transactionsHeaders = new HashMap<>();
         transactionsHeaders.put(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         transactionsHeaders.put(CORRELATION_ID_HEADER, CORRELATION_ID_TRANSACTIONS);
         transactionsHeaders.put(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
+        transactionsHeaders.put(INFO_REQUEST_ID_HEADER, INFO_REQUEST_ID);
 
         Map<String, String> responseHeaders = new HashMap<>();
         responseHeaders.put(HttpHeaders.CONTENT_TYPE, "application/json");
@@ -272,32 +281,40 @@ public class ConsumerContractTest {
         accountListHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         accountListHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST);
         accountListHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
+        accountListHeaders.set(INFO_REQUEST_ID_HEADER, INFO_REQUEST_ID);
 
         emptyAccountListHeaders.set(PARTY_ID_HEADER, PARTY_ID_NO_ACCOUNTS);
         emptyAccountListHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         emptyAccountListHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
         emptyAccountListHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
+        emptyAccountListHeaders.set(INFO_REQUEST_ID_HEADER, INFO_REQUEST_ID);
 
         wrongAccountListHeaders.set(PARTY_ID_HEADER, PARTY_ID_2);
         wrongAccountListHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE_ERROR);
         wrongAccountListHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_LIST_EMPTY);
         wrongAccountListHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
+        wrongAccountListHeaders.set(INFO_REQUEST_ID_HEADER, INFO_REQUEST_ID);
 
         detailsHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         detailsHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ACCOUNT_DETAILS);
         detailsHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
+        detailsHeaders.set(INFO_REQUEST_ID_HEADER, INFO_REQUEST_ID);
 
         cardsHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         cardsHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_CARDS);
         cardsHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
+        cardsHeaders.set(INFO_REQUEST_ID_HEADER, INFO_REQUEST_ID);
 
         rolesHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         rolesHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_ROLES);
         rolesHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
+        rolesHeaders.set(INFO_REQUEST_ID_HEADER, INFO_REQUEST_ID);
 
         transactionHeaders.set(LEGAL_MANDATE_HEADER, LEGAL_MANDATE);
         transactionHeaders.set(CORRELATION_ID_HEADER, CORRELATION_ID_TRANSACTIONS);
         transactionHeaders.set(HttpHeaders.AUTHORIZATION, AUTHORIZATION);
+        transactionHeaders.set(INFO_REQUEST_ID_HEADER, INFO_REQUEST_ID);
+
     }
 
     private void verifyRoles(RestTemplate restTemplate, HttpHeaders accountCommonHeaders) {
