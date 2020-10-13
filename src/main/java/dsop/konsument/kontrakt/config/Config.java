@@ -7,6 +7,7 @@ import java.util.Locale;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.Formatter;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 @Configuration
 //Used for localDate with spring boot.
@@ -25,5 +26,16 @@ public class Config {
                 return DateTimeFormatter.ISO_DATE.format(object);
             }
         };
+    }
+
+    @Bean
+    public CommonsRequestLoggingFilter requestLoggingFilter() {
+        CommonsRequestLoggingFilter loggingFilter = new CommonsRequestLoggingFilter();
+        loggingFilter.setIncludeClientInfo(true);
+        loggingFilter.setIncludeQueryString(true);
+        loggingFilter.setIncludePayload(true);
+        loggingFilter.setMaxPayloadLength(64000);
+        loggingFilter.setIncludeHeaders(true);
+        return loggingFilter;
     }
 }

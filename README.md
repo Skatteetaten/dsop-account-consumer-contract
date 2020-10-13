@@ -39,13 +39,13 @@ This document is intented for developers and testers.
 
 ## Test cases
 ### 200 scenario
-| Test state               | Interaction                                           |
-| -------------            | -------------                                         |
-| test GET AccountList     | Sends an AccountList request with PartyID: 909716212  |
-| test GET AccountDetails  | Sends an AccountDetails request for the given party   |
-| test GET Roles           | Sends a Roles request for the given party             |
-| test GET Cards           | Sends a Cards request for the given party             |
-| test GET Transactions    | Sends a Transaction request for the given party       |
+| Test state               | Interaction                                                      |
+| -------------            | -------------                                                    |
+| test GET AccountList     | Sends an AccountList request with PartyID: 909716212             |
+| test GET AccountDetails  | Sends an AccountDetails request for the given accountReference   |
+| test GET Roles           | Sends a Roles request for the given accountReference             |
+| test GET Cards           | Sends a Cards request for the given accountReference             |
+| test GET Transactions    | Sends a Transaction request for the given accountReference       |
 
 ### Other test scenarios
 | Test state                           | Interaction                                                                                                  |
