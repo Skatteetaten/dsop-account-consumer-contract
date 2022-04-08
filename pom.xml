@@ -23,7 +23,7 @@
     <json-unit.version>1.25.0</json-unit.version>
     <springframework-boot.version>2.5.12</springframework-boot.version>
     <junit-jupiter-engine.version>5.6.1</junit-jupiter-engine.version>
-    <commons-io.version>2.6</commons-io.version>
+    <commons-io.version>2.7</commons-io.version>
     <jackson-databind.version>2.11.3</jackson-databind.version>
     <springfox-swagger2.version>2.6.0</springfox-swagger2.version>
     <pact.version>3.5.23</pact.version>
